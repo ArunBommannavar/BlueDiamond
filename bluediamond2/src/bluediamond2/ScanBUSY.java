@@ -48,8 +48,7 @@ public class ScanBUSY implements PropertyChangeListener{
 	public void propertyChange(PropertyChangeEvent evt) {
 		valString = pvObject.getVal();
 		val =  Integer.parseInt(valString);
-
-	   	  changes.firePropertyChange(changePropertyName, "-99", valString);   
+		changes.firePropertyChange(changePropertyName, "-99", valString);   
 
 	}
 }

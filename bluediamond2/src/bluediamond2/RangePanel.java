@@ -4,18 +4,11 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JTabbedPane;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-
 import edu.ciw.hpcat.epics.data.CountDownConnection;
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
-
 import javax.swing.border.TitledBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
@@ -23,19 +16,21 @@ import javax.swing.border.CompoundBorder;
 import net.miginfocom.swing.MigLayout;
 import java.awt.GridLayout;
 import javax.swing.JCheckBox;
-import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
 
 public class RangePanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
 	private JTextField yRangeMinTextBox;
 	private JTextField yRangeMaxTextBox;
 	private Map<Integer, JCheckBox> posXMap = new HashMap<>();
-	private Map<Integer, JCheckBox> posYMap = new HashMap<>();
+//	private Map<Integer, JCheckBox> posYMap = new HashMap<>();
 	JTabbedPane tabbedPane;
 	JTabbedPane rangeTabbedPane;
 	

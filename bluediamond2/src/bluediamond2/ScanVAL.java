@@ -48,7 +48,6 @@ public class ScanVAL implements PropertyChangeListener {
 		ret = (EpicsDataObject) evtObj;
 		temp = ret.getVal();
 		val = Double.parseDouble(temp);
-//		System.out.println(" VAL value = "+val);
 		changes.firePropertyChange(changePropertyName, -1, temp);
 
 	}

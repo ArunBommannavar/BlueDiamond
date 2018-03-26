@@ -115,7 +115,7 @@ public class Scan1PositionerParms {
 	public void setData1D(Data1D d1d) {
 		data1D = d1d;
 	}
-	public List getValidPos(){
+	public List<Integer> getValidPos(){
 		return validPos;
 	}
 	public void setInitPos(boolean b){

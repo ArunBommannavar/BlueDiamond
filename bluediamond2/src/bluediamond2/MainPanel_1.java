@@ -1,9 +1,9 @@
 package bluediamond2;
 
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
+
 import net.miginfocom.swing.MigLayout;
-import java.awt.GridBagLayout;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -40,7 +40,6 @@ import java.awt.Graphics2D;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JSeparator;
 import javax.swing.border.BevelBorder;
 import javax.swing.plaf.basic.BasicLabelUI;
 import javax.vecmath.Point3d;
@@ -49,45 +48,35 @@ import edu.ciw.hpcat.epics.data.CountDownConnection;
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
 
 import java.awt.Color;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
-import com.klg.jclass.chart.ChartDataEvent;
 import com.klg.jclass.chart.ChartDataView;
 import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCAxisTitle;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.JCLineStyle;
 import com.klg.jclass.chart.JCMarker;
-import com.klg.jclass.chart.data.JCDefaultDataSource;
 
 import com.klg.jclass.chart3d.*;
 import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
 
 
 import com.klg.jclass.chart3d.Chart3dDataView;
-import com.klg.jclass.chart3d.event.Chart3dDataSupport.*;
-import com.klg.jclass.chart3d.event.Chart3dDataEvent.*;
-
 
 import com.klg.jclass.chart3d.JCData3dIndex;
 import com.klg.jclass.chart3d.JCData3dGridIndex;
-import com.klg.jclass.chart3d.event.Chart3dGridDataEvent;
-import javax.vecmath.Point3d;
 
-
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
 import javax.swing.JComboBox;
-import javax.swing.border.SoftBevelBorder;
-import java.awt.FlowLayout;
 
 
 public class MainPanel_1 extends JPanel implements ActionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 	private JTextField xRangeMin_textField_1D;
 	private JTextField xRangeMax_textField_1D;
@@ -139,7 +128,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 	private Map<Integer, JCheckBox> posYMap = new HashMap<>();
 	
 	private Map<Integer, DetectorColorPanel> detMap_1D = new HashMap<>();
-	private Map<Integer, DetectorColorPanel> detMap_2D = new HashMap<>();
+//	private Map<Integer, DetectorColorPanel> detMap_2D = new HashMap<>();
 	List<Integer> selectedDetectors = new ArrayList<Integer>();
 
 	protected JCChart chart;
@@ -309,9 +298,6 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 			}
 		});
 		chart.addMouseMotionListener(new MouseMotionAdapter() {
-			/*
-			 * public void mouseMoved(MouseEvent me) { chart_mouseMoved(me); }
-			 */
 			public void mouseDragged(MouseEvent e) {
 				chart_mouseDragged(e);
 			}
@@ -1298,12 +1284,11 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 
 		detComboBox_2D.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				System.out.println(" Selected Combo Item # = "+detComboBox_2D.getSelectedIndex());
+//				System.out.println(" Selected Combo Item # = "+detComboBox_2D.getItemCount());
+				if (detComboBox_2D.getItemCount()>0)
 				data2D.setSelectedDetector(detComboBox_2D.getSelectedIndex());
 			}
 		});
-
-
 		addDetectorPanels_1D();
 		this.updateUI();
 	}
@@ -1444,6 +1429,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 	
 	public void clear2dDetector(){
 		detComboBox_2D.removeAllItems();
+		detComboBox_2D.getItemCount();
 	}
 	
 
@@ -1622,7 +1608,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		int thickness = data1D.getSeriesThickness(nm);
 		int shape = data1D.getSeriesSymbol(nm);
 		int symbolSize = data1D.getSeriesSymbolSize(nm);
-		Color lineColor = data1D.getSeriesLineColor(nm);
+//		Color lineColor = data1D.getSeriesLineColor(nm);
 		sp.setThickness(thickness);
 		sp.setShape(shape);
 		sp.setSymbolSize(symbolSize);
@@ -1649,7 +1635,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 	
 	
 	public void detectorStatus2D(String str,boolean b){
-		int n = Integer.parseInt(str);
+//		int n = Integer.parseInt(str);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -1673,7 +1659,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 			int thickness = data1D.getSeriesThickness(nm);
 			int shape = data1D.getSeriesSymbol(nm);
 			int symbolSize = data1D.getSeriesSymbolSize(nm);
-			Color lineColor = data1D.getSeriesLineColor(nm);
+//			Color lineColor = data1D.getSeriesLineColor(nm);
 			sp.setThickness(thickness);
 			sp.setShape(shape);
 			sp.setSymbolSize(symbolSize);
@@ -2073,17 +2059,13 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		}
 	}
 
-	public void chart_mouseMoved(MouseEvent e) {
-		Point point;
-		point = e.getPoint();
-	}
 
 	public void moveVmarker(JCMarker mrkr, double d) {
 		double d1;
 		double d2;
 		double dCenter;
-		double dWidth;
-		double temp;
+//		double dWidth;
+//		double temp;
 
 		mrkr.setValue(d);
 		d1 = vMarker1.getValue();
@@ -2100,7 +2082,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		double d1;
 		double d2;
 		double dCenter;
-		double dWidth;
+//		double dWidth;
 
 		mrkr.setValue(d);
 		d1 = hMarker1.getValue();
@@ -2113,7 +2095,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 
 	public void chart_mouseDragged(MouseEvent e) {
 		Point point;
-		String str;
+//		String str;
 
 		double pickedPoint;
 		if (vMarkerSelected) {

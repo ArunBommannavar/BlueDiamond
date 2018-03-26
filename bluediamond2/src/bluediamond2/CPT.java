@@ -36,5 +36,6 @@ public class CPT implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
 		val = Integer.parseInt(evtObj.getVal());
+//		System.out.println(" pvName "+pvName+"  = "+val);
 	}
 }

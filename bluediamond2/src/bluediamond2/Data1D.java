@@ -1,29 +1,20 @@
 package bluediamond2;
 
 import java.awt.Color;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.SwingUtilities;
-
 import com.klg.jclass.chart.ChartDataEvent;
 import com.klg.jclass.chart.ChartDataView;
-import com.klg.jclass.chart.ChartText;
 import com.klg.jclass.chart.JCAxis;
-import com.klg.jclass.chart.JCAxisTitle;
 import com.klg.jclass.chart.JCChart;
-import com.klg.jclass.chart.JCLineStyle;
-import com.klg.jclass.chart.JCMarker;
 import com.klg.jclass.chart.data.JCDefaultDataSource;
-import com.klg.jclass.util.legend.JCLegend;
 
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
 
 public class Data1D extends JCDefaultDataSource {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7676041947267691757L;
 	int numberOfPositioners = 4;
 	int numberOfDetectors = 60;
 	int cpt;
@@ -404,6 +395,7 @@ public class Data1D extends JCDefaultDataSource {
 		int rawLastPlotPoint = n;
 		int derTotalPlotPints = m - 1;
 		int derLastPlotPoint = n - 1;
+// System.out.println(" Current Point "+n);
 		chart.setBatched(true);
 
 		if (derivative) {

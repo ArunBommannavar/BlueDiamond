@@ -175,10 +175,11 @@ public class ExtraPV {
             case DBR_CTRL_DOUBLE:
                 count = in.readInt();
                 size = in.readInt();
+                /*
                 if (size > 0) {
                     String unit = CountedString.getCountedString(in);
                 }
-
+*/
                 double_Value = new double[count];
                 for (int i = 0; i < count; i++) {
                     double_Value[i] = in.readDouble();
@@ -194,7 +195,7 @@ public class ExtraPV {
 
     public byte getCountedChar(DataInputStream in){
         byte b = 0;
-        int i;
+//        int i;
 
         return b;
 

@@ -33,12 +33,12 @@ public class CountedString {
 	    int size;
 	    int mod;
 	    int rem;
-	    int cor;
+//	    int cor;
 	    byte[] tmpByte;
 
-	    byte[] extBytes;
-	    int extSize;
-	    int diffSize;
+//	    byte[] extBytes;
+//	    int extSize;
+//	    int diffSize;
 
 
 	    try {
@@ -50,7 +50,7 @@ public class CountedString {
 	      else {
 	        rem = 0;
 	      }
-	      cor = size + rem;
+//	      cor = size + rem;
 //	      tmpByte = new byte[cor];
 	      tmpByte = new byte[size];
 	      in.read(tmpByte);

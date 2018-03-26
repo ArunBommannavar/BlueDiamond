@@ -2,36 +2,25 @@ package bluediamond2;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JTabbedPane;
-import javax.swing.plaf.basic.BasicLabelUI;
 import java.awt.GridLayout;
-
-import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
-import javax.swing.UIManager;
 
 public class VertHorzTabPanel extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Create the panel.

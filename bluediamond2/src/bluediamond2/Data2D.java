@@ -8,6 +8,10 @@ import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
 
 public class Data2D extends JCDefault3dGridDataSource {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1086522056399066124L;
 	int numberOfXPositioners = 4;
 	int numberOfYPositioners = 4;
 	int numberOfDetectors = 60;
@@ -278,7 +282,7 @@ public class Data2D extends JCDefault3dGridDataSource {
 	public void setDetectorDataArray(int y, int det, double[] zv){	
 //		System.out.println(" XPoints = "+xNumPoints);
 			for (int j = 0; j < xNumPoints; j++) {				
-					z2D[det][j][y] = zv[j];
+					z2D[det][j][y-1] = zv[j];
 //					System.out.println(" 2D Z Value = "+zv[j]);
 			}
 	}

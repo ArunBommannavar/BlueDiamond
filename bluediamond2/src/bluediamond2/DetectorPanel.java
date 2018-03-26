@@ -7,6 +7,10 @@ import java.awt.GridLayout;
 
 public class DetectorPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1189077496507855693L;
 	JPanel detectors_1_30_panel;
 	JPanel detectors_31_60_panel;
 	

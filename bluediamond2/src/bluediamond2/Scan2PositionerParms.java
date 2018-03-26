@@ -94,7 +94,7 @@ public class Scan2PositionerParms {
 		initPos = true;
 	}
 	
-	public List getValidPos(){
+	public List<Integer> getValidPos(){
 		return validPos;
 	}
 

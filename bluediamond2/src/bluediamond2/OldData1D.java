@@ -12,6 +12,10 @@ import com.klg.jclass.chart.data.JCDefaultDataSource;
 
 public class OldData1D extends JCDefaultDataSource {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected JCChart oldChart;
 	String fileName;
 	int dataViewNumber;

@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.UIManager.*;
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,20 +20,16 @@ import java.nio.file.Paths;
 
 import javax.swing.Box;
 import javax.swing.JFileChooser;
-import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
 import edu.ciw.hpcat.epics.data.*;
-
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import javax.swing.JFrame;
+//import javax.swing.JFrame;
 
 public class BlueDiamond {
 
@@ -205,8 +200,8 @@ public class BlueDiamond {
          * Open an old mda file for display
          */
         File inFile;
-        byte[] fileContents;
-        int currentPoint;
+//        byte[] fileContents;
+//        int currentPoint;
         JFileChooser jFileChooser1 = new JFileChooser();
         jFileChooser1.setMultiSelectionEnabled(false);
         jFileChooser1.setFileFilter(new MDAfilter());
@@ -290,12 +285,8 @@ public class BlueDiamond {
 	}
 
 	public void showOpenConfigPanel() {
-		boolean test = false;
 		File inFile;
 		String[] parms = new String[2];
-		long l1;
-		long l2;
-		long delta;
 
 		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(programPath);
@@ -381,6 +372,7 @@ public class BlueDiamond {
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
 			countDownConnection.pendIO();
+
 
 			Thread scanMonitorThread = new Thread(scanMonitor);
 			scanMonitorThread.start();

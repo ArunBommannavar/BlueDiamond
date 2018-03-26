@@ -112,7 +112,7 @@ public class ReadSavedMdaData {
 	    int scanCurrentNumPoint;
 	    int[] xlc;
 	    int tmpInt;
-	    int nminus;
+//	    int nminus;
 
 	    int asize;
 	    byte[] extBytes;
@@ -295,6 +295,8 @@ public class ReadSavedMdaData {
 	    if (offset < bytes.length) {
 	      throw new IOException("Could not completely read file " +
 	                            file.getName());
+	     
+	    
 	    }
 
 	    // Close the input stream and return bytes

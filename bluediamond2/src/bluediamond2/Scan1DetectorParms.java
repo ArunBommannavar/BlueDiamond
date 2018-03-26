@@ -69,7 +69,7 @@ public class Scan1DetectorParms {
 		initDet = true;
 	}
 
-	public List getValidDet(){
+	public List<Integer> getValidDet(){
 		return validDet;
 	}
 	public void setInitDet(boolean b){

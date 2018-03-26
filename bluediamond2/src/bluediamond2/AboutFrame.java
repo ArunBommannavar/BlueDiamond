@@ -16,6 +16,10 @@ import javax.swing.JButton;
 
 public class AboutFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	LogoPanel logoPanel = new LogoPanel();
 	JPanel infoPanel;
