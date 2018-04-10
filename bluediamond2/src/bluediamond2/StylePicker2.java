@@ -38,7 +38,6 @@ public class StylePicker2 extends JComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 	JFrame jFrame;
-//	   java.util.List parmList = new ArrayList();
 	   String[] detectors = new String[60];
 	   String[] thicknessList = new String[20];
 	   String[] shapeList = {"None", "Dot", "Box", "Triangle", "Diamond", "Star", "Vert-Line", "Horiz-Line", "Cross",

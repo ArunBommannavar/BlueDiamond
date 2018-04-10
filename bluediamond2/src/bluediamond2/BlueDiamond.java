@@ -46,14 +46,17 @@ public class BlueDiamond {
 	Scan1PositionerParms scan1PositionerParms;
 	Scan2PositionerParms scan2PositionerParms;
 	Scan1DetectorParms scan1DetectorParms;
-	// Scan1Monitor scan1Monitor;
-	// Scan2Monitor scan2Monitor;
 
 	Data1D data1D;
 	Data2D data2D;
 
 	ScanMonitor scanMonitor;
-	MainPanel_1 mainPanel;
+//	MainPanel_1 mainPanel;
+	MainPanel mainPanel;
+	Active_1D_ScanPanel active_1D_ScanPanel;
+	Active_2D_ScanPanel active_2D_ScanPanel;
+	Saved_1D_ScanPanel saved_1D_ScanPanel;
+	
 	protected JCChart chart;
 	protected JCChart oldChart;
     JCChart3dJava2d chart3d = null;
@@ -217,7 +220,7 @@ public class BlueDiamond {
          */
         if (retVal == JFileChooser.APPROVE_OPTION) {
             inFile = jFileChooser1.getSelectedFile();
-            readSavedMdaFile.setFile(inFile,oldChart);
+            readSavedMdaFile.setFile(inFile,oldChart,saved_1D_ScanPanel);
         }
 	}
 
@@ -316,7 +319,9 @@ public class BlueDiamond {
 			scan2PositionerParms = new Scan2PositionerParms(scan2Str);
 
 			scan1PositionerParms.initPnPV_values();
-			mainPanel = new MainPanel_1();
+//			mainPanel = new MainPanel_1();
+			mainPanel = new MainPanel();
+			
 			chart = mainPanel.getChart();
 			oldChart = mainPanel.getOldChart();
 
@@ -337,7 +342,14 @@ public class BlueDiamond {
 			scanMonitor.setScan1PositionerParms(scan1PositionerParms);
 			scanMonitor.setScan1DetectorParms(scan1DetectorParms);
 			scanMonitor.setScan2PositionerParms(scan2PositionerParms);
-			scanMonitor.setMainPanel(mainPanel);
+			
+//			scanMonitor.setMainPanel(mainPanel);
+			
+			active_1D_ScanPanel = mainPanel.getActive_1D_ScanPanel();
+			scanMonitor.setActive_1D_ScanPanel(active_1D_ScanPanel);
+			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
+			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
+			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 
 			scan1PositionerParms.createPosPVs();
 			countDownConnection.pendIO();
@@ -365,8 +377,8 @@ public class BlueDiamond {
 			scanMonitor.setMainPanel_1D_DetectorNames();
 			
 
-			mainPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
-			mainPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());		
+			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
+			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());		
 			
 
 			scanMonitor.createDSTATE();

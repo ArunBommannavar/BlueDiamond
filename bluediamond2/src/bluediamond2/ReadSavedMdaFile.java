@@ -14,7 +14,8 @@ public class ReadSavedMdaFile {
     int totalNumberOfScans;
     int dataViewNum = 0;
     long lastModified;
-    
+    int posPrecision = 4;
+
     int numXPoints;
     int numCurrentXPoint;
     int numXPos;
@@ -52,7 +53,7 @@ public class ReadSavedMdaFile {
     ReadSavedMdaData rmd = new ReadSavedMdaData();
     
     private static ReadSavedMdaFile readSavedMdaFile = new ReadSavedMdaFile();
-
+    Saved_1D_ScanPanel saved_1D_ScanPanel;
     private ReadSavedMdaFile() {
     	
     }
@@ -61,7 +62,8 @@ public class ReadSavedMdaFile {
     }
 
     
-    public void setFile(File file, JCChart oldChart) {
+    public void setFile(File file, JCChart oldChart,Saved_1D_ScanPanel saved_1D_ScanPanel) {
+    	this.saved_1D_ScanPanel = saved_1D_ScanPanel;
         inFile = file;
         fileName = file.getName();
         lastModified = file.lastModified();
@@ -242,5 +244,147 @@ public class ReadSavedMdaFile {
         //     save2DAscii_format2();
 
     }
+    
+    private void posMinMax1D() {
 
-}
+        posXMin = new double[numXPos];
+        posXMax = new double[numXPos];
+
+        detMin = new double[numDets];
+        detMax = new double[numDets];
+
+        for (int i = 0; i < numXPos; i++) {
+            posXMin[i] = xVal[i][0];
+            posXMax[i] = xVal[i][0];
+
+            for (int j = 1; j < numXPoints; j++) {
+                if (xVal[i][j] < posXMin[i]) {
+                    posXMin[i] = xVal[i][j];
+                }
+                if (xVal[i][j] > posXMax[i]) {
+                    posXMax[i] = xVal[i][j];
+                }
+            }
+
+            posXMin[i] = getPrecisionedData(posXMin[i]);
+            posXMax[i] = getPrecisionedData(posXMax[i]);
+
+        }
+
+        for (int i = 0; i < numDets; i++) {
+            detMin[i] = yVal[i][0];
+            detMax[i] = yVal[i][0];
+
+            for (int j = 1; j < numXPoints; j++) {
+                if (yVal[i][j] < detMin[i]) {
+                    detMin[i] = yVal[i][j];
+                }
+                if (yVal[i][j] > detMax[i]) {
+                    detMax[i] = yVal[i][j];
+                }
+            }
+        }
+    }
+    public double getPrecisionedData(double d1) {
+        double d = Math.floor(d1 * Math.pow(10, posPrecision) + 0.5);
+        d = d / Math.pow(10, posPrecision);
+        return d;
+    }
+    /*
+    public void populate1DimScanData() {
+       if (!oldFileFrame.isListed(inFile.getName())) {
+            oldFileFrame.addNewFile(inFile, chart, data, dataViewNum);
+            oldFileFrame.setPosName(posXName);
+            oldFileFrame.setPosDesc(posXDesc);
+            oldFileFrame.setDetName(detName);
+            oldFileFrame.setDetDesc(detDesc);
+
+            oldFileFrame.setPosMin(posXMin);
+            oldFileFrame.setPosMax(posXMax);
+            oldFileFrame.setDetMin(detMin);
+            oldFileFrame.setDetMax(detMax);
+
+//            oldFileFrame.setVisible(true);
+            oldFileFrame.populatePanel();
+
+            ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
+
+            ods.setDataViewNumb(dataViewNum);
+
+            chart.addDataView(dataViewNum);
+            chart.getDataView(dataViewNum).setDataSource(ods);
+
+            // Set number of points, positioners and detectors
+            ods.setNumPoints(numCurrentXPoint);
+            ods.setNumPositioners(numXPos);
+            ods.setNumberOfDetectors(numDets);
+            // Initialize the arrays.
+            ods.initArrays();
+            // set names for positioners and detectors
+            ods.setPosName(posXName);
+            ods.setPosDesc(posXDesc);
+            ods.setDetName(detName);
+            ods.setDetDesc(detDesc);
+
+            // Now fill up the X and Y values
+            ods.setXVals(xVal);
+            ods.setYVals(yVal);
+            // set the min and max values for positioners
+            ods.setPosMinMax();
+            ods.displayDets();
+            ods.setDerivative(data.getDerivative());
+
+            dataViewNum++;
+
+        }*/ 
+    /*
+    public void populate1DimScanData() {
+    if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
+         saved_1D_ScanPanel.addNewFile(inFile, chart, data, dataViewNum);
+         saved_1D_ScanPanel.setPosName(posXName);
+         saved_1D_ScanPanel.setPosDesc(posXDesc);
+         saved_1D_ScanPanel.setDetName(detName);
+         saved_1D_ScanPanel.setDetDesc(detDesc);
+
+         saved_1D_ScanPanel.setPosMin(posXMin);
+         saved_1D_ScanPanel.setPosMax(posXMax);
+         saved_1D_ScanPanel.setDetMin(detMin);
+         saved_1D_ScanPanel.setDetMax(detMax);
+
+//         saved_1D_ScanPanel.setVisible(true);
+         saved_1D_ScanPanel.populatePanel();
+
+         ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
+
+         ods.setDataViewNumb(dataViewNum);
+
+         chart.addDataView(dataViewNum);
+         chart.getDataView(dataViewNum).setDataSource(ods);
+
+         // Set number of points, positioners and detectors
+         ods.setNumPoints(numCurrentXPoint);
+         ods.setNumPositioners(numXPos);
+         ods.setNumberOfDetectors(numDets);
+         // Initialize the arrays.
+         ods.initArrays();
+         // set names for positioners and detectors
+         ods.setPosName(posXName);
+         ods.setPosDesc(posXDesc);
+         ods.setDetName(detName);
+         ods.setDetDesc(detDesc);
+
+         // Now fill up the X and Y values
+         ods.setXVals(xVal);
+         ods.setYVals(yVal);
+         // set the min and max values for positioners
+         ods.setPosMinMax();
+         ods.displayDets();
+         ods.setDerivative(data.getDerivative());
+
+         dataViewNum++;
+
+     }
+    */
+    }
+
+

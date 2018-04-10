@@ -7,6 +7,8 @@ import java.util.ArrayList;
 //import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JCheckBox;
+
 import edu.ciw.hpcat.epics.data.CountDownConnection;
 
 public class ScanMonitor implements PropertyChangeListener, Runnable {
@@ -59,17 +61,22 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	Scan1PositionerParms scan1PositionerParms;
 	Scan1DetectorParms scan1DetectorParms;
 	Scan2PositionerParms scan2PositionerParms;
+	
 	Data1D data1D;
 	Data2D data2D;
+	
 	List<Integer> validPos1 = new ArrayList<Integer>();
 	List<Integer> validPos2 = new ArrayList<Integer>();
 	List<Integer> validDet = new ArrayList<Integer>();
-	MainPanel_1 mainPanel;
+	
+	Active_1D_ScanPanel active_1D_ScanPanel;
+	Active_2D_ScanPanel active_2D_ScanPanel;
+	
+//	MainPanel_1 mainPanel;
 
 	public ScanMonitor(String s1, String s2) {
 		this.scan1Prefix = s1;
 		this.scan2Prefix = s2;
-
 	}
 
 	public void createScanPVS() {
@@ -135,9 +142,16 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2EXSCObj.disconnectChannel();
 		saveFileNameObj.disconnectChannel();
 	}
-
+/*
 	public void setMainPanel(MainPanel_1 m) {
 		this.mainPanel = m;
+	}
+	*/
+	public void setActive_1D_ScanPanel(Active_1D_ScanPanel active_1D_ScanPanel) {
+		this.active_1D_ScanPanel = active_1D_ScanPanel;
+	}
+	public void setActive_2D_ScanPanel(Active_2D_ScanPanel active_2D_ScanPanel) {
+		this.active_2D_ScanPanel = active_2D_ScanPanel;
 	}
 
 	public void setScan1PositionerParms(Scan1PositionerParms m) {
@@ -224,7 +238,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	private void doScan2EXSC() {
 		setScan2EXSCStatus(false);
-		mainPanel.clear2dDetector();
+		active_2D_ScanPanel.clear2dDetector();
 		if(!hasScan2Parms) {
 			initPosDet2D();
 		}
@@ -265,7 +279,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	private void updateData1DAfterScan() {
 		scan1AfterScanDataReady = false;
 		scan1CPT = scan1CPTObj.getValue();
-		System.out.println(" After updateData1DAfterScan 1 "+scan1CPT);
+//		System.out.println(" After updateData1DAfterScan 1 "+scan1CPT);
 		if (scan1CPT > 0) {
 			data1D.setNumberOfPoints(scan1CPT);
 			data1D.setCurrentPoint(scan1CPT);
@@ -312,16 +326,23 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			}
 
 			double d = data1D.getScanCenter();
-			mainPanel.setScanCenterLabel(d);
-			mainPanel.setMarkers("dstate");
-			mainPanel.updateScanCenterDiff();
-			mainPanel.updateUserAuto();
-			String posName = mainPanel.getPositionerName(data1D.getSelectedPositioner());
-			mainPanel.setXAxisTitle(posName);
+			active_1D_ScanPanel.setScanCenterLabel(d);
+			active_1D_ScanPanel.setMarkers("dstate");
+			active_1D_ScanPanel.updateScanCenterDiff();
+			active_1D_ScanPanel.updateUserAuto();
+			
+//			mainPanel.setScanCenterLabel(d);			
+//			mainPanel.setMarkers("dstate");
+//			mainPanel.updateScanCenterDiff();
+//			mainPanel.updateUserAuto();
+//			String posName = mainPanel.getPositionerName(data1D.getSelectedPositioner());
+			String posName = active_1D_ScanPanel.getPositionerName(data1D.getSelectedPositioner());
+			active_1D_ScanPanel.setXAxisTitle(posName);
 
 		} else {
 
-			mainPanel.showAlert(" Number of points is zero ");
+//			mainPanel.showAlert(" Number of points is zero ");
+			active_1D_ScanPanel.showAlert(" Number of points is zero ");
 			/*
 			 * Post a alert message that CPT is zero.
 			 */
@@ -332,35 +353,37 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	public void setMainPanel_1D_PositionerNames() {
 
 		validPos1.forEach((n) -> {
-			mainPanel.setXPositionerVisible_1D(n, true);
+			active_1D_ScanPanel.setXPositionerVisible_1D(n, true);
 			final String str = scan1PositionerParms.getPosPnPV(n);
-			mainPanel.setXPositionerName_1D(n, str);
+			active_1D_ScanPanel.setXPositionerName_1D(n, str);
 		});
 	}
 
 	public void setMainPanel_2D_X_PositionerNames() {
 
 		validPos1.forEach((n) -> {
-			mainPanel.setXPositionerVisible_2D(n, true);
-			mainPanel.setXPositionerName_2D(n);
+			active_2D_ScanPanel.setXPositionerVisible_2D(n, true);
+			String posName_X = active_1D_ScanPanel.getPosName(n);
+			active_2D_ScanPanel.setXPositionerName_2D(n,posName_X);
 		});
 	}
 
+
 	public void setMainPanel_2D_Y_PositionerNames() {
 		validPos2.forEach((n) -> {
-			mainPanel.setYPositionerVisible_2D(n, true);
+			active_2D_ScanPanel.setYPositionerVisible_2D(n, true);
 			final String str = scan2PositionerParms.getPosPnPV(n);
-			mainPanel.setYPositionerName_2D(n, str);
+			active_2D_ScanPanel.setYPositionerName_2D(n, str);
 		});
 
 	}
 
 	public void setMainPanel_1D_DetectorNames() {
 		validDet.forEach((n) -> {
-			mainPanel.setDetVisible(n, true);
-			mainPanel.setDetEnable(n, true);
+			active_1D_ScanPanel.setDetVisible(n, true);
+			active_1D_ScanPanel.setDetEnable(n, true);
 			final String str = scan1DetectorParms.getDetPV(n);
-			mainPanel.setDetectorName(n, str);
+			active_1D_ScanPanel.setDetectorName(n, str);
 		});
 	}
 
@@ -375,8 +398,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
-		mainPanel.resetDetectors();
-		mainPanel.resetPositioners_1D();
+		active_1D_ScanPanel.resetDetectors();
+		active_1D_ScanPanel.resetPositioners_1D();
 
 		init1DPlot();
 
@@ -432,17 +455,17 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		data1D.setXAxisScale();
 		data1D.setYAxisScale();
-		mainPanel.setMarkers("initPosDet1D");
-		mainPanel.updateVMarkers();
-		mainPanel.updateHMarkers();
-		mainPanel.updateUserAuto();
+		active_1D_ScanPanel.setMarkers("initPosDet1D");
+		active_1D_ScanPanel.updateVMarkers();
+		active_1D_ScanPanel.updateHMarkers();
+		active_1D_ScanPanel.updateUserAuto();
 		setScan1InProgress(true);
 //		setHasScan1Parms(true);
 
 	}
 
 	public void initPosDet2D() {
-		mainPanel.resetPositioners_2D();
+		active_2D_ScanPanel.resetPositioners_2D();
 		initPosDet1D();
 
 		scan2NumberOfPoints = scan2NPTSObj.getVal();
@@ -457,8 +480,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		data2D.initDataArray(scan1NumberOfPoints, scan2NumberOfPoints, 4, 4, 60);
 
 		validDet.forEach((n) -> {
-			final String str = mainPanel.getDetectorName(n);
-			mainPanel.add2DDetector(str);
+			final String str = active_1D_ScanPanel.getDetectorName(n);
+			active_2D_ScanPanel.add2DDetector(str);
 		});
 
 		// Linear/Table/Fly mode
@@ -545,7 +568,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		Object evtObj = evt.getNewValue();
 		String srcString = String.valueOf(evtObj);
 		
-		System.out.println(" PropertyChange  "+propertyName+"  "+srcString+"  "+System.currentTimeMillis());
+//		System.out.println(" PropertyChange  "+propertyName+"  "+srcString+"  "+System.currentTimeMillis());
 		if (propertyName.equals("VAL")) {
 			setScan1VALStatus(true & scan1InProgress);
 
@@ -553,9 +576,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			if (srcString.equals("1")) {
 				// setScan1EXSCStatus(true & !scan2InProgress);
 				setScan1EXSCStatus(true);
-				mainPanel.setScanStatus("in progress");
+				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
-				mainPanel.setScanStatus("Done");
+				active_1D_ScanPanel.setScanStatus("Done");
 				if(!scan2InProgress) {
 					setScan1InProgress(false);
 					setScan1EXSCStatus(false);
@@ -579,7 +602,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		} else if (propertyName.equals("SCAN2EXSC")) {
 			if (srcString.equals("1")) {
 				setScan2EXSCStatus(true);
-				mainPanel.setScanStatus("in progress");
+				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
 				setScan2EXSCStatus(false);
 				setHasScan2Parms(false);
@@ -608,7 +631,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		}		
 		
 		else if (propertyName.equals("FileName")) {
-			mainPanel.setFileName(srcString);
+			active_1D_ScanPanel.setFileName(srcString);
 		}
 	}
 

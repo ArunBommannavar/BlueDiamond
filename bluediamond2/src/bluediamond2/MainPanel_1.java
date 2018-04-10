@@ -72,11 +72,10 @@ import javax.swing.UIManager;
 import javax.swing.JComboBox;
 
 
-public class MainPanel_1 extends JPanel implements ActionListener {
+public class MainPanel_1 extends JPanel/* implements ActionListener*/ {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 	private JTextField xRangeMin_textField_1D;
 	private JTextField xRangeMax_textField_1D;
@@ -227,10 +226,12 @@ public class MainPanel_1 extends JPanel implements ActionListener {
     double pickedX;
     double pickedY;
     private final double HOLE_VALUE = Double.MAX_VALUE;
-
+    
+    JPanel panel_9;
     JCChart oldChart;
-    
-    
+	Map<Integer,JPanel> oldPanelSelect = new HashMap<Integer, JPanel>();
+
+     
     
     /**
 	 * Create the panel.
@@ -297,6 +298,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 				chart_mouseReleased(e);
 			}
 		});
+		
 		chart.addMouseMotionListener(new MouseMotionAdapter() {
 			public void mouseDragged(MouseEvent e) {
 				chart_mouseDragged(e);
@@ -834,9 +836,9 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				setMarkers("Reset");
 				
-			}
-			
+			}			
 		});
+		
 		detectorPanel_1D.setLayout(new BorderLayout(0, 0));
 
 		detectorTabbedPane_1D = new JTabbedPane(JTabbedPane.TOP);
@@ -849,7 +851,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 
 		detectorPanel_1D_31_60 = new JPanel();
 		detectorTabbedPane_1D.addTab("Detectors 31-60", null, detectorPanel_1D_31_60, null);
-		detectorPanel_1D_31_60.setLayout(new GridLayout(0, 3, 0, 0));
+		detectorPanel_1D_31_60.setLayout(new GridLayout(10, 3, 0, 0));
 
 		JPanel panel_2D = new JPanel();
 		panel_2D.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -1148,9 +1150,6 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		sl_panel_1D_old.putConstraint(SpringLayout.SOUTH, panel_8, 345, SpringLayout.NORTH, panel_1D_old);
 		sl_panel_1D_old.putConstraint(SpringLayout.EAST, panel_8, -5, SpringLayout.EAST, panel_1D_old);
 		panel_1D_old.add(panel_8);
-		
-		JPanel panel_9 = new JPanel();
-		sl_panel_1D_old.putConstraint(SpringLayout.NORTH, panel_9, 6, SpringLayout.SOUTH, panel_8);
 		SpringLayout sl_panel_8 = new SpringLayout();
 		panel_8.setLayout(sl_panel_8);
 		
@@ -1172,21 +1171,21 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		JPanel panel_10 = new JPanel();
 		sl_panel_oldMarkers.putConstraint(SpringLayout.NORTH, panel_10, 5, SpringLayout.NORTH, panel_oldMarkers);
 		sl_panel_oldMarkers.putConstraint(SpringLayout.WEST, panel_10, 5, SpringLayout.WEST, panel_oldMarkers);
-		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_10, 30, SpringLayout.NORTH, panel_oldMarkers);
+		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_10, 70, SpringLayout.NORTH, panel_oldMarkers);
 		sl_panel_oldMarkers.putConstraint(SpringLayout.EAST, panel_10, -5, SpringLayout.EAST, panel_oldMarkers);
 		panel_oldMarkers.add(panel_10);
 		
 		JPanel panel_16 = new JPanel();
 		sl_panel_oldMarkers.putConstraint(SpringLayout.NORTH, panel_16, 5, SpringLayout.SOUTH, panel_10);
 		sl_panel_oldMarkers.putConstraint(SpringLayout.WEST, panel_16, 5, SpringLayout.WEST, panel_oldMarkers);
-		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_16, 30, SpringLayout.SOUTH, panel_10);
+		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_16, 70, SpringLayout.SOUTH, panel_10);
 		sl_panel_oldMarkers.putConstraint(SpringLayout.EAST, panel_16, 0, SpringLayout.EAST, panel_10);
 		panel_oldMarkers.add(panel_16);
 		
 		JPanel panel_18 = new JPanel();
 		sl_panel_oldMarkers.putConstraint(SpringLayout.NORTH, panel_18, 5, SpringLayout.SOUTH, panel_16);
 		sl_panel_oldMarkers.putConstraint(SpringLayout.WEST, panel_18, 5, SpringLayout.WEST, panel_oldMarkers);
-		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_18, 30, SpringLayout.SOUTH, panel_16);
+		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_18, 70, SpringLayout.SOUTH, panel_16);
 		panel_16.setLayout(new GridLayout(2, 0, 0, 0));
 		
 		JPanel panel_22 = new JPanel();
@@ -1206,7 +1205,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		JPanel panel_19 = new JPanel();
 		sl_panel_oldMarkers.putConstraint(SpringLayout.NORTH, panel_19, 5, SpringLayout.SOUTH, panel_18);
 		sl_panel_oldMarkers.putConstraint(SpringLayout.WEST, panel_19, 5, SpringLayout.WEST, panel_oldMarkers);
-		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_19, 30, SpringLayout.SOUTH, panel_18);
+		sl_panel_oldMarkers.putConstraint(SpringLayout.SOUTH, panel_19, 70, SpringLayout.SOUTH, panel_18);
 		panel_18.setLayout(new GridLayout(2, 0, 0, 0));
 		
 		JPanel panel_24 = new JPanel();
@@ -1253,14 +1252,23 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		
 		oldChart = new JCChart();
 		panel_oldChart.add(oldChart, BorderLayout.CENTER);
-		sl_panel_1D_old.putConstraint(SpringLayout.WEST, panel_9, 5, SpringLayout.WEST, panel_1D_old);
-		sl_panel_1D_old.putConstraint(SpringLayout.SOUTH, panel_9, -5, SpringLayout.SOUTH, panel_1D_old);
-		sl_panel_1D_old.putConstraint(SpringLayout.EAST, panel_9, -5, SpringLayout.EAST, panel_1D_old);
-		panel_1D_old.add(panel_9);
-		panel_9.setLayout(new BorderLayout(0, 0));
 		
-		JTabbedPane tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
-		panel_9.add(tabbedPane_3, BorderLayout.CENTER);
+		panel_9 = new JPanel();
+		sl_panel_1D_old.putConstraint(SpringLayout.NORTH, panel_9, 6, SpringLayout.SOUTH, panel_8);
+		sl_panel_1D_old.putConstraint(SpringLayout.WEST, panel_9, 5, SpringLayout.WEST, panel_1D_old);
+		sl_panel_1D_old.putConstraint(SpringLayout.SOUTH, panel_9, 165, SpringLayout.SOUTH, panel_8);
+		sl_panel_1D_old.putConstraint(SpringLayout.EAST, panel_9, 783, SpringLayout.WEST, panel_1D_old);
+		panel_1D_old.add(panel_9);
+		panel_9.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JPanel panel_32 = new JPanel();
+		panel_9.add(panel_32);
+		
+		JPanel panel_33 = new JPanel();
+		panel_9.add(panel_33);
+		
+		oldPanelSelect.put(0, panel_32);
+		oldPanelSelect.put(1, panel_33);
 		
 		JPanel panel_2D_old = new JPanel();
 		tabbedPane.addTab("Old Files (2-D)", null, panel_2D_old, null);
@@ -1445,6 +1453,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 			setXPositionerVisible_1D(i,false);
 		}
 	}
+	
 	public void resetPositioners_2D(){
 		for (int i=0;i<4;i++){
 			setXPositionerVisible_2D(i,false);
@@ -1731,7 +1740,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 
 	
 	public void setMarkers(String whoCalled) {
-
+		
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
 
@@ -1739,7 +1748,7 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 		checkRange = checkRange & between(vMarker2.getValue(), xaxis.getMin(), xaxis.getMax());
 		checkRange = checkRange & between(hMarker1.getValue(), yaxis.getMin(), yaxis.getMax());
 		checkRange = checkRange & between(hMarker2.getValue(), yaxis.getMin(), yaxis.getMax());
-		if (whoCalled.equals("Reset"))checkRange=!checkRange;
+//		if (whoCalled.equals("Reset"))checkRange=!checkRange;
 		if (!checkRange) {
 
 			runSafe(new Runnable() {
@@ -2216,84 +2225,14 @@ public class MainPanel_1 extends JPanel implements ActionListener {
 			scan2PosPnPV[i] = pp[i];
 		}
 	}
-}
-
-class VerticalLabelUI extends BasicLabelUI {
-
-	static {
-		labelUI = new VerticalLabelUI(false);
-	}
-
-	protected boolean clockwise;
-
-	VerticalLabelUI(boolean clockwise) {
-		super();
-		this.clockwise = clockwise;
-	}
-
-	public Dimension getPreferredSize(JComponent c) {
-		Dimension dim = super.getPreferredSize(c);
-		return new Dimension(dim.height, dim.width);
-	}
-
-	private static Rectangle paintIconR = new Rectangle();
-	private static Rectangle paintTextR = new Rectangle();
-	private static Rectangle paintViewR = new Rectangle();
-	private static Insets paintViewInsets = new Insets(0, 0, 0, 0);
-
-	public void paint(Graphics g, JComponent c) {
-
-		JLabel label = (JLabel) c;
-		String text = label.getText();
-		Icon icon = (label.isEnabled()) ? label.getIcon() : label.getDisabledIcon();
-
-		if ((icon == null) && (text == null)) {
-			return;
-		}
-
-		FontMetrics fm = g.getFontMetrics();
-		paintViewInsets = c.getInsets(paintViewInsets);
-
-		paintViewR.x = paintViewInsets.left;
-		paintViewR.y = paintViewInsets.top;
-
-		// Use inverted height & width
-		paintViewR.height = c.getWidth() - (paintViewInsets.left + paintViewInsets.right);
-		paintViewR.width = c.getHeight() - (paintViewInsets.top + paintViewInsets.bottom);
-
-		paintIconR.x = paintIconR.y = paintIconR.width = paintIconR.height = 0;
-		paintTextR.x = paintTextR.y = paintTextR.width = paintTextR.height = 0;
-
-		String clippedText = layoutCL(label, fm, text, icon, paintViewR, paintIconR, paintTextR);
-
-		Graphics2D g2 = (Graphics2D) g;
-		AffineTransform tr = g2.getTransform();
-		if (clockwise) {
-			g2.rotate(Math.PI / 2);
-			g2.translate(0, -c.getWidth());
-		} else {
-			g2.rotate(-Math.PI / 2);
-			g2.translate(-c.getHeight(), 0);
-		}
-
-		if (icon != null) {
-			icon.paintIcon(c, g, paintIconR.x, paintIconR.y);
-		}
-
-		if (text != null) {
-			int textX = paintTextR.x;
-			int textY = paintTextR.y + fm.getAscent();
-
-			if (label.isEnabled()) {
-				paintEnabledText(label, g, clippedText, textX, textY);
-			} else {
-				paintDisabledText(label, g, clippedText, textX, textY);
-			}
-		}
-
-		g2.setTransform(tr);
+	
+	private JPanel getSelectPanel(int n) {
+		int m = (n+1)%2;
+		return oldPanelSelect.get(m);
 	}
 }
+
+
 
 class MainPanel_1_xPositionerCheckBox_1_actionAdapter implements ActionListener {
 	private MainPanel_1 adaptee;

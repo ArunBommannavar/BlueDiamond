@@ -303,7 +303,6 @@ public class Data1D extends JCDefaultDataSource {
 		} else if (scanMode[n].equals("FLY")){
 			pStart[n] = posPP[n] + pMin[n];
 			pEnd[n] = pStart[n] + pWidth[n];
-//			System.out.println(" pStart = "+pStart[n]+"   pEnd = "+pEnd[n]   );
 			for (int i = 0; i < npts; i++) {
 				xVals[n][i] = pStart[n] + ((double) i / (double) (npts - 1)) * pWidth[n];
 			}
@@ -316,11 +315,8 @@ public class Data1D extends JCDefaultDataSource {
 
 	synchronized public void setDetectorValue(int det, int cpt, double d) {
 		try{
-//			System.out.println(" det = "+det+" cpt = "+cpt+"  value = "+d+" size of yVals "+yVals[det].length);
-
 		yVals[det][cpt - 1] = d;
 		}catch (ArrayIndexOutOfBoundsException e){
-			System.out.println(" in Exception det = "+det+"  cpt = "+cpt+" size of yVals "+yVals[det].length);
 		}
 	}
 
