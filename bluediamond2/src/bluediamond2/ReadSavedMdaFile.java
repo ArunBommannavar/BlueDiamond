@@ -60,7 +60,6 @@ public class ReadSavedMdaFile {
     public static ReadSavedMdaFile getInstance() {
         return readSavedMdaFile;
     }
-
     
     public void setFile(File file, JCChart oldChart,Saved_1D_ScanPanel saved_1D_ScanPanel) {
     	this.saved_1D_ScanPanel = saved_1D_ScanPanel;
@@ -337,10 +336,10 @@ public class ReadSavedMdaFile {
             dataViewNum++;
 
         }*/ 
-    /*
+    
     public void populate1DimScanData() {
     if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
-         saved_1D_ScanPanel.addNewFile(inFile, chart, data, dataViewNum);
+         saved_1D_ScanPanel.addNewFile(inFile,dataViewNum);
          saved_1D_ScanPanel.setPosName(posXName);
          saved_1D_ScanPanel.setPosDesc(posXDesc);
          saved_1D_ScanPanel.setDetName(detName);
@@ -352,8 +351,8 @@ public class ReadSavedMdaFile {
          saved_1D_ScanPanel.setDetMax(detMax);
 
 //         saved_1D_ScanPanel.setVisible(true);
-         saved_1D_ScanPanel.populatePanel();
-
+ //        saved_1D_ScanPanel.populatePanel();
+/*
          ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
 
          ods.setDataViewNumb(dataViewNum);
@@ -380,11 +379,12 @@ public class ReadSavedMdaFile {
          ods.setPosMinMax();
          ods.displayDets();
          ods.setDerivative(data.getDerivative());
-
+*/
          dataViewNum++;
 
      }
-    */
+    
     }
+}
 
 

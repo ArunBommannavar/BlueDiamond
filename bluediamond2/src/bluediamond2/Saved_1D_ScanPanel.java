@@ -7,6 +7,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import java.awt.GridLayout;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +25,14 @@ import java.awt.Font;
 public class Saved_1D_ScanPanel extends JPanel {
 
 	JCChart chart;
-	Map<Integer,JPanel> oldPanelSelect = new HashMap<Integer, JPanel>();
+	Map<Integer,JTabbedPane> oldPanelSelect = new HashMap<Integer, JTabbedPane>();
+	JTabbedPane tabbedPane_1;
+	JTabbedPane tabbedPane_2;
+	
 	java.util.List<String> oldList = new ArrayList<String>();
 	private int scanDataViewNum = 0;
 	private Old_1D_Panel old_1D_Panel;
+	private OldData1D oldData1D;
 	
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
@@ -35,7 +40,14 @@ public class Saved_1D_ScanPanel extends JPanel {
 	private JTextField yRangeMinTextBox;
 	private JTextField yRangeMaxTextBox;
 
-
+	String[] posName;
+	String[] posDesc;
+	String[] detName;
+	String[] detDesc;
+	double[] posMin;
+	double[] posMax;
+	double[] detMin;
+	double[] detMax;
 	
 	/**
 	 * Create the panel.
@@ -62,6 +74,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		markerChartPanel.setLayout(sl_markerChartPanel);
 		
 		JPanel markerPanel = new JPanel();
+		markerPanel.setBorder(new CompoundBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(128, 128, 128)), new BevelBorder(BevelBorder.RAISED, new Color(255, 200, 0), new Color(0, 255, 255), new Color(0, 0, 255), new Color(0, 255, 255))), new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0))));
 		sl_markerChartPanel.putConstraint(SpringLayout.NORTH, markerPanel, 10, SpringLayout.NORTH, markerChartPanel);
 		sl_markerChartPanel.putConstraint(SpringLayout.WEST, markerPanel, 10, SpringLayout.WEST, markerChartPanel);
 		sl_markerChartPanel.putConstraint(SpringLayout.SOUTH, markerPanel, 349, SpringLayout.NORTH, markerChartPanel);
@@ -151,7 +164,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 		JPanel panel = new JPanel();
 		sl_markerPanel.putConstraint(SpringLayout.NORTH, panel, 6, SpringLayout.SOUTH, widthPanel);
 		sl_markerPanel.putConstraint(SpringLayout.WEST, panel, 10, SpringLayout.WEST, markerPanel);
-		sl_markerPanel.putConstraint(SpringLayout.SOUTH, panel, 145, SpringLayout.SOUTH, widthPanel);
+		sl_markerPanel.putConstraint(SpringLayout.SOUTH, panel, 135, SpringLayout.SOUTH, widthPanel);
+		sl_markerPanel.putConstraint(SpringLayout.EAST, panel, 155, SpringLayout.WEST, markerPanel);
 		widthPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_13 = new JPanel();
@@ -167,7 +181,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		lblNewLabel_2.setUI(new VerticalLabelUI(false));
 
 		panel_14.add(lblNewLabel_2, BorderLayout.CENTER);
-		sl_markerPanel.putConstraint(SpringLayout.EAST, panel, 160, SpringLayout.WEST, markerPanel);
 		markerPanel.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -176,6 +189,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(255, 255, 0)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(255, 255, 0))));
 		panel_1.add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel panel_3 = new JPanel();
@@ -235,21 +249,29 @@ public class Saved_1D_ScanPanel extends JPanel {
 		chartPanel.add(chart, BorderLayout.CENTER);
 		add(detectorPositionerTopPanel);
 		detectorPositionerTopPanel.setLayout(new GridLayout(0, 2, 0, 0));
-		
+		oldData1D = new OldData1D(chart);
 		JPanel panel_4 = new JPanel();
 		detectorPositionerTopPanel.add(panel_4);
 		
 		JPanel panel_5 = new JPanel();
 		detectorPositionerTopPanel.add(panel_5);
-		oldPanelSelect.put(0, panel_4);
-		oldPanelSelect.put(1, panel_5);
+		panel_4.setLayout(new BorderLayout(0, 0));
 		
+		tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		panel_4.add(tabbedPane_1, BorderLayout.NORTH);
+		panel_5.setLayout(new BorderLayout(0, 0));
+		
+		tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
+		panel_5.add(tabbedPane_2, BorderLayout.NORTH);
+		oldPanelSelect.put(0, tabbedPane_1);
+		oldPanelSelect.put(1, tabbedPane_2);
+
 	}
 	
 	public JCChart getSaved_1D_Chart() {
 		return chart;
 	}
-	private JPanel getSelectPanel(int n) {
+	private JTabbedPane getSelectTabPane(int n) {
 		int m = (n+1)%2;
 		return oldPanelSelect.get(m);
 	}
@@ -257,20 +279,87 @@ public class Saved_1D_ScanPanel extends JPanel {
 	public boolean isListed(String str) {
 		return oldList.contains(str);
 	}
-/*
-	   public void addNewFile(File fl, JCChart ch, ChartDataSource d,int n) {
-		      chart = ch;
+	   public void setPosName(String[] s){
+		      int n = s.length;
+		      posName = new String[n];
+		      for (int i =0; i < n ; i++){
+		         posName[i] = s[i];
+		      }
+		   }
+
+		   public void setPosDesc(String[] s){
+		      int n = s.length;
+		      posDesc = new String[n];
+		      for (int i =0; i < n ; i++){
+		         posDesc[i] = s[i];
+		      }
+		   }
+
+		   public void setDetName(String[] s){
+		      int n = s.length;
+		      detName = new String[n];
+		      for (int i =0; i < n ; i++){
+		         detName[i] = s[i];
+		      }
+		   }
+
+		   public void setDetDesc(String[] s){
+		      int n = s.length;
+		      detDesc = new String[n];
+		      for (int i =0; i < n ; i++){
+		         detDesc[i] = s[i];
+		      }
+		   }
+
+		   public void setPosMin(double[] d){
+		      int n= d.length;
+		      posMin = new double[n];
+
+		      for (int i=0; i < n; i++){
+		         posMin[i] = d[i];
+		      }
+		   }
+
+		   public void setPosMax(double[] d){
+		      int n= d.length;
+		      posMax = new double[n];
+		      for (int i=0; i < n; i++){
+		         posMax[i] = d[i];
+		      }
+		   }
+
+		   public void setDetMin(double[] d){
+		      int n= d.length;
+		      detMin = new double[n];
+		      for (int i=0; i < n; i++){
+		         detMin[i] = d[i];
+		      }
+		   }
+
+		   public void setDetMax(double[] d){
+		      int n= d.length;
+		      detMax = new double[n];
+		      for (int i=0; i < n; i++){
+		         detMax[i] = d[i];
+		      }
+		   }
+
+
+
+	   public void addNewFile(File fl, int n) {
+		     
 		      scanDataViewNum = n;
 		      String str = fl.getName();
 		      old_1D_Panel = new Old_1D_Panel();
 		      old_1D_Panel.setChart(chart);
 		      old_1D_Panel.setDataViewNumber(n);
-		      jTabbedPane1.addTab(str, old_1D_Panel);
+		      JTabbedPane oldTab = getSelectTabPane(n);
+		      oldTab.addTab(str, old_1D_Panel);
 		      oldList.add(str);
-		      data = d;
-		      java.util.List list = data.getSelectedChartDetectors();
+		     
+		      java.util.List list = oldData1D.getSelectedChartDetectors();
 		      old_1D_Panel.setSelectedDetectorsForDisplay(list);
 
 		    }
-*/
+
 }

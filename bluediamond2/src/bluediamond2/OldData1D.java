@@ -170,6 +170,18 @@ public class OldData1D extends JCDefaultDataSource {
 
 		   }
 
+	   public List getSelectedChartDetectors() {
+		      List list = new ArrayList();
+
+		      for (int i = 0; i < numberOfDetectors; i++) {
+		         if (oldChart.getDataView(dataViewNumber).getSeries(i).isVisible()) {
+		            list.add(i);
+		         }
+		      }
+		      return list;
+		   }
+
+	   
 	   synchronized public void updateDisplay() {
 		      oldChart.setBatched(true);
 		      /**

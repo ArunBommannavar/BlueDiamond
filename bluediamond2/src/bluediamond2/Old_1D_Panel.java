@@ -31,9 +31,11 @@ import com.klg.jclass.chart.JCChart;
 
 public class Old_1D_Panel extends JPanel {
 
-	private JTabbedPane tabbedPane;
+	private JTabbedPane posDetTabbedPane;
 	private JScrollPane posScrollPane;
 	private JScrollPane detScrollPane;
+	JPanel PosPanel;
+	JPanel DetPanel;
 	private JTable posTable;
 	private JTable detTable;
 	HpTableModel dm1 = new HpTableModel();
@@ -54,11 +56,11 @@ public class Old_1D_Panel extends JPanel {
 	public Old_1D_Panel() {
 		setLayout(new BorderLayout(0, 0));
 
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		add(tabbedPane, BorderLayout.CENTER);
+		posDetTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		add(posDetTabbedPane, BorderLayout.CENTER);
 
-		JPanel PosPanel = new JPanel();
-		tabbedPane.addTab("Positioners", null, PosPanel, null);
+		PosPanel = new JPanel();
+		posDetTabbedPane.addTab("Positioners", null, PosPanel, null);
 		PosPanel.setLayout(new BorderLayout(0, 0));
 
 		posScrollPane = new JScrollPane();
@@ -67,8 +69,8 @@ public class Old_1D_Panel extends JPanel {
 		posTable = new JTable();
 		posScrollPane.setViewportView(posTable);
 
-		JPanel DetPanel = new JPanel();
-		tabbedPane.addTab("Detectors", null, DetPanel, null);
+		DetPanel = new JPanel();
+		posDetTabbedPane.addTab("Detectors", null, DetPanel, null);
 		DetPanel.setLayout(new BorderLayout(0, 0));
 
 		detScrollPane = new JScrollPane();
@@ -87,10 +89,18 @@ public class Old_1D_Panel extends JPanel {
 		dataViewNumber = n;
 	}
 
+	public int getDataViewNumber() {
+		return dataViewNumber;
+	}
+	
 	public void setSelectedDetectorsForDisplay(java.util.List l) {
 		selectedDetectorsForDisplay = l;
 	}
 
+	public void setTabName(String str) {
+		posDetTabbedPane.setTitleAt(dataViewNumber, str);
+	}
+	
 	public void setPosHeaders(JTable tb) {
 
 		HpTableModel mp = (HpTableModel) tb.getModel();
