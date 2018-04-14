@@ -665,6 +665,23 @@ public class Active_1D_ScanPanel extends JPanel {
 		});
 		dataView = chart.getDataView(0);
 		addDetectorPanels_1D();
+        vMarker1 = new JCMarker();
+        vMarker1.setAssociatedWithYAxis(false);
+
+        vMarker2 = new JCMarker();
+        vMarker2.setAssociatedWithYAxis(false);
+
+        vMarkerCenter = new JCMarker();
+        vMarkerCenter.setAssociatedWithYAxis(false);
+
+        hMarker1 = new JCMarker();
+        hMarker1.setAssociatedWithYAxis(true);
+
+        hMarker2 = new JCMarker();
+        hMarker2.setAssociatedWithYAxis(true);
+
+        hMarkerCenter = new JCMarker();
+        hMarkerCenter.setAssociatedWithYAxis(true);
 
 		this.updateUI();
 

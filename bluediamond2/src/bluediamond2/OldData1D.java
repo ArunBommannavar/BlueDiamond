@@ -66,6 +66,7 @@ public class OldData1D extends JCDefaultDataSource {
 	}
 	public void setNumPositioners(int n) {
 		numberOfPositioners = n;
+        System.out.println("OldData1_D Pos # = "+n);
 	}
 
 	public void setNumberOfDetectors(int n) {

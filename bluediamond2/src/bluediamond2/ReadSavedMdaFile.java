@@ -69,6 +69,7 @@ public class ReadSavedMdaFile {
         rmd.setFile(inFile);
         rmd.readMdaData();
         dataRank = rmd.getRank();
+        System.out.println(" Rank = "+dataRank );
         double[][] temp;
         String tempString;
         int[] dims = new int[2];
@@ -76,20 +77,21 @@ public class ReadSavedMdaFile {
         if (dataRank == 1) {
         	oldData1D = new OldData1D(oldChart);
         	oldData1D.setNumPoints(rmd.getNumPoints(0));
-//           numXPoints = rmd.getNumPoints(0);
-//           numCurrentXPoint = rmd.getCurrentPoint(0);
+           numXPoints = rmd.getNumPoints(0);
+           numCurrentXPoint = rmd.getCurrentPoint(0);
             
-            oldData1D.setNumberOfCurrentPoints(rmd.getCurrentPoint(0));
+            oldData1D.setNumberOfCurrentPoints(numCurrentXPoint);
             
-//            numXPos = rmd.getNumPos(0);
-//            numDets = rmd.getNumDets(0);
+            numXPos = rmd.getNumPos(0);
+            numDets = rmd.getNumDets(0);
 
-            oldData1D.setNumPositioners(rmd.getNumPos(0));
-            oldData1D.setNumberOfDetectors(rmd.getNumDets(0));
+            oldData1D.setNumPositioners(numXPos);
+            oldData1D.setNumberOfDetectors(numDets);
+  
             
             posXName = new String[numXPos];
             posXDesc = new String[numXPos];
-
+            System.out.println(" Num XPos = "+numXPos);
             detName = new String[numDets];
             detDesc = new String[numDets];
 
@@ -103,8 +105,8 @@ public class ReadSavedMdaFile {
 
             xVal = rmd.getPosData(0);
             yVal = rmd.getDetsData(0);
-//            posMinMax1D();
-//            populate1DimScanData();
+            posMinMax1D();
+            populate1DimScanData();
         } else if (dataRank == 2) {
             numCurrentYPoint = rmd.getCurrentPoint(0);
             /**
@@ -338,6 +340,7 @@ public class ReadSavedMdaFile {
         }*/ 
     
     public void populate1DimScanData() {
+    	System.out.println(" inFile = "+inFile.getName());
     if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
          saved_1D_ScanPanel.addNewFile(inFile,dataViewNum);
          saved_1D_ScanPanel.setPosName(posXName);
@@ -350,8 +353,8 @@ public class ReadSavedMdaFile {
          saved_1D_ScanPanel.setDetMin(detMin);
          saved_1D_ScanPanel.setDetMax(detMax);
 
-//         saved_1D_ScanPanel.setVisible(true);
- //        saved_1D_ScanPanel.populatePanel();
+         saved_1D_ScanPanel.setVisible(true);
+         saved_1D_ScanPanel.populatePanel();
 /*
          ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
 

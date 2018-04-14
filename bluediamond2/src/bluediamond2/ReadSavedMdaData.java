@@ -176,7 +176,7 @@ public class ReadSavedMdaData {
 	          asize = inData.readInt();
 	          extSize = CountedString.getCorrectedByteSize(asize);
 	          diffSize = extSize-asize;
-	          System.out.println(" Asize = "+asize);
+//	          System.out.println(" Asize = "+asize);
 	          bytes = new byte[asize];
 	          inData.read(bytes);
 	          str = new String(bytes);

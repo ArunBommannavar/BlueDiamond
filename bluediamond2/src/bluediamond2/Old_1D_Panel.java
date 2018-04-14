@@ -28,6 +28,9 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import com.klg.jclass.chart.JCChart;
+import java.awt.GridLayout;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.BevelBorder;
 
 public class Old_1D_Panel extends JPanel {
 
@@ -49,11 +52,15 @@ public class Old_1D_Panel extends JPanel {
 	int dataViewNumber;
 	java.util.List selectedDetectorsForDisplay;
 	ButtonGroup buttonGroup1 = new ButtonGroup();
+	private JPanel showHidePanel;
+	private JButton hideButton;
+	private JButton showButton;
 
 	/**
 	 * Create the panel.
 	 */
 	public Old_1D_Panel() {
+		setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 255), new Color(0, 255, 255), new Color(0, 255, 0), new Color(255, 200, 0)), new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(255, 200, 0), new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 175, 175)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(255, 200, 0), new Color(0, 0, 255), new Color(0, 255, 255)))));
 		setLayout(new BorderLayout(0, 0));
 
 		posDetTabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -66,8 +73,25 @@ public class Old_1D_Panel extends JPanel {
 		posScrollPane = new JScrollPane();
 		PosPanel.add(posScrollPane, BorderLayout.CENTER);
 
-		posTable = new JTable();
+		posTable = new JTable(dm1){
+	          public void tableChanged(TableModelEvent e) {
+		             super.tableChanged(e);
+		             repaint();
+		          }
+		       };
+		posTable.setName("Pos");
 		posScrollPane.setViewportView(posTable);
+		
+	       
+		showHidePanel = new JPanel();
+		PosPanel.add(showHidePanel, BorderLayout.SOUTH);
+		showHidePanel.setLayout(new GridLayout(0, 4, 0, 0));
+		
+		hideButton = new JButton("Hide");
+		showHidePanel.add(hideButton);
+		
+		showButton = new JButton("Show");
+		showHidePanel.add(showButton);
 
 		DetPanel = new JPanel();
 		posDetTabbedPane.addTab("Detectors", null, DetPanel, null);
@@ -76,8 +100,20 @@ public class Old_1D_Panel extends JPanel {
 		detScrollPane = new JScrollPane();
 		DetPanel.add(detScrollPane, BorderLayout.CENTER);
 
-		detTable = new JTable();
+		detTable = new JTable(dm2){
+	          public void tableChanged(TableModelEvent e) {
+		             super.tableChanged(e);
+		             repaint();
+		          }
+		       };
+		detTable.setName("Dets");
 		detScrollPane.setViewportView(detTable);
+		dm1.addTableModelListener(new HPTableModelListener(posTable));
+		dm2.addTableModelListener(new HPTableModelListener(detTable));
+		setPosHeaders(posTable);
+		setDetHeaders(detTable);
+		posTable.setDefaultRenderer(Object.class, renderer1);
+		detTable.setDefaultRenderer(Object.class, renderer2);
 
 	}
 

@@ -1,26 +1,50 @@
 package bluediamond2;
 
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.SpringLayout;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.border.MatteBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.BorderLayout;
 import com.klg.jclass.chart.JCChart;
+
+import bluediamond2.Old_1D_Panel.EvenOddRenderer;
+import bluediamond2.Old_1D_Panel.HpTableModel;
+import bluediamond2.Old_1D_Panel.RadioButtonEditor;
+import bluediamond2.Old_1D_Panel.RadioButtonRenderer;
+
 import javax.swing.JTabbedPane;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EtchedBorder;
 
 public class Saved_1D_ScanPanel extends JPanel {
 
@@ -28,7 +52,11 @@ public class Saved_1D_ScanPanel extends JPanel {
 	Map<Integer,JTabbedPane> oldPanelSelect = new HashMap<Integer, JTabbedPane>();
 	JTabbedPane tabbedPane_1;
 	JTabbedPane tabbedPane_2;
-	
+	HpFileTableModel dm1 = new HpFileTableModel();
+	TableCellRenderer renderer1 = new EvenOddRenderer();
+
+	boolean hidden = false;
+
 	java.util.List<String> oldList = new ArrayList<String>();
 	private int scanDataViewNum = 0;
 	private Old_1D_Panel old_1D_Panel;
@@ -48,6 +76,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 	double[] posMax;
 	double[] detMin;
 	double[] detMax;
+	private JTable table;
 	
 	/**
 	 * Create the panel.
@@ -62,23 +91,15 @@ public class Saved_1D_ScanPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.WEST, markerChartPanel, 10, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, markerChartPanel, 845, SpringLayout.WEST, this);
 		add(markerChartPanel);
-		
-		JPanel detectorPositionerTopPanel = new JPanel();
-		detectorPositionerTopPanel.setBorder(new CompoundBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 0, 255), new Color(128, 128, 128))));
-		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 379, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, detectorPositionerTopPanel, 10, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -9, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, -3, SpringLayout.EAST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, -6, SpringLayout.NORTH, detectorPositionerTopPanel);
 		SpringLayout sl_markerChartPanel = new SpringLayout();
 		markerChartPanel.setLayout(sl_markerChartPanel);
 		
 		JPanel markerPanel = new JPanel();
+		sl_markerChartPanel.putConstraint(SpringLayout.EAST, markerPanel, 200, SpringLayout.WEST, markerChartPanel);
 		markerPanel.setBorder(new CompoundBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(128, 128, 128)), new BevelBorder(BevelBorder.RAISED, new Color(255, 200, 0), new Color(0, 255, 255), new Color(0, 0, 255), new Color(0, 255, 255))), new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0))));
 		sl_markerChartPanel.putConstraint(SpringLayout.NORTH, markerPanel, 10, SpringLayout.NORTH, markerChartPanel);
 		sl_markerChartPanel.putConstraint(SpringLayout.WEST, markerPanel, 10, SpringLayout.WEST, markerChartPanel);
 		sl_markerChartPanel.putConstraint(SpringLayout.SOUTH, markerPanel, 349, SpringLayout.NORTH, markerChartPanel);
-		sl_markerChartPanel.putConstraint(SpringLayout.EAST, markerPanel, 180, SpringLayout.WEST, markerChartPanel);
 		markerChartPanel.add(markerPanel);
 		
 		JPanel chartPanel = new JPanel();
@@ -92,13 +113,14 @@ public class Saved_1D_ScanPanel extends JPanel {
 		sl_markerPanel.putConstraint(SpringLayout.NORTH, leftPanel, 10, SpringLayout.NORTH, markerPanel);
 		sl_markerPanel.putConstraint(SpringLayout.WEST, leftPanel, 10, SpringLayout.WEST, markerPanel);
 		sl_markerPanel.putConstraint(SpringLayout.SOUTH, leftPanel, 50, SpringLayout.NORTH, markerPanel);
-		sl_markerPanel.putConstraint(SpringLayout.EAST, leftPanel, 160, SpringLayout.WEST, markerPanel);
+		sl_markerPanel.putConstraint(SpringLayout.EAST, leftPanel, -10, SpringLayout.EAST, markerPanel);
 		markerPanel.add(leftPanel);
 		
 		JPanel rightPanel = new JPanel();
 		sl_markerPanel.putConstraint(SpringLayout.NORTH, rightPanel, 6, SpringLayout.SOUTH, leftPanel);
 		sl_markerPanel.putConstraint(SpringLayout.WEST, rightPanel, 10, SpringLayout.WEST, markerPanel);
 		sl_markerPanel.putConstraint(SpringLayout.SOUTH, rightPanel, 46, SpringLayout.SOUTH, leftPanel);
+		sl_markerPanel.putConstraint(SpringLayout.EAST, rightPanel, 0, SpringLayout.EAST, leftPanel);
 		leftPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_7 = new JPanel();
@@ -114,12 +136,12 @@ public class Saved_1D_ScanPanel extends JPanel {
 		lblNewLabel_5.setUI(new VerticalLabelUI(false));
 
 		panel_8.add(lblNewLabel_5, BorderLayout.CENTER);
-		sl_markerPanel.putConstraint(SpringLayout.EAST, rightPanel, 160, SpringLayout.WEST, markerPanel);
 		markerPanel.add(rightPanel);
 		
 		JPanel centerPanel = new JPanel();
 		sl_markerPanel.putConstraint(SpringLayout.NORTH, centerPanel, 6, SpringLayout.SOUTH, rightPanel);
 		sl_markerPanel.putConstraint(SpringLayout.SOUTH, centerPanel, 46, SpringLayout.SOUTH, rightPanel);
+		sl_markerPanel.putConstraint(SpringLayout.EAST, centerPanel, 0, SpringLayout.EAST, rightPanel);
 		rightPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_9 = new JPanel();
@@ -136,13 +158,13 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		panel_10.add(lblNewLabel_4, BorderLayout.CENTER);
 		sl_markerPanel.putConstraint(SpringLayout.WEST, centerPanel, 10, SpringLayout.WEST, markerPanel);
-		sl_markerPanel.putConstraint(SpringLayout.EAST, centerPanel, 160, SpringLayout.WEST, markerPanel);
 		markerPanel.add(centerPanel);
 		
 		JPanel widthPanel = new JPanel();
 		sl_markerPanel.putConstraint(SpringLayout.NORTH, widthPanel, 6, SpringLayout.SOUTH, centerPanel);
 		sl_markerPanel.putConstraint(SpringLayout.WEST, widthPanel, 10, SpringLayout.WEST, markerPanel);
 		sl_markerPanel.putConstraint(SpringLayout.SOUTH, widthPanel, 46, SpringLayout.SOUTH, centerPanel);
+		sl_markerPanel.putConstraint(SpringLayout.EAST, widthPanel, 0, SpringLayout.EAST, centerPanel);
 		centerPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_11 = new JPanel();
@@ -158,14 +180,13 @@ public class Saved_1D_ScanPanel extends JPanel {
 		lblNewLabel_3.setUI(new VerticalLabelUI(false));
 
 		panel_12.add(lblNewLabel_3, BorderLayout.CENTER);
-		sl_markerPanel.putConstraint(SpringLayout.EAST, widthPanel, -10, SpringLayout.EAST, markerPanel);
 		markerPanel.add(widthPanel);
 		
 		JPanel panel = new JPanel();
 		sl_markerPanel.putConstraint(SpringLayout.NORTH, panel, 6, SpringLayout.SOUTH, widthPanel);
 		sl_markerPanel.putConstraint(SpringLayout.WEST, panel, 10, SpringLayout.WEST, markerPanel);
 		sl_markerPanel.putConstraint(SpringLayout.SOUTH, panel, 135, SpringLayout.SOUTH, widthPanel);
-		sl_markerPanel.putConstraint(SpringLayout.EAST, panel, 155, SpringLayout.WEST, markerPanel);
+		sl_markerPanel.putConstraint(SpringLayout.EAST, panel, 0, SpringLayout.EAST, widthPanel);
 		widthPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_13 = new JPanel();
@@ -197,17 +218,17 @@ public class Saved_1D_ScanPanel extends JPanel {
 		panel_3.setLayout(new MigLayout("", "[][grow]", "[][]"));
 		
 		JLabel lblNewLabel = new JLabel("Min");
-		panel_3.add(lblNewLabel, "cell 0 0,alignx trailing");
+		panel_3.add(lblNewLabel, "cell 0 0,alignx trailing,growy");
 		
 		xRangeMinTextBox = new JTextField();
-		panel_3.add(xRangeMinTextBox, "cell 1 0,growx");
+		panel_3.add(xRangeMinTextBox, "cell 1 0,grow");
 		xRangeMinTextBox.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Max");
-		panel_3.add(lblNewLabel_1, "cell 0 1,alignx trailing");
+		panel_3.add(lblNewLabel_1, "cell 0 1,alignx trailing,growy");
 		
 		xRangeMaxTextBox = new JTextField();
-		panel_3.add(xRangeMaxTextBox, "cell 1 1,growx");
+		panel_3.add(xRangeMaxTextBox, "cell 1 1,grow");
 		xRangeMaxTextBox.setColumns(10);
 		
 		JPanel panel_6 = new JPanel();
@@ -230,13 +251,14 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 		JPanel panel_2 = new JPanel();
 		panel.add(panel_2, BorderLayout.SOUTH);
+		panel_2.setLayout(new BorderLayout(0, 0));
 		
 		JCheckBox userCheckBox = new JCheckBox("User");
-		panel_2.add(userCheckBox);
+		panel_2.add(userCheckBox, BorderLayout.WEST);
 		
 		JCheckBox autoCheckBox = new JCheckBox("Auto");
 		autoCheckBox.setSelected(true);
-		panel_2.add(autoCheckBox);
+		panel_2.add(autoCheckBox, BorderLayout.EAST);
 		
 		autoUserGroup.add(autoCheckBox);
 		autoUserGroup.add(userCheckBox);
@@ -247,23 +269,60 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 		chart = new JCChart();
 		chartPanel.add(chart, BorderLayout.CENTER);
-		add(detectorPositionerTopPanel);
-		detectorPositionerTopPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		oldData1D = new OldData1D(chart);
-		JPanel panel_4 = new JPanel();
-		detectorPositionerTopPanel.add(panel_4);
 		
-		JPanel panel_5 = new JPanel();
-		detectorPositionerTopPanel.add(panel_5);
+		JPanel detectorPositionerTopPanel = new JPanel();
+		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, -6, SpringLayout.NORTH, detectorPositionerTopPanel);
+		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 379, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, detectorPositionerTopPanel, 10, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -9, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, -3, SpringLayout.EAST, this);
+		add(detectorPositionerTopPanel);
+		detectorPositionerTopPanel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_15 = new JPanel();
+		detectorPositionerTopPanel.add(panel_15, BorderLayout.WEST);
+		panel_15.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_15.add(scrollPane, BorderLayout.CENTER);
+
+		table = new JTable(dm1) {
+			public void tableChanged(TableModelEvent e) {
+				super.tableChanged(e);
+				repaint();
+			}
+		};
+		table.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0)), new EtchedBorder(EtchedBorder.RAISED, new Color(0, 255, 255), new Color(0, 255, 255))));
+		;
+		table.setName("Saved File");
+		
+		dm1.addTableModelListener(new HPFileTableModelListener(table));
+		setPosHeaders(table);
+		table.setDefaultRenderer(Object.class, renderer1);
+
+		panel_15.add(table, BorderLayout.CENTER);
+	      
+		JPanel panel_16 = new JPanel();
+		panel_16.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0)), new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0))));
+		detectorPositionerTopPanel.add(panel_16, BorderLayout.CENTER);
+		panel_16.setLayout(new GridLayout(0, 2, 0, 0));
+		JPanel panel_4 = new JPanel();
+		panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_16.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		
 		tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		panel_4.add(tabbedPane_1, BorderLayout.NORTH);
+		panel_4.add(tabbedPane_1, BorderLayout.CENTER);
+		oldPanelSelect.put(0, tabbedPane_1);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_16.add(panel_5);
 		panel_5.setLayout(new BorderLayout(0, 0));
 		
 		tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
-		panel_5.add(tabbedPane_2, BorderLayout.NORTH);
-		oldPanelSelect.put(0, tabbedPane_1);
+		panel_5.add(tabbedPane_2, BorderLayout.CENTER);
 		oldPanelSelect.put(1, tabbedPane_2);
 
 	}
@@ -344,8 +403,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		      }
 		   }
 
-
-
 	   public void addNewFile(File fl, int n) {
 		     
 		      scanDataViewNum = n;
@@ -356,10 +413,183 @@ public class Saved_1D_ScanPanel extends JPanel {
 		      JTabbedPane oldTab = getSelectTabPane(n);
 		      oldTab.addTab(str, old_1D_Panel);
 		      oldList.add(str);
-		     
+		      populateFileTable(str);
 		      java.util.List list = oldData1D.getSelectedChartDetectors();
 		      old_1D_Panel.setSelectedDetectorsForDisplay(list);
 
 		    }
+	   
+	   public void populateFileTable(String str) {
+			HpFileTableModel mp = (HpFileTableModel) table.getModel();
+			JRadioButton rb1 = new JRadioButton();
+			table.getColumn("Select").setCellRenderer(new RadioButtonRenderer());
+			table.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
+
+			mp.addRow(new Object[] { str, rb1 });
+
+	   }
+	   public void populatePanel(){
+		      int numPos = posMin.length;
+		      int numDets = detMin.length;
+
+		      for (int i=0; i < numPos; i++){
+		    	  old_1D_Panel.addNewPosData(posName[i],posDesc[i],posMin[i],posMax[i]);
+		      }
+
+		      for (int i=0; i < numDets; i++){
+		    	  old_1D_Panel.addNewDetData(detName[i],detDesc[i],detMin[i],detMax[i]);
+		      }
+		   }
+
+	   public void setPosHeaders(JTable tb) {
+
+		      HpFileTableModel mp = (HpFileTableModel) tb.getModel();
+
+		      mp.addColumn("File Name");
+		      mp.addColumn("Select");
+		      DefaultTableColumnModel colModel = (DefaultTableColumnModel) tb.getColumnModel();
+		      int wo = colModel.getTotalColumnWidth();
+
+		      TableColumn col0 = colModel.getColumn(0);
+		      col0.setPreferredWidth((wo * 75) / 100);
+
+		      TableColumn col1 = colModel.getColumn(1);
+		      col1.setPreferredWidth((wo * 25) / 100);
+
+		   }
+	   class HpFileTableModel extends DefaultTableModel {
+		   	
+	
+	   }
+	   public class HPFileTableModelListener implements TableModelListener {
+		      JTable table;
+		      HpFileTableModel mp;
+
+		      // It is necessary to keep the table since it is not possible
+		      // to determine the table from the event's source
+		      HPFileTableModelListener(JTable table) {
+		         this.table = table;
+		         mp = (HpFileTableModel) table.getModel();
+		      }
+
+		      public void tableChanged(TableModelEvent e) {
+		         int firstRow = e.getFirstRow();
+		         int lastRow = e.getLastRow();
+		         int mColIndex = e.getColumn();
+		         switch (e.getType()) {
+		         case TableModelEvent.INSERT:
+
+		            // The inserted rows are in the range [firstRow, lastRow]
+		            for (int r = firstRow; r <= lastRow; r++) {
+		               // Row r was inserted
+		            }
+		            break;
+		         case TableModelEvent.UPDATE:
+		            if (firstRow == TableModelEvent.HEADER_ROW) {
+		               if (mColIndex == TableModelEvent.ALL_COLUMNS) {
+		                  // A column was added
+		               } else {
+		                  // Column mColIndex in header changed
+		               }
+		            } else {
+		               // The rows in the range [firstRow, lastRow] changed
+		               for (int r = firstRow; r <= lastRow; r++) {
+		                  // Row r was changed
+
+		                  if (mColIndex == TableModelEvent.ALL_COLUMNS) {
+		                     // All columns in the range of rows have changed
+		                  } else {
+		                     // Column mColIndex changed
+		                     if (mColIndex == 1) {
+		                        Object obj = mp.getValueAt(firstRow, mColIndex);
+		                        JRadioButton rb = (JRadioButton) obj;
+
+//		                        Object dObj = chart.getDataView(dataViewNumber).getDataSource();
+
+		                        if (table.getName() == "Dets") {
+//		                           ((DetectorDisplay) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
+		                        }
+		                     } 
+		                  }
+		               }
+		            }
+		            break;
+		         case TableModelEvent.DELETE:
+
+		            // The rows in the range [firstRow, lastRow] changed
+		            for (int r = firstRow; r <= lastRow; r++) {
+		               // Row r was deleted
+		            }
+		            break;
+		         }
+		      }
+		   }
+	   class EvenOddRenderer implements TableCellRenderer {
+
+		      public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
+		      public Component getTableCellRendererComponent(JTable table, Object value,
+		                                                     boolean isSelected, boolean hasFocus, int row, int column) {
+		         Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+		              table, value, isSelected, hasFocus, row, column);
+		         ((JLabel) renderer).setOpaque(true);
+		         Color foreground, background;
+		         if (hidden) {
+		            foreground = new Color(0xDC, 0xDC, 0xDC);
+		            background = new Color(0x69, 0x69, 0x69);
+		         } else {
+		            background = new Color(0xFF, 0xFA, 0xCD);
+		            foreground = new Color(0x00, 0x00, 0xCD);
+		         }
+		         renderer.setForeground(foreground);
+		         renderer.setBackground(background);
+		         return renderer;
+		      }
+		   }
+	   class RadioButtonRenderer implements TableCellRenderer {
+		      public Component getTableCellRendererComponent(JTable table,
+		                                                     Object value,
+		                                                     boolean isSelected,
+		                                                     boolean hasFocus,
+		                                                     int row, int column) {
+		         if (value == null) {
+		            return null;
+		         }
+		         return (Component) value;
+		      }
+		   }
+
+
+		   class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
+		      private JRadioButton button;
+		      public RadioButtonEditor(JCheckBox checkBox) {
+		         super(checkBox);
+		      }
+
+		      public Component getTableCellEditorComponent(JTable table, Object value,
+		                                                   boolean isSelected,
+		                                                   int row,
+		                                                   int column) {
+		         if (value == null) {
+		            return null;
+		         }
+
+		         button = (JRadioButton) value;
+
+		         button.addItemListener(this);
+		         return (Component) value;
+
+		      }
+
+		      public Object getCellEditorValue() {
+		         button.removeItemListener(this);
+		         return button;
+		      }
+
+		      public void itemStateChanged(ItemEvent e) {
+		         super.fireEditingStopped();
+		      }
+		   }
 
 }
+
