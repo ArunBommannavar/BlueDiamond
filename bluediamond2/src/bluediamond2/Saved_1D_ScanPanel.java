@@ -45,13 +45,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.ListSelectionModel;
 
 public class Saved_1D_ScanPanel extends JPanel {
 
 	JCChart chart;
 	Map<Integer,JTabbedPane> oldPanelSelect = new HashMap<Integer, JTabbedPane>();
-	JTabbedPane tabbedPane_1;
-	JTabbedPane tabbedPane_2;
 	HpFileTableModel dm1 = new HpFileTableModel();
 	TableCellRenderer renderer1 = new EvenOddRenderer();
 
@@ -87,19 +86,21 @@ public class Saved_1D_ScanPanel extends JPanel {
 		setLayout(springLayout);
 		
 		JPanel markerChartPanel = new JPanel();
-		springLayout.putConstraint(SpringLayout.NORTH, markerChartPanel, 14, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.NORTH, markerChartPanel, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, markerChartPanel, 10, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST, markerChartPanel, 845, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, 360, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, markerChartPanel, -10, SpringLayout.EAST, this);
 		add(markerChartPanel);
 		SpringLayout sl_markerChartPanel = new SpringLayout();
 		markerChartPanel.setLayout(sl_markerChartPanel);
 		
 		JPanel markerPanel = new JPanel();
+		markerPanel.setBackground(new Color(255, 255, 204));
+		sl_markerChartPanel.putConstraint(SpringLayout.SOUTH, markerPanel, -5, SpringLayout.SOUTH, markerChartPanel);
 		sl_markerChartPanel.putConstraint(SpringLayout.EAST, markerPanel, 200, SpringLayout.WEST, markerChartPanel);
 		markerPanel.setBorder(new CompoundBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(128, 128, 128)), new BevelBorder(BevelBorder.RAISED, new Color(255, 200, 0), new Color(0, 255, 255), new Color(0, 0, 255), new Color(0, 255, 255))), new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0))));
 		sl_markerChartPanel.putConstraint(SpringLayout.NORTH, markerPanel, 10, SpringLayout.NORTH, markerChartPanel);
 		sl_markerChartPanel.putConstraint(SpringLayout.WEST, markerPanel, 10, SpringLayout.WEST, markerChartPanel);
-		sl_markerChartPanel.putConstraint(SpringLayout.SOUTH, markerPanel, 349, SpringLayout.NORTH, markerChartPanel);
 		markerChartPanel.add(markerPanel);
 		
 		JPanel chartPanel = new JPanel();
@@ -210,7 +211,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(255, 255, 0)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(255, 255, 0))));
+		tabbedPane.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(255, 255, 0)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 255, 0), new Color(0, 255, 255))));
 		panel_1.add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel panel_3 = new JPanel();
@@ -250,13 +251,17 @@ public class Saved_1D_ScanPanel extends JPanel {
 		yRangeMaxTextBox.setColumns(10);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 205), new Color(0, 0, 205), new Color(119, 136, 153), new Color(112, 128, 144)));
+		panel_2.setBackground(new Color(255, 204, 102));
 		panel.add(panel_2, BorderLayout.SOUTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
 		JCheckBox userCheckBox = new JCheckBox("User");
+		userCheckBox.setBackground(new Color(255, 204, 102));
 		panel_2.add(userCheckBox, BorderLayout.WEST);
 		
 		JCheckBox autoCheckBox = new JCheckBox("Auto");
+		autoCheckBox.setBackground(new Color(255, 204, 102));
 		autoCheckBox.setSelected(true);
 		panel_2.add(autoCheckBox, BorderLayout.EAST);
 		
@@ -272,58 +277,85 @@ public class Saved_1D_ScanPanel extends JPanel {
 		oldData1D = new OldData1D(chart);
 		
 		JPanel detectorPositionerTopPanel = new JPanel();
-		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, -6, SpringLayout.NORTH, detectorPositionerTopPanel);
-		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 379, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 5, SpringLayout.SOUTH, markerChartPanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -10, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, 0, SpringLayout.EAST, markerChartPanel);
 		springLayout.putConstraint(SpringLayout.WEST, detectorPositionerTopPanel, 10, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -9, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, -3, SpringLayout.EAST, this);
 		add(detectorPositionerTopPanel);
-		detectorPositionerTopPanel.setLayout(new BorderLayout(0, 0));
+		SpringLayout sl_detectorPositionerTopPanel = new SpringLayout();
+		detectorPositionerTopPanel.setLayout(sl_detectorPositionerTopPanel);
 		
-		JPanel panel_15 = new JPanel();
-		detectorPositionerTopPanel.add(panel_15, BorderLayout.WEST);
-		panel_15.setLayout(new BorderLayout(0, 0));
+		JPanel savedFilepanel = new JPanel();
+		savedFilepanel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.GREEN, Color.BLUE, Color.ORANGE, Color.YELLOW));
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.NORTH, savedFilepanel, 5, SpringLayout.NORTH, detectorPositionerTopPanel);
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.WEST, savedFilepanel, 5, SpringLayout.WEST, detectorPositionerTopPanel);
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.SOUTH, savedFilepanel, -5, SpringLayout.SOUTH, detectorPositionerTopPanel);
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.EAST, savedFilepanel, 200, SpringLayout.WEST, detectorPositionerTopPanel);
+		detectorPositionerTopPanel.add(savedFilepanel);
+		
+		JPanel posDetPanel = new JPanel();
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.EAST, posDetPanel, 0, SpringLayout.EAST, detectorPositionerTopPanel);
+		posDetPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 255, 255)), new CompoundBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0)), new BevelBorder(BevelBorder.RAISED, new Color(255, 255, 0), new Color(255, 200, 0), new Color(0, 255, 0), new Color(0, 255, 255)))));
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.NORTH, posDetPanel, 5, SpringLayout.NORTH, detectorPositionerTopPanel);
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.WEST, posDetPanel, 6, SpringLayout.EAST, savedFilepanel);
+		sl_detectorPositionerTopPanel.putConstraint(SpringLayout.SOUTH, posDetPanel, 0, SpringLayout.SOUTH, savedFilepanel);
+		savedFilepanel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel savedPanelLabel = new JPanel();
+		savedPanelLabel.setBorder(new LineBorder(Color.ORANGE, 2));
+		savedPanelLabel.setBackground(new Color(153, 204, 153));
+		savedFilepanel.add(savedPanelLabel, BorderLayout.NORTH);
+		
+		JLabel lblNewLabel_8 = new JLabel("Saved .mda Files");
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 11));
+		savedPanelLabel.add(lblNewLabel_8);
+		
+		JPanel savedFilesTablePanel = new JPanel();
+		savedFilesTablePanel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE));
+		savedFilepanel.add(savedFilesTablePanel, BorderLayout.CENTER);
+		savedFilesTablePanel.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		panel_15.add(scrollPane, BorderLayout.CENTER);
-
+		scrollPane.setViewportBorder(new LineBorder(new Color(102, 51, 51), 2, true));
+		savedFilesTablePanel.add(scrollPane, BorderLayout.CENTER);
+		
 		table = new JTable(dm1) {
-			public void tableChanged(TableModelEvent e) {
-				super.tableChanged(e);
-				repaint();
-			}
-		};
-		table.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0)), new EtchedBorder(EtchedBorder.RAISED, new Color(0, 255, 255), new Color(0, 255, 255))));
-		;
-		table.setName("Saved File");
-		
-		dm1.addTableModelListener(new HPFileTableModelListener(table));
-		setPosHeaders(table);
-		table.setDefaultRenderer(Object.class, renderer1);
+	          public void tableChanged(TableModelEvent e) {
+		             super.tableChanged(e);
+		             repaint();
+		          }
+		       };
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(204, 102, 0), new Color(204, 204, 0), new Color(204, 255, 153), new Color(204, 255, 153)));
+		table.setBackground(new Color(255, 255, 204));
+		table.setShowGrid(true);
+		table.setShowHorizontalLines(true);
+		table.setShowVerticalLines(true);
+	    table.setName("Saved File");
+	    dm1.addTableModelListener(new HPFileTableModelListener(table));
+	    setPosHeaders(table);
+	    table.setDefaultRenderer(Object.class, renderer1);
 
-		panel_15.add(table, BorderLayout.CENTER);
-	      
-		JPanel panel_16 = new JPanel();
-		panel_16.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0)), new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 200, 0))));
-		detectorPositionerTopPanel.add(panel_16, BorderLayout.CENTER);
-		panel_16.setLayout(new GridLayout(0, 2, 0, 0));
-		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_16.add(panel_4);
-		panel_4.setLayout(new BorderLayout(0, 0));
+		scrollPane.setViewportView(table);
+		detectorPositionerTopPanel.add(posDetPanel);
+		posDetPanel.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		panel_4.add(tabbedPane_1, BorderLayout.CENTER);
-		oldPanelSelect.put(0, tabbedPane_1);
+		JPanel posDetPanel_left = new JPanel();
+		posDetPanel.add(posDetPanel_left);
+		posDetPanel_left.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_16.add(panel_5);
-		panel_5.setLayout(new BorderLayout(0, 0));
+		JTabbedPane tabbedPane_left = new JTabbedPane(JTabbedPane.TOP);
+		posDetPanel_left.add(tabbedPane_left, BorderLayout.CENTER);
 		
-		tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
-		panel_5.add(tabbedPane_2, BorderLayout.CENTER);
-		oldPanelSelect.put(1, tabbedPane_2);
+		JPanel posDetPanel_right = new JPanel();
+		posDetPanel.add(posDetPanel_right);
+		posDetPanel_right.setLayout(new BorderLayout(0, 0));
+		
+		JTabbedPane tabbedPane_right = new JTabbedPane(JTabbedPane.TOP);
+		posDetPanel_right.add(tabbedPane_right, BorderLayout.CENTER);
+		
+		oldPanelSelect.put(0, tabbedPane_left);
+		oldPanelSelect.put(1, tabbedPane_right);
 
 	}
 	
@@ -412,6 +444,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		      old_1D_Panel.setDataViewNumber(n);
 		      JTabbedPane oldTab = getSelectTabPane(n);
 		      oldTab.addTab(str, old_1D_Panel);
+		      
 		      oldList.add(str);
 		      populateFileTable(str);
 		      java.util.List list = oldData1D.getSelectedChartDetectors();
@@ -444,7 +477,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 	   public void setPosHeaders(JTable tb) {
 
 		      HpFileTableModel mp = (HpFileTableModel) tb.getModel();
-
+		      
 		      mp.addColumn("File Name");
 		      mp.addColumn("Select");
 		      DefaultTableColumnModel colModel = (DefaultTableColumnModel) tb.getColumnModel();
@@ -590,6 +623,5 @@ public class Saved_1D_ScanPanel extends JPanel {
 		         super.fireEditingStopped();
 		      }
 		   }
-
 }
 

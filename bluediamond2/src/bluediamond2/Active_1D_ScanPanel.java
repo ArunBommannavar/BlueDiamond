@@ -56,6 +56,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 
 public class Active_1D_ScanPanel extends JPanel {
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
@@ -161,9 +162,10 @@ public class Active_1D_ScanPanel extends JPanel {
 		add(leftPanel);
 		
 		JPanel plotPanel = new JPanel();
+		plotPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42), new Color(169, 169, 169), new Color(169, 169, 169)), new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 240), new Color(255, 255, 240), new Color(255, 255, 240), new Color(255, 255, 240))));
 		springLayout.putConstraint(SpringLayout.NORTH, plotPanel, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, plotPanel, 5, SpringLayout.EAST, leftPanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, plotPanel, -200, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, plotPanel, -230, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, plotPanel, -5, SpringLayout.EAST, this);
 		add(plotPanel);
 		
@@ -638,11 +640,13 @@ public class Active_1D_ScanPanel extends JPanel {
 		detectorPanel_1D.setLayout(new BorderLayout(0, 0));
 		
 		JTabbedPane detectorTabbedPane_1D = new JTabbedPane(JTabbedPane.TOP);
+		detectorTabbedPane_1D.setBorder(new LineBorder(new Color(255, 0, 0), 2));
 		detectorPanel_1D.add(detectorTabbedPane_1D, BorderLayout.CENTER);
 		
 		detectorPanel_1D_1_30 = new JPanel();
+		detectorPanel_1D_1_30.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(255, 222, 173), new Color(255, 222, 173), new Color(255, 222, 173), new Color(255, 222, 173)), new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42))));
 		detectorTabbedPane_1D.addTab("Detectors 1-30", null, detectorPanel_1D_1_30, null);
-		detectorPanel_1D_1_30.setLayout(new GridLayout(10, 3, 0, 0));
+		detectorPanel_1D_1_30.setLayout(new GridLayout(10, 3, 2, 0));
 		
 		detectorPanel_1D_31_60 = new JPanel();
 		detectorTabbedPane_1D.addTab("Detectors 31-60", null, detectorPanel_1D_31_60, null);

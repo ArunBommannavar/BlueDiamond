@@ -331,17 +331,11 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			active_1D_ScanPanel.updateScanCenterDiff();
 			active_1D_ScanPanel.updateUserAuto();
 			
-//			mainPanel.setScanCenterLabel(d);			
-//			mainPanel.setMarkers("dstate");
-//			mainPanel.updateScanCenterDiff();
-//			mainPanel.updateUserAuto();
-//			String posName = mainPanel.getPositionerName(data1D.getSelectedPositioner());
 			String posName = active_1D_ScanPanel.getPositionerName(data1D.getSelectedPositioner());
 			active_1D_ScanPanel.setXAxisTitle(posName);
 
 		} else {
 
-//			mainPanel.showAlert(" Number of points is zero ");
 			active_1D_ScanPanel.showAlert(" Number of points is zero ");
 			/*
 			 * Post a alert message that CPT is zero.

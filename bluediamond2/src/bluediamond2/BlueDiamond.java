@@ -40,17 +40,19 @@ public class BlueDiamond {
 	String scan1Str = "mnbmnb ";
 	String scan2Str = "gfdfgdfgd ";
 	File programPath;
+	String mdaFilesPath = ".";
 
 	boolean derivative = false;
 	boolean yAxisLog = false;
-	Scan1PositionerParms scan1PositionerParms;
-	Scan2PositionerParms scan2PositionerParms;
-	Scan1DetectorParms scan1DetectorParms;
+	
+	ScanMonitor scanMonitor = null;
+	Scan1PositionerParms scan1PositionerParms = null;
+	Scan2PositionerParms scan2PositionerParms = null;
+	Scan1DetectorParms scan1DetectorParms = null;
 
 	Data1D data1D;
 	Data2D data2D;
 
-	ScanMonitor scanMonitor;
 //	MainPanel_1 mainPanel;
 	MainPanel mainPanel;
 	Active_1D_ScanPanel active_1D_ScanPanel;
@@ -190,10 +192,14 @@ public class BlueDiamond {
 	}
 
 	public void closeApplication() {
-		scanMonitor.disconnectChannel();
-		scan1PositionerParms.disconnectChannel();
-		scan1DetectorParms.disconnectChannel();
-		scan2PositionerParms.disconnectChannel();
+		if (scanMonitor != null)
+			scanMonitor.disconnectChannel();
+		if (scan1PositionerParms != null)
+			scan1PositionerParms.disconnectChannel();
+		if (scan1DetectorParms !=null)
+			scan1DetectorParms.disconnectChannel();
+		if (scan2PositionerParms != null)
+			scan2PositionerParms.disconnectChannel();
 		System.exit(0);
 
 	}
@@ -203,12 +209,9 @@ public class BlueDiamond {
          * Open an old mda file for display
          */
         File inFile;
-//        byte[] fileContents;
-//        int currentPoint;
-        JFileChooser jFileChooser1 = new JFileChooser();
+        JFileChooser jFileChooser1 = new JFileChooser(mdaFilesPath);
         jFileChooser1.setMultiSelectionEnabled(false);
         jFileChooser1.setFileFilter(new MDAfilter());
-//        int retVal = jFileChooser1.showOpenDialog(this);
         
         int retVal = jFileChooser1.showOpenDialog(null);
         /**
@@ -220,6 +223,7 @@ public class BlueDiamond {
          */
         if (retVal == JFileChooser.APPROVE_OPTION) {
             inFile = jFileChooser1.getSelectedFile();
+            mdaFilesPath = inFile.getAbsolutePath();
             readSavedMdaFile.setFile(inFile,oldChart,saved_1D_ScanPanel);
         }
 	}
@@ -350,6 +354,7 @@ public class BlueDiamond {
 			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
+			active_1D_ScanPanel.resetPositioners_1D();
 
 			scan1PositionerParms.createPosPVs();
 			countDownConnection.pendIO();

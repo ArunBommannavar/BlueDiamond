@@ -81,17 +81,6 @@ public class Old_1D_Panel extends JPanel {
 		       };
 		posTable.setName("Pos");
 		posScrollPane.setViewportView(posTable);
-		
-	       
-		showHidePanel = new JPanel();
-		PosPanel.add(showHidePanel, BorderLayout.SOUTH);
-		showHidePanel.setLayout(new GridLayout(0, 4, 0, 0));
-		
-		hideButton = new JButton("Hide");
-		showHidePanel.add(hideButton);
-		
-		showButton = new JButton("Show");
-		showHidePanel.add(showButton);
 
 		DetPanel = new JPanel();
 		posDetTabbedPane.addTab("Detectors", null, DetPanel, null);
@@ -112,6 +101,17 @@ public class Old_1D_Panel extends JPanel {
 		dm2.addTableModelListener(new HPTableModelListener(detTable));
 		setPosHeaders(posTable);
 		setDetHeaders(detTable);
+		
+	       
+		showHidePanel = new JPanel();
+		add(showHidePanel, BorderLayout.SOUTH);
+		showHidePanel.setLayout(new GridLayout(0, 4, 0, 0));
+		
+		hideButton = new JButton("Hide");
+		showHidePanel.add(hideButton);
+		
+		showButton = new JButton("Show");
+		showHidePanel.add(showButton);
 		posTable.setDefaultRenderer(Object.class, renderer1);
 		detTable.setDefaultRenderer(Object.class, renderer2);
 

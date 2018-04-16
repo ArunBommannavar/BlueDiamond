@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
 
 public class DetectorColorPanel extends JPanel {
 
@@ -22,21 +24,19 @@ public class DetectorColorPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public DetectorColorPanel() {
-		setForeground(Color.RED);
-		setBackground(Color.LIGHT_GRAY);
-		setBorder(new TitledBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		setForeground(new Color(255, 255, 224));
+		setBackground(new Color(250, 250, 210));
 		setLayout(new BorderLayout(0, 0));
 
 		detCheckbox = new JCheckBox("New check box");
 		detCheckbox.setSelected(true);
-		detCheckbox.setBackground(Color.LIGHT_GRAY);
+		detCheckbox.setBackground(new Color(255, 255, 255));
 		detCheckbox.setFont(new Font("Tahoma", Font.BOLD, 12));
 		add(detCheckbox, BorderLayout.CENTER);
 
 		colorButton = new JButton("Color");
-		colorButton.setEnabled(false);
-		colorButton.setBackground(Color.LIGHT_GRAY);
-		colorButton.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 12));
+		colorButton.setBackground(new Color(250, 250, 210));
+		colorButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		add(colorButton, BorderLayout.EAST);
 
 	}
