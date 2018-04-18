@@ -265,6 +265,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	}
 	
 	private void doScan1Val() {
+//		System.out.println(" In doScan1Val " );
 
 		setScan1VALStatus(false);
 		scan1CPT = scan1CPTObj.getValue();
@@ -299,11 +300,13 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			 */
 			data1D.setXAxisScale();
 			data1D.setYAxisScale();
+			active_1D_ScanPanel.setMarkers(" ");
 
 			/*
 			 * Now lets plot the data.
 			 */
 			data1D.updateChartDisplay(scan1CPT, scan1CPT);
+			
 
 			/**
 			 * Lets handle the 2D scan case
@@ -311,7 +314,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			if (scan2InProgress) {
 
 				scan2CPT = scan2CPTObj.getValue();
-				System.out.println(" CPT 2 = "+scan2CPT);
+//				System.out.println(" CPT 2 = "+scan2CPT);
 
 				if (scan2CPT == 1) {
 					validPos1.forEach((n) -> {
@@ -346,6 +349,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void setMainPanel_1D_PositionerNames() {
 
+		//System.out.println(" In setMainPanel_1D_PositionerNames ");
 		validPos1.forEach((n) -> {
 			active_1D_ScanPanel.setXPositionerVisible_1D(n, true);
 			final String str = scan1PositionerParms.getPosPnPV(n);
@@ -389,6 +393,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	
 	public void initPosDet1D() {
 
+		System.out.println(" In initPosDet1D " );
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
@@ -632,6 +637,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	public void run() {
 		while (true) {
 			if (scan2EXSCStatus) {
+//				System.out.println(" In run doScan2EXSC ");
 				doScan2EXSC();
 
 			} else if (scan1EXSCStatus) {
@@ -642,6 +648,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 				 * positioner's start and width value Tell the plot about the X-scale
 				 * positioners range.
 				 */
+//				System.out.println(" In run doScan1EXSC ");
 
 				doScan1EXSC();
 				// }else{
@@ -653,11 +660,15 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 				 * A new data point is available. Check for scan1 in progress. If the scan1 is
 				 * in progress then read new value for each detectors and tell the plot
 				 */
+//				System.out.println(" In run doScan1Val ");
+
 				doScan1Val();
 			}
 
 			else if (scan1AfterScanDataReady) {
 				// scan1AfterScanDataReady = false;
+				System.out.println(" In run updateData1DAfterScan ");
+
 				updateData1DAfterScan();
 			}
 

@@ -56,6 +56,7 @@ public class Data1D extends JCDefaultDataSource {
 		dataView = chart.getDataView(0);
 	}
 	public void setNumberOfPoints(int n) {
+		System.out.println(" In Data1D setNumberOfPoints");
 		npts = n;
 	}
 
@@ -68,6 +69,7 @@ public class Data1D extends JCDefaultDataSource {
 
 	void setSelectedPositioner(int n) {
 		selectedPositioner = n;
+		System.out.println(" Selected Positioner = "+n);
 		setXAxisScale();
 		updateChartDisplay(cpt,npts);
 	}
@@ -104,6 +106,7 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setChartData(int sp) {
+		System.out.println("setChartData");
 		selectedPositioner = sp;
 
 		for (int i = 0; i < npts; i++) {
@@ -112,7 +115,7 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setChartRawData() {
-
+		System.out.println(" setChartRawData ");
 		for (int i = 0; i < npts; i++) {
 			xvalues[0][i] = xVals[selectedPositioner][i];
 		}
@@ -314,10 +317,9 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	synchronized public void setDetectorValue(int det, int cpt, double d) {
-		try{
+		
 		yVals[det][cpt - 1] = d;
-		}catch (ArrayIndexOutOfBoundsException e){
-		}
+		
 	}
 
 	public void setPositionerDataArray(int pos, double[] d) {
@@ -391,7 +393,7 @@ public class Data1D extends JCDefaultDataSource {
 		int rawLastPlotPoint = n;
 		int derTotalPlotPints = m - 1;
 		int derLastPlotPoint = n - 1;
-// System.out.println(" Current Point "+n);
+
 		chart.setBatched(true);
 
 		if (derivative) {

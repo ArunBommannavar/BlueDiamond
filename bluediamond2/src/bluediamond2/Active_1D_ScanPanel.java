@@ -110,6 +110,8 @@ public class Active_1D_ScanPanel extends JPanel {
 	boolean hMarkersShowing = true;
 	boolean hMarkerSelected = false;
 	boolean vMarkerSelected = false;
+	
+	
 	JCMarker pickedMarker;
 	double pickedPoint;
 	double minMarker;
@@ -162,7 +164,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		add(leftPanel);
 		
 		JPanel plotPanel = new JPanel();
-		plotPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42), new Color(169, 169, 169), new Color(169, 169, 169)), new BevelBorder(BevelBorder.LOWERED, new Color(255, 255, 240), new Color(255, 255, 240), new Color(255, 255, 240), new Color(255, 255, 240))));
+		plotPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42)), new BevelBorder(BevelBorder.RAISED, new Color(255, 69, 0), new Color(255, 69, 0), new Color(255, 69, 0), new Color(255, 69, 0))));
 		springLayout.putConstraint(SpringLayout.NORTH, plotPanel, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, plotPanel, 5, SpringLayout.EAST, leftPanel);
 		springLayout.putConstraint(SpringLayout.SOUTH, plotPanel, -230, SpringLayout.SOUTH, this);
@@ -687,7 +689,7 @@ public class Active_1D_ScanPanel extends JPanel {
         hMarkerCenter = new JCMarker();
         hMarkerCenter.setAssociatedWithYAxis(true);
 
-		this.updateUI();
+ 		this.updateUI();
 
 	}
 	public static void runSafe(Runnable task) {
@@ -704,18 +706,30 @@ public class Active_1D_ScanPanel extends JPanel {
 			return false;
 	}
 
+	public boolean isVerticalMarkerInRange() {
+		
+		xaxis = chart.getDataView(0).getXAxis();
+		yaxis = chart.getDataView(0).getYAxis();
+		boolean checkRange = between(vMarker1.getValue(), xaxis.getMin(), xaxis.getMax());
+		checkRange = checkRange & between(vMarker2.getValue(), xaxis.getMin(), xaxis.getMax());		
+		return checkRange;
+	}
+	
+	public boolean isHorizontalMarkerInRange() {
+		
+		xaxis = chart.getDataView(0).getXAxis();
+		yaxis = chart.getDataView(0).getYAxis();
+		boolean checkRange = between(hMarker1.getValue(), yaxis.getMin(), yaxis.getMax());
+		checkRange = checkRange & between(hMarker2.getValue(), yaxis.getMin(), yaxis.getMax());
+		
+		return checkRange;
+	}
+	
+	
 	public void setMarkers(String whoCalled) {
 		
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
-
-		boolean checkRange = between(vMarker1.getValue(), xaxis.getMin(), xaxis.getMax());
-		checkRange = checkRange & between(vMarker2.getValue(), xaxis.getMin(), xaxis.getMax());
-		checkRange = checkRange & between(hMarker1.getValue(), yaxis.getMin(), yaxis.getMax());
-		checkRange = checkRange & between(hMarker2.getValue(), yaxis.getMin(), yaxis.getMax());
-//		if (whoCalled.equals("Reset"))checkRange=!checkRange;
-		if (!checkRange) {
-
 			runSafe(new Runnable() {
 				public void run() {
 
@@ -757,15 +771,16 @@ public class Active_1D_ScanPanel extends JPanel {
 					setHorzBotValue(hMarker1Pos);
 					setHorzCenterValue(hMarkerCenterPos);
 					setHorzWidthValue(getWidth(d3, d4));
+				
 					data1D.updateChartDisplay();
 				}
 			});
-		}
+		
 	}
 	
 	public void setXAxisTitle(String str){
 		JCAxis xAxis = chart.getDataView(0).getXAxis();
-		xAxis.setTitle(new JCAxisTitle(str));
+		xAxis.setTitle(new JCAxisTitle(str));		
 	}
 
 	public void xCheckBox1_actionPerformed(ActionEvent e) {
@@ -870,7 +885,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 
 			chart.setBatched(false);
-			data1D.updateChartDisplay();
+			
 		}
 		if (pickedMarker == null && hMarkersShowing) {
 
@@ -901,8 +916,9 @@ public class Active_1D_ScanPanel extends JPanel {
 				hMarkerSelected = false;
 			}
 			chart.setBatched(false);
-			data1D.updateChartDisplay();
 		}
+		data1D.updateChartDisplay();
+
 	}
 
 	public void chart_mouseReleased(MouseEvent e) {
@@ -916,13 +932,57 @@ public class Active_1D_ScanPanel extends JPanel {
 		}
 	}
 
+    public void addVMarkers() {
+        dataView.addMarker(vMarker1);
+        dataView.addMarker(vMarker2);
+        dataView.addMarker(vMarkerCenter);
+    }
+    
+     public void showVMarkers() {
+        addVMarkers();
+        updateVMarkers();
+    }    
+    
+    public void addHMarkers() {
+        dataView.addMarker(hMarker1);
+        dataView.addMarker(hMarker2);
+        dataView.addMarker(hMarkerCenter);
+    }
+    
+    public void showHMarkers() {
+    	addHMarkers();
+    	updateHMarkers();    	
+    }
+    
+    public void hideVMarkers() {
+
+        vMarker1Pos = vMarker1.getValue();
+        dataView.removeMarker(vMarker1);
+
+        vMarker2Pos = vMarker2.getValue();
+        dataView.removeMarker(vMarker2);
+
+        vMarkerCenterPos = vMarkerCenter.getValue();
+        dataView.removeMarker(vMarkerCenter);
+    }
+
+    public void hideHMarkers() {
+
+        hMarker1Pos = hMarker1.getValue();
+        dataView.removeMarker(hMarker1);
+
+        hMarker2Pos = hMarker2.getValue();
+        dataView.removeMarker(hMarker2);
+
+        hMarkerCenterPos = hMarkerCenter.getValue();
+        dataView.removeMarker(hMarkerCenter);
+    }
+
 
 	public void moveVmarker(JCMarker mrkr, double d) {
 		double d1;
 		double d2;
 		double dCenter;
-//		double dWidth;
-//		double temp;
 
 		mrkr.setValue(d);
 		d1 = vMarker1.getValue();
@@ -1031,7 +1091,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			pickedPoint = getPrecisionedData(pickedPoint);
 			moveVmarker(pickedMarker, pickedPoint);
 			chart.setBatched(false);
-			data1D.updateChartDisplay();
+			
 		} else if (hMarkerSelected) {
 			chart.setBatched(true);
 			point = e.getPoint();
@@ -1046,8 +1106,9 @@ public class Active_1D_ScanPanel extends JPanel {
 			moveHmarker(pickedMarker, pickedPoint);
 
 			chart.setBatched(false);
-			data1D.updateChartDisplay();
+			
 		}
+		data1D.updateChartDisplay();
 	}
 	
 	public JCMarker getLeftMarker() {

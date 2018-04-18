@@ -28,6 +28,7 @@ import edu.ciw.hpcat.epics.data.*;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import java.awt.Font;
 
 //import javax.swing.JFrame;
 
@@ -44,6 +45,8 @@ public class BlueDiamond {
 
 	boolean derivative = false;
 	boolean yAxisLog = false;
+	boolean showVMarkers = false;
+	boolean showHMarkers = false;
 	
 	ScanMonitor scanMonitor = null;
 	Scan1PositionerParms scan1PositionerParms = null;
@@ -122,6 +125,7 @@ public class BlueDiamond {
 		frame.setJMenuBar(menuBar);
 
 		JMenu mnFile = new JMenu("File");
+		mnFile.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		menuBar.add(mnFile);
 
 		JMenuItem mntmOpenMda = new JMenuItem("Open");
@@ -133,6 +137,7 @@ public class BlueDiamond {
 		mntmExit.addActionListener(new BlueDiamond_fileexit_ActionAdapter(this));
 
 		JMenu mnConfiguration = new JMenu("configuration");
+		mnConfiguration.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		menuBar.add(mnConfiguration);
 
 		JMenuItem mntmNewConfig = new JMenuItem("New");
@@ -144,6 +149,7 @@ public class BlueDiamond {
 		mntmOpenConfig.addActionListener(new Bluediamond_configopen_ActionAdapter(this));
 
 		JMenu mnUtil = new JMenu("Util");
+		mnUtil.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		menuBar.add(mnUtil);
 
 		JMenuItem mntmDerivative = new JMenuItem("Derivative");
@@ -159,6 +165,39 @@ public class BlueDiamond {
 
 		JMenuItem mntmYaxislog = new JMenuItem("y-axis->log");
 		mnUtil.add(mntmYaxislog);
+		
+		JMenu mnNewMenu = new JMenu("Markers");
+		mnUtil.add(mnNewMenu);
+		
+		JMenuItem mntmShowVMarkers = new JMenuItem("Hide V Markers");
+		mntmShowVMarkers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(showVMarkers) {
+					active_1D_ScanPanel.showVMarkers();
+				}else {
+					active_1D_ScanPanel.hideVMarkers();
+				}
+				showVMarkers = !showVMarkers;				
+				mntmShowVMarkers.setText(((showVMarkers)?"Show V Marker":"Hide V Marker"));
+			}
+		});
+		mnNewMenu.add(mntmShowVMarkers);
+		
+		JMenuItem mntmShowHMarkers = new JMenuItem("Hide H Markers");
+		mntmShowHMarkers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(showHMarkers) {
+					active_1D_ScanPanel.showHMarkers();
+				}else {
+					active_1D_ScanPanel.hideHMarkers();
+				}
+				showHMarkers = !showHMarkers;
+				mntmShowHMarkers.setText(((showHMarkers)?"Show H Marker":"Hide H Marker"));
+
+			}
+		});
+		mnNewMenu.add(mntmShowHMarkers);
+		
 		mntmYaxislog.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				yAxisLog = !yAxisLog;
@@ -169,18 +208,21 @@ public class BlueDiamond {
 		});
 
 		JMenu mnMdafiles = new JMenu("mdaFiles");
+		mnMdafiles.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		menuBar.add(mnMdafiles);
 
 		JMenuItem mntmShow = new JMenuItem("Show");
 		mnMdafiles.add(mntmShow);
 
 		JMenu mnTable = new JMenu("TableScan");
+		mnTable.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		menuBar.add(mnTable);
 
 		JMenuItem mntmReadValues = new JMenuItem("Read Values");
 		mnTable.add(mntmReadValues);
 
 		JMenu mnHelp = new JMenu("About");
+		mnHelp.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(mnHelp);
 
@@ -370,8 +412,7 @@ public class BlueDiamond {
 
 			scanMonitor.validate1DPositioners();
 			scanMonitor.validate2DPositioners();
-			scanMonitor.validateDets();
-			
+			scanMonitor.validateDets();			
 		
 			scanMonitor.getScan1ValidPos();
 			scanMonitor.getScan1ValidDet();
@@ -379,21 +420,21 @@ public class BlueDiamond {
 			scanMonitor.setMainPanel_1D_PositionerNames();
 			scanMonitor.setMainPanel_2D_X_PositionerNames();
 			scanMonitor.setMainPanel_2D_Y_PositionerNames();
-			scanMonitor.setMainPanel_1D_DetectorNames();
-			
+			scanMonitor.setMainPanel_1D_DetectorNames();			
 
 			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
-			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());		
-			
+			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());			
 
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
 			countDownConnection.pendIO();
 
-
 			Thread scanMonitorThread = new Thread(scanMonitor);
 			scanMonitorThread.start();
-			initDisplay();			
+			initDisplay();		
+			active_1D_ScanPanel.showVMarkers();
+			active_1D_ScanPanel.showHMarkers();
+			active_1D_ScanPanel.setMarkers("Start");
 		}
 	}
 

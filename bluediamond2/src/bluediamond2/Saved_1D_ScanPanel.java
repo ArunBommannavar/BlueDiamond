@@ -211,10 +211,12 @@ public class Saved_1D_ScanPanel extends JPanel {
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBackground(new Color(0, 255, 255));
 		tabbedPane.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(255, 200, 0), new Color(255, 255, 0)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 255, 0), new Color(0, 255, 255))));
 		panel_1.add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(175, 238, 238));
 		tabbedPane.addTab("X-Range", null, panel_3, null);
 		panel_3.setLayout(new MigLayout("", "[][grow]", "[][]"));
 		
