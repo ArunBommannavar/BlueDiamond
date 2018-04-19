@@ -4,390 +4,331 @@ import java.io.File;
 
 import com.klg.jclass.chart.JCChart;
 
-
 public class ReadSavedMdaFile {
 
-    File inFile;
-    int dataRank;
-    int scanNumber;
-    String fileName = null;
-    int totalNumberOfScans;
-    int dataViewNum = 0;
-    long lastModified;
-    int posPrecision = 4;
+	File inFile;
+	int dataRank;
+	int scanNumber;
+	String fileName = null;
+	int totalNumberOfScans;
+	int dataViewNum = 0;
+	long lastModified;
+	int posPrecision = 4;
 
-    int numXPoints;
-    int numCurrentXPoint;
-    int numXPos;
+	int numXPoints;
+	int numCurrentXPoint;
+	int numXPos;
 
-    int numYPoints;
-    int numCurrentYPoint;
-    int numYPos;
+	int numYPoints;
+	int numCurrentYPoint;
+	int numYPos;
 
-    int numDets;
+	int numDets;
 
-    String[] posXName;
-    String[] posXDesc;
+	String[] posXName;
+	String[] posXDesc;
 
-    double[] posXMin;
-    double[] posXMax;
+	double[] posXMin;
+	double[] posXMax;
 
-    String[] detName;
-    String[] detDesc;
-    double[] detMin;
-    double[] detMax;
+	String[] detName;
+	String[] detDesc;
+	double[] detMin;
+	double[] detMax;
 
-    String[] posYName;
-    String[] posYDesc;
+	String[] posYName;
+	String[] posYDesc;
 
-    double[] posYMin;
-    double[] posYMax;
-    double[][] xVal;
-    double[][] yVal;
-    double[][][] zVal;
+	double[] posYMin;
+	double[] posYMax;
+	double[][] xVal;
+	double[][] yVal;
+	double[][][] zVal;
 
-    OldData1D oldData1D;// = new OldData1D();
+	OldData1D oldData1D;// = new OldData1D();
 
-    private final double HOLE_VALUE = Double.MAX_VALUE;
-    
-    ReadSavedMdaData rmd = new ReadSavedMdaData();
-    
-    private static ReadSavedMdaFile readSavedMdaFile = new ReadSavedMdaFile();
-    Saved_1D_ScanPanel saved_1D_ScanPanel;
-    private ReadSavedMdaFile() {
-    	
-    }
-    public static ReadSavedMdaFile getInstance() {
-        return readSavedMdaFile;
-    }
-    
-    public void setFile(File file, JCChart oldChart,Saved_1D_ScanPanel saved_1D_ScanPanel) {
-    	this.saved_1D_ScanPanel = saved_1D_ScanPanel;
-        inFile = file;
-        fileName = file.getName();
-        lastModified = file.lastModified();
-        rmd.setFile(inFile);
-        rmd.readMdaData();
-        dataRank = rmd.getRank();
-        System.out.println(" Rank = "+dataRank );
-        double[][] temp;
-        String tempString;
-        int[] dims = new int[2];
+	private final double HOLE_VALUE = Double.MAX_VALUE;
 
-        if (dataRank == 1) {
-        	oldData1D = new OldData1D(oldChart);
-        	oldData1D.setNumPoints(rmd.getNumPoints(0));
-           numXPoints = rmd.getNumPoints(0);
-           numCurrentXPoint = rmd.getCurrentPoint(0);
-            
-            oldData1D.setNumberOfCurrentPoints(numCurrentXPoint);
-            
-            numXPos = rmd.getNumPos(0);
-            numDets = rmd.getNumDets(0);
+	ReadSavedMdaData rmd = new ReadSavedMdaData();
 
-            oldData1D.setNumPositioners(numXPos);
-            oldData1D.setNumberOfDetectors(numDets);
-  
-            
-            posXName = new String[numXPos];
-            posXDesc = new String[numXPos];
-            System.out.println(" Num XPos = "+numXPos);
-            detName = new String[numDets];
-            detDesc = new String[numDets];
+	private static ReadSavedMdaFile readSavedMdaFile = new ReadSavedMdaFile();
+	Saved_1D_ScanPanel saved_1D_ScanPanel;
 
-            posXName = rmd.getPosName(0);
-            posXDesc = rmd.getPosDesc(0);
-            detName = rmd.getDetName(0);
-            detDesc = rmd.getDetDesc(0);
+	private ReadSavedMdaFile() {
 
-            xVal = new double[numXPos][numCurrentXPoint];
-            yVal = new double[numDets][numCurrentXPoint];
+	}
 
-            xVal = rmd.getPosData(0);
-            yVal = rmd.getDetsData(0);
-            posMinMax1D();
-            populate1DimScanData();
-        } else if (dataRank == 2) {
-            numCurrentYPoint = rmd.getCurrentPoint(0);
-            /**
-             * dims[0] = outer loop numPoints
-             * dims[1] = inner loop numPoints
-             */
+	public static ReadSavedMdaFile getInstance() {
+		return readSavedMdaFile;
+	}
 
-            if (rmd.getCurrentPoint(0) > 1) {
-                dims = rmd.getDims();
-                numYPoints = dims[0];
-                numXPoints = dims[1];
+	public void setFile(File file, JCChart oldChart, Saved_1D_ScanPanel saved_1D_ScanPanel) {
+		this.saved_1D_ScanPanel = saved_1D_ScanPanel;
+		inFile = file;
+		fileName = file.getName();
+		lastModified = file.lastModified();
+		rmd.setFile(inFile);
+		rmd.readMdaData();
+		dataRank = rmd.getRank();
+		// System.out.println(" Rank = "+dataRank );
+		double[][] temp;
+		String tempString;
+		int[] dims = new int[2];
 
-                numYPos = rmd.getNumPos(0);
-                numXPos = rmd.getNumPos(1);
-                numDets = rmd.getNumDets(1);
+		if (dataRank == 1) {
+			oldData1D = new OldData1D(oldChart);
+			oldData1D.setNumPoints(rmd.getNumPoints(0));
+			numXPoints = rmd.getNumPoints(0);
+			numCurrentXPoint = rmd.getCurrentPoint(0);
 
-                posXName = new String[numXPos];
-                posXDesc = new String[numXPos];
+			oldData1D.setNumberOfCurrentPoints(numCurrentXPoint);
 
-                posYName = new String[numYPos];
-                posYDesc = new String[numYPos];
+			numXPos = rmd.getNumPos(0);
+			numDets = rmd.getNumDets(0);
 
-                detName = new String[numDets];
-                detDesc = new String[numDets];
+			oldData1D.setNumPositioners(numXPos);
+			oldData1D.setNumberOfDetectors(numDets);
 
-                posXName = rmd.getPosName(1);
-                posXDesc = rmd.getPosDesc(1);
+			posXName = new String[numXPos];
+			posXDesc = new String[numXPos];
+			// System.out.println(" Num XPos = "+numXPos);
+			detName = new String[numDets];
+			detDesc = new String[numDets];
 
-                posYName = rmd.getPosName(0);
-                posYDesc = rmd.getPosDesc(0);
+			posXName = rmd.getPosName(0);
+			posXDesc = rmd.getPosDesc(0);
+			detName = rmd.getDetName(0);
+			detDesc = rmd.getDetDesc(0);
 
-                detName = rmd.getDetName(1);
-                detDesc = rmd.getDetDesc(1);
+			xVal = new double[numXPos][numCurrentXPoint];
+			yVal = new double[numDets][numCurrentXPoint];
 
-                for (int i = 0; i < 60; i++) {
-                    if (i < numDets) {
-//                        scan1Panel.setDetValid(i);
-                        tempString = detDesc[i].trim();
-                        if (tempString.equals("")) {
-                            tempString = detName[i].trim();
-                        }
-//                        scan1Panel.setDetName(tempString, i);
-                    } else {
- //                       scan1Panel.setDetInvalid(i);
-                    }
-                }
+			xVal = rmd.getPosData(0);
+			yVal = rmd.getDetsData(0);
+			posMinMax1D();
+			populate1DimScanData();
+		} else if (dataRank == 2) {
+			numCurrentYPoint = rmd.getCurrentPoint(0);
+			/**
+			 * dims[0] = outer loop numPoints dims[1] = inner loop numPoints
+			 */
 
-                for (int i = 0; i < 4; i++) {
-                    if (i < numYPos) {
-//                        scan1Panel.setPosYValid(i);
-                        tempString = posYDesc[i].trim();
-                        if (tempString.equals("")) {
-                            tempString = posYName[i].trim();
-                        }
+			if (rmd.getCurrentPoint(0) > 1) {
+				dims = rmd.getDims();
+				numYPoints = dims[0];
+				numXPoints = dims[1];
 
-//                        scan1Panel.setPosYName(tempString, i);
-                    } else {
-//                        scan1Panel.setPosYInvalid(i);
-                    }
-                }
+				numYPos = rmd.getNumPos(0);
+				numXPos = rmd.getNumPos(1);
+				numDets = rmd.getNumDets(1);
 
-                for (int i = 0; i < 4; i++) {
-                    if (i < numXPos) {
-//                        scan1Panel.setPosXValid(i);
-                        tempString = posXDesc[i].trim();
-                        if (tempString.equals("")) {
-                            tempString = posXName[i].trim();
-                        }
-//                        scan1Panel.setPosXName(tempString, i);
-                    } else {
-//                        scan1Panel.setPosXInvalid(i);
-                    }
-                }
+				posXName = new String[numXPos];
+				posXDesc = new String[numXPos];
 
-                /**
-                 * Initialize the x , y and z values
-                 */
-                xVal = new double[numXPos][numXPoints];
-                yVal = new double[numYPos][numCurrentYPoint];
-                zVal = new double[numDets][numXPoints][numCurrentYPoint];
+				posYName = new String[numYPos];
+				posYDesc = new String[numYPos];
 
-                xVal = rmd.getPosData(1);
+				detName = new String[numDets];
+				detDesc = new String[numDets];
 
-                yVal = rmd.getPosData(0);
-                for (int i = 0; i < numDets; i++) {
-                    for (int j = 0; j < numXPoints; j++) {
-                        for (int k = 0; k < numCurrentYPoint; k++) {
-                            zVal[i][j][k] = HOLE_VALUE;
-                        }
-                    }
-                }
-                /**
-                 * Here we need to be sure that we are only reading
-                 * current data.
-                 */
+				posXName = rmd.getPosName(1);
+				posXDesc = rmd.getPosDesc(1);
 
-                int tempXpts;
+				posYName = rmd.getPosName(0);
+				posYDesc = rmd.getPosDesc(0);
 
-                //           for (int k=0; k < numYPoints; k++){
-                for (int k = 0; k < numCurrentYPoint; k++) {
+				detName = rmd.getDetName(1);
+				detDesc = rmd.getDetDesc(1);
 
-                    tempXpts = rmd.getCurrentPoint(k + 1);
-                    temp = new double[numDets][tempXpts];
-                    temp = rmd.getDetsData(k + 1);
+				for (int i = 0; i < 60; i++) {
+					if (i < numDets) {
+						// scan1Panel.setDetValid(i);
+						tempString = detDesc[i].trim();
+						if (tempString.equals("")) {
+							tempString = detName[i].trim();
+						}
+						// scan1Panel.setDetName(tempString, i);
+					} else {
+						// scan1Panel.setDetInvalid(i);
+					}
+				}
 
-                    for (int i = 0; i < numDets; i++) {
-                        for (int j = 0; j < tempXpts; j++) {
-                            zVal[i][j][k] = temp[i][j];
-                        }
-                    }
-                }
+				for (int i = 0; i < 4; i++) {
+					if (i < numYPos) {
+						// scan1Panel.setPosYValid(i);
+						tempString = posYDesc[i].trim();
+						if (tempString.equals("")) {
+							tempString = posYName[i].trim();
+						}
 
-                /**
-                 *
-                 * Now we have read all data values, number of X,Y positioners
-                 * and their names and values.
-                 */
-                //       data3d.setXNumPoints(numXPoints);
-                //       data3d.setYNumPoints(numYPoints);
-                //       data3d.setNumDets(numDets);
-                //           data3d.initData(numXPoints, numYPoints, numXPos, numYPos, numDets);
+						// scan1Panel.setPosYName(tempString, i);
+					} else {
+						// scan1Panel.setPosYInvalid(i);
+					}
+				}
 
-//                data3d.setCurrentScanData(false);
-//                data3d.initData(numXPoints, numCurrentYPoint, numXPos, numYPos,numDets);
-//                data3d.readXPosdata(xVal);
-//                data3d.readYPosdata(yVal);
-//                data3d.readMdaData(zVal, numDets, numXPoints, numCurrentYPoint);
-//                data3d.setDefault1DPositioner(0);
-//                data3d.setDefault2DPositioner(0);
-//                data3d.setDefaultDetector(0);
-//                data3d.reScale();
-//                data3d.setFooterString(fileName, lastModified);
+				for (int i = 0; i < 4; i++) {
+					if (i < numXPos) {
+						// scan1Panel.setPosXValid(i);
+						tempString = posXDesc[i].trim();
+						if (tempString.equals("")) {
+							tempString = posXName[i].trim();
+						}
+						// scan1Panel.setPosXName(tempString, i);
+					} else {
+						// scan1Panel.setPosXInvalid(i);
+					}
+				}
 
-            }
-        }
-        //     save2DAscii_format2();
+				/**
+				 * Initialize the x , y and z values
+				 */
+				xVal = new double[numXPos][numXPoints];
+				yVal = new double[numYPos][numCurrentYPoint];
+				zVal = new double[numDets][numXPoints][numCurrentYPoint];
 
-    }
-    
-    private void posMinMax1D() {
+				xVal = rmd.getPosData(1);
 
-        posXMin = new double[numXPos];
-        posXMax = new double[numXPos];
+				yVal = rmd.getPosData(0);
+				for (int i = 0; i < numDets; i++) {
+					for (int j = 0; j < numXPoints; j++) {
+						for (int k = 0; k < numCurrentYPoint; k++) {
+							zVal[i][j][k] = HOLE_VALUE;
+						}
+					}
+				}
+				/**
+				 * Here we need to be sure that we are only reading current data.
+				 */
 
-        detMin = new double[numDets];
-        detMax = new double[numDets];
+				int tempXpts;
 
-        for (int i = 0; i < numXPos; i++) {
-            posXMin[i] = xVal[i][0];
-            posXMax[i] = xVal[i][0];
+				// for (int k=0; k < numYPoints; k++){
+				for (int k = 0; k < numCurrentYPoint; k++) {
 
-            for (int j = 1; j < numXPoints; j++) {
-                if (xVal[i][j] < posXMin[i]) {
-                    posXMin[i] = xVal[i][j];
-                }
-                if (xVal[i][j] > posXMax[i]) {
-                    posXMax[i] = xVal[i][j];
-                }
-            }
+					tempXpts = rmd.getCurrentPoint(k + 1);
+					temp = new double[numDets][tempXpts];
+					temp = rmd.getDetsData(k + 1);
 
-            posXMin[i] = getPrecisionedData(posXMin[i]);
-            posXMax[i] = getPrecisionedData(posXMax[i]);
+					for (int i = 0; i < numDets; i++) {
+						for (int j = 0; j < tempXpts; j++) {
+							zVal[i][j][k] = temp[i][j];
+						}
+					}
+				}
 
-        }
+				/**
+				 *
+				 * Now we have read all data values, number of X,Y positioners and their names
+				 * and values.
+				 */
+				// data3d.setXNumPoints(numXPoints);
+				// data3d.setYNumPoints(numYPoints);
+				// data3d.setNumDets(numDets);
+				// data3d.initData(numXPoints, numYPoints, numXPos, numYPos, numDets);
 
-        for (int i = 0; i < numDets; i++) {
-            detMin[i] = yVal[i][0];
-            detMax[i] = yVal[i][0];
+				// data3d.setCurrentScanData(false);
+				// data3d.initData(numXPoints, numCurrentYPoint, numXPos, numYPos,numDets);
+				// data3d.readXPosdata(xVal);
+				// data3d.readYPosdata(yVal);
+				// data3d.readMdaData(zVal, numDets, numXPoints, numCurrentYPoint);
+				// data3d.setDefault1DPositioner(0);
+				// data3d.setDefault2DPositioner(0);
+				// data3d.setDefaultDetector(0);
+				// data3d.reScale();
+				// data3d.setFooterString(fileName, lastModified);
 
-            for (int j = 1; j < numXPoints; j++) {
-                if (yVal[i][j] < detMin[i]) {
-                    detMin[i] = yVal[i][j];
-                }
-                if (yVal[i][j] > detMax[i]) {
-                    detMax[i] = yVal[i][j];
-                }
-            }
-        }
-    }
-    public double getPrecisionedData(double d1) {
-        double d = Math.floor(d1 * Math.pow(10, posPrecision) + 0.5);
-        d = d / Math.pow(10, posPrecision);
-        return d;
-    }
-    /*
-    public void populate1DimScanData() {
-       if (!oldFileFrame.isListed(inFile.getName())) {
-            oldFileFrame.addNewFile(inFile, chart, data, dataViewNum);
-            oldFileFrame.setPosName(posXName);
-            oldFileFrame.setPosDesc(posXDesc);
-            oldFileFrame.setDetName(detName);
-            oldFileFrame.setDetDesc(detDesc);
+			}
+		}
+		// save2DAscii_format2();
 
-            oldFileFrame.setPosMin(posXMin);
-            oldFileFrame.setPosMax(posXMax);
-            oldFileFrame.setDetMin(detMin);
-            oldFileFrame.setDetMax(detMax);
+	}
 
-//            oldFileFrame.setVisible(true);
-            oldFileFrame.populatePanel();
+	private void posMinMax1D() {
 
-            ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
+		posXMin = new double[numXPos];
+		posXMax = new double[numXPos];
 
-            ods.setDataViewNumb(dataViewNum);
+		detMin = new double[numDets];
+		detMax = new double[numDets];
 
-            chart.addDataView(dataViewNum);
-            chart.getDataView(dataViewNum).setDataSource(ods);
+		for (int i = 0; i < numXPos; i++) {
+			posXMin[i] = xVal[i][0];
+			posXMax[i] = xVal[i][0];
 
-            // Set number of points, positioners and detectors
-            ods.setNumPoints(numCurrentXPoint);
-            ods.setNumPositioners(numXPos);
-            ods.setNumberOfDetectors(numDets);
-            // Initialize the arrays.
-            ods.initArrays();
-            // set names for positioners and detectors
-            ods.setPosName(posXName);
-            ods.setPosDesc(posXDesc);
-            ods.setDetName(detName);
-            ods.setDetDesc(detDesc);
+			for (int j = 1; j < numXPoints; j++) {
+				if (xVal[i][j] < posXMin[i]) {
+					posXMin[i] = xVal[i][j];
+				}
+				if (xVal[i][j] > posXMax[i]) {
+					posXMax[i] = xVal[i][j];
+				}
+			}
 
-            // Now fill up the X and Y values
-            ods.setXVals(xVal);
-            ods.setYVals(yVal);
-            // set the min and max values for positioners
-            ods.setPosMinMax();
-            ods.displayDets();
-            ods.setDerivative(data.getDerivative());
+			posXMin[i] = getPrecisionedData(posXMin[i]);
+			posXMax[i] = getPrecisionedData(posXMax[i]);
 
-            dataViewNum++;
+		}
 
-        }*/ 
-    
-    public void populate1DimScanData() {
-    	System.out.println(" inFile = "+inFile.getName());
-    if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
-         saved_1D_ScanPanel.addNewFile(inFile,dataViewNum);
-         saved_1D_ScanPanel.setPosName(posXName);
-         saved_1D_ScanPanel.setPosDesc(posXDesc);
-         saved_1D_ScanPanel.setDetName(detName);
-         saved_1D_ScanPanel.setDetDesc(detDesc);
+		for (int i = 0; i < numDets; i++) {
+			detMin[i] = yVal[i][0];
+			detMax[i] = yVal[i][0];
 
-         saved_1D_ScanPanel.setPosMin(posXMin);
-         saved_1D_ScanPanel.setPosMax(posXMax);
-         saved_1D_ScanPanel.setDetMin(detMin);
-         saved_1D_ScanPanel.setDetMax(detMax);
+			for (int j = 1; j < numXPoints; j++) {
+				if (yVal[i][j] < detMin[i]) {
+					detMin[i] = yVal[i][j];
+				}
+				if (yVal[i][j] > detMax[i]) {
+					detMax[i] = yVal[i][j];
+				}
+			}
+		}
+	}
 
-         saved_1D_ScanPanel.setVisible(true);
-         saved_1D_ScanPanel.populatePanel();
-/*
-         ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
+	public double getPrecisionedData(double d1) {
+		double d = Math.floor(d1 * Math.pow(10, posPrecision) + 0.5);
+		d = d / Math.pow(10, posPrecision);
+		return d;
+	}
 
-         ods.setDataViewNumb(dataViewNum);
+	public void populate1DimScanData() {
+		// System.out.println(" inFile = "+inFile.getName());
+		if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
+			saved_1D_ScanPanel.addNewFile(inFile, dataViewNum);
+			saved_1D_ScanPanel.setPosName(posXName);
+			saved_1D_ScanPanel.setPosDesc(posXDesc);
+			saved_1D_ScanPanel.setDetName(detName);
+			saved_1D_ScanPanel.setDetDesc(detDesc);
 
-         chart.addDataView(dataViewNum);
-         chart.getDataView(dataViewNum).setDataSource(ods);
+			saved_1D_ScanPanel.setPosMin(posXMin);
+			saved_1D_ScanPanel.setPosMax(posXMax);
+			saved_1D_ScanPanel.setDetMin(detMin);
+			saved_1D_ScanPanel.setDetMax(detMax);
 
-         // Set number of points, positioners and detectors
-         ods.setNumPoints(numCurrentXPoint);
-         ods.setNumPositioners(numXPos);
-         ods.setNumberOfDetectors(numDets);
-         // Initialize the arrays.
-         ods.initArrays();
-         // set names for positioners and detectors
-         ods.setPosName(posXName);
-         ods.setPosDesc(posXDesc);
-         ods.setDetName(detName);
-         ods.setDetDesc(detDesc);
+			saved_1D_ScanPanel.setVisible(true);
+			saved_1D_ScanPanel.populatePanel();
+			/*
+			 * ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
+			 * 
+			 * ods.setDataViewNumb(dataViewNum);
+			 * 
+			 * chart.addDataView(dataViewNum);
+			 * chart.getDataView(dataViewNum).setDataSource(ods);
+			 * 
+			 * // Set number of points, positioners and detectors
+			 * ods.setNumPoints(numCurrentXPoint); ods.setNumPositioners(numXPos);
+			 * ods.setNumberOfDetectors(numDets); // Initialize the arrays.
+			 * ods.initArrays(); // set names for positioners and detectors
+			 * ods.setPosName(posXName); ods.setPosDesc(posXDesc); ods.setDetName(detName);
+			 * ods.setDetDesc(detDesc);
+			 * 
+			 * // Now fill up the X and Y values ods.setXVals(xVal); ods.setYVals(yVal); //
+			 * set the min and max values for positioners ods.setPosMinMax();
+			 * ods.displayDets(); ods.setDerivative(data.getDerivative());
+			 */
+			dataViewNum++;
 
-         // Now fill up the X and Y values
-         ods.setXVals(xVal);
-         ods.setYVals(yVal);
-         // set the min and max values for positioners
-         ods.setPosMinMax();
-         ods.displayDets();
-         ods.setDerivative(data.getDerivative());
-*/
-         dataViewNum++;
+		}
 
-     }
-    
-    }
+	}
 }
-
-

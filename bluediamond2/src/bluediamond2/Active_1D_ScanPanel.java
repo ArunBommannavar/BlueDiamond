@@ -625,6 +625,7 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		
 		autoCheckBox = new JCheckBox("Auto");
+		autoCheckBox.setSelected(true);
 		panel_8.add(autoCheckBox);
 		plotPanel.setLayout(new BorderLayout(0, 0));
 		autoCheckBox.addActionListener(new ActionListener() {

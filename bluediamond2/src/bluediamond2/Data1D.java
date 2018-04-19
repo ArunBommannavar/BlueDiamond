@@ -56,7 +56,7 @@ public class Data1D extends JCDefaultDataSource {
 		dataView = chart.getDataView(0);
 	}
 	public void setNumberOfPoints(int n) {
-		System.out.println(" In Data1D setNumberOfPoints");
+//		System.out.println(" In Data1D setNumberOfPoints");
 		npts = n;
 	}
 
@@ -69,7 +69,7 @@ public class Data1D extends JCDefaultDataSource {
 
 	void setSelectedPositioner(int n) {
 		selectedPositioner = n;
-		System.out.println(" Selected Positioner = "+n);
+//		System.out.println(" Selected Positioner = "+n);
 		setXAxisScale();
 		updateChartDisplay(cpt,npts);
 	}
@@ -106,7 +106,7 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setChartData(int sp) {
-		System.out.println("setChartData");
+//		System.out.println("setChartData");
 		selectedPositioner = sp;
 
 		for (int i = 0; i < npts; i++) {
@@ -115,7 +115,7 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setChartRawData() {
-		System.out.println(" setChartRawData ");
+//		System.out.println(" setChartRawData ");
 		for (int i = 0; i < npts; i++) {
 			xvalues[0][i] = xVals[selectedPositioner][i];
 		}

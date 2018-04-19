@@ -254,16 +254,16 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 205), new Color(0, 0, 205), new Color(119, 136, 153), new Color(112, 128, 144)));
-		panel_2.setBackground(new Color(255, 204, 102));
+		panel_2.setBackground(new Color(95, 158, 160));
 		panel.add(panel_2, BorderLayout.SOUTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
 		JCheckBox userCheckBox = new JCheckBox("User");
-		userCheckBox.setBackground(new Color(255, 204, 102));
+		userCheckBox.setBackground(new Color(95, 158, 160));
 		panel_2.add(userCheckBox, BorderLayout.WEST);
 		
 		JCheckBox autoCheckBox = new JCheckBox("Auto");
-		autoCheckBox.setBackground(new Color(255, 204, 102));
+		autoCheckBox.setBackground(new Color(95, 158, 160));
 		autoCheckBox.setSelected(true);
 		panel_2.add(autoCheckBox, BorderLayout.EAST);
 		

@@ -393,7 +393,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	
 	public void initPosDet1D() {
 
-		System.out.println(" In initPosDet1D " );
+//		System.out.println(" In initPosDet1D " );
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
@@ -667,7 +667,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 			else if (scan1AfterScanDataReady) {
 				// scan1AfterScanDataReady = false;
-				System.out.println(" In run updateData1DAfterScan ");
+//				System.out.println(" In run updateData1DAfterScan ");
 
 				updateData1DAfterScan();
 			}
