@@ -53,7 +53,8 @@ public class ReadSavedMdaFile {
 
 	private static ReadSavedMdaFile readSavedMdaFile = new ReadSavedMdaFile();
 	Saved_1D_ScanPanel saved_1D_ScanPanel;
-
+	JCChart oldChart;
+	
 	private ReadSavedMdaFile() {
 
 	}
@@ -62,15 +63,22 @@ public class ReadSavedMdaFile {
 		return readSavedMdaFile;
 	}
 
-	public void setFile(File file, JCChart oldChart, Saved_1D_ScanPanel saved_1D_ScanPanel) {
+	public void setSavedDataChart(JCChart oldChart) {
+		this.oldChart = oldChart;
+	}
+	
+	public void setSaved_1D_ScanPanel(Saved_1D_ScanPanel saved_1D_ScanPanel) {
 		this.saved_1D_ScanPanel = saved_1D_ScanPanel;
+	}
+	
+	public void setFile(File file) {
+		
 		inFile = file;
 		fileName = file.getName();
 		lastModified = file.lastModified();
 		rmd.setFile(inFile);
 		rmd.readMdaData();
 		dataRank = rmd.getRank();
-		// System.out.println(" Rank = "+dataRank );
 		double[][] temp;
 		String tempString;
 		int[] dims = new int[2];
@@ -86,12 +94,8 @@ public class ReadSavedMdaFile {
 			numXPos = rmd.getNumPos(0);
 			numDets = rmd.getNumDets(0);
 
-			oldData1D.setNumPositioners(numXPos);
-			oldData1D.setNumberOfDetectors(numDets);
-
 			posXName = new String[numXPos];
 			posXDesc = new String[numXPos];
-			// System.out.println(" Num XPos = "+numXPos);
 			detName = new String[numDets];
 			detDesc = new String[numDets];
 
@@ -106,6 +110,22 @@ public class ReadSavedMdaFile {
 			xVal = rmd.getPosData(0);
 			yVal = rmd.getDetsData(0);
 			posMinMax1D();
+			
+			oldData1D.setNumPositioners(numXPos);
+			oldData1D.setNumberOfDetectors(numDets);
+			oldData1D.setFileName(fileName);
+			oldData1D.setDataViewNumber(dataViewNum);
+			oldData1D.setNumPoints(numCurrentXPoint);
+			  
+			 // Initialize the arrays.
+			oldData1D.initArrays(); 
+			 // set names for positioners and detectors
+			oldData1D.setPosName(posXName); 
+			oldData1D.setPosDesc(posXDesc); 
+			oldData1D.setDetName(detName);
+			oldData1D.setDetDesc(detDesc);
+
+
 			populate1DimScanData();
 		} else if (dataRank == 2) {
 			numCurrentYPoint = rmd.getCurrentPoint(0);
@@ -307,6 +327,10 @@ public class ReadSavedMdaFile {
 
 			saved_1D_ScanPanel.setVisible(true);
 			saved_1D_ScanPanel.populatePanel();
+			
+			oldChart.addDataView(dataViewNum);
+			oldChart.getDataView(dataViewNum).setDataSource(oldData1D);
+			
 			/*
 			 * ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
 			 * 
@@ -316,15 +340,22 @@ public class ReadSavedMdaFile {
 			 * chart.getDataView(dataViewNum).setDataSource(ods);
 			 * 
 			 * // Set number of points, positioners and detectors
-			 * ods.setNumPoints(numCurrentXPoint); ods.setNumPositioners(numXPos);
-			 * ods.setNumberOfDetectors(numDets); // Initialize the arrays.
-			 * ods.initArrays(); // set names for positioners and detectors
-			 * ods.setPosName(posXName); ods.setPosDesc(posXDesc); ods.setDetName(detName);
+			 * ods.setNumPoints(numCurrentXPoint); 
+			 * ods.setNumPositioners(numXPos);
+			 * ods.setNumberOfDetectors(numDets); 
+			 * // Initialize the arrays.
+			 * ods.initArrays(); 
+			 * // set names for positioners and detectors
+			 * ods.setPosName(posXName); 
+			 * ods.setPosDesc(posXDesc); 
+			 * ods.setDetName(detName);
 			 * ods.setDetDesc(detDesc);
 			 * 
 			 * // Now fill up the X and Y values ods.setXVals(xVal); ods.setYVals(yVal); //
-			 * set the min and max values for positioners ods.setPosMinMax();
-			 * ods.displayDets(); ods.setDerivative(data.getDerivative());
+			 * set the min and max values for positioners 
+			 * ods.setPosMinMax();
+			 * ods.displayDets(); 
+			 * ods.setDerivative(data.getDerivative());
 			 */
 			dataViewNum++;
 

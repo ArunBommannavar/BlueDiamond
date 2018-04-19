@@ -266,7 +266,7 @@ public class BlueDiamond {
         if (retVal == JFileChooser.APPROVE_OPTION) {
             inFile = jFileChooser1.getSelectedFile();
             mdaFilesPath = inFile.getAbsolutePath();
-            readSavedMdaFile.setFile(inFile,oldChart,saved_1D_ScanPanel);
+            readSavedMdaFile.setFile(inFile);
         }
 	}
 
@@ -370,7 +370,7 @@ public class BlueDiamond {
 			
 			chart = mainPanel.getChart();
 			oldChart = mainPanel.getOldChart();
-
+			readSavedMdaFile.setSavedDataChart(oldChart);
 			chart3d = mainPanel.get3DChart(); 
 
 			data1D = new Data1D(chart);
@@ -397,7 +397,8 @@ public class BlueDiamond {
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 			active_1D_ScanPanel.resetPositioners_1D();
-
+			readSavedMdaFile.setSaved_1D_ScanPanel(saved_1D_ScanPanel);
+			
 			scan1PositionerParms.createPosPVs();
 			countDownConnection.pendIO();
 

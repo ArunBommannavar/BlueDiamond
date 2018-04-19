@@ -30,12 +30,19 @@ public class OldData1D extends JCDefaultDataSource {
 	double[][] xTemp;
 	double[][] yTemp;
 
+	double[] pMin;
+	double[] pMax;
+	String[] posName;
+	String[] posDesc;
+	String[] detName;
+	String[] detDesc;
+
 	JCAxis xaxis;
 	JCAxis yaxis;
 	ChartDataView hpDataView;
 	List<Integer> selectedDetectors = new ArrayList<Integer>();
 	boolean displayModeSwitched = true;
-
+	private final double HOLE_VALUE = Double.MAX_VALUE;
 
 	public OldData1D(JCChart c) {
 		oldChart = c;
@@ -64,13 +71,54 @@ public class OldData1D extends JCDefaultDataSource {
 	public void setNumberOfCurrentPoints(int n) {
 		numberOfCurrentPoints = n;
 	}
+
 	public void setNumPositioners(int n) {
 		numberOfPositioners = n;
-        System.out.println("OldData1_D Pos # = "+n);
 	}
 
 	public void setNumberOfDetectors(int n) {
 		numberOfDetectors = n;
+	}
+
+	public void initArrays() {
+		xVal = new double[numberOfPositioners][numberOfPoints];
+		yVal = new double[numberOfDetectors][numberOfPoints];
+		pMin = new double[numberOfPositioners];
+		pMax = new double[numberOfPositioners];
+		xvalues = new double[1][numberOfPoints];
+		yvalues = new double[numberOfDetectors][numberOfPoints];
+	}
+
+	public void setPosName(String[] s) {
+		int n = s.length;
+		posName = new String[n];
+		for (int i = 0; i < n; i++) {
+			posName[i] = s[i];
+		}
+	}
+
+	public void setPosDesc(String[] s) {
+		int n = s.length;
+		posDesc = new String[n];
+		for (int i = 0; i < n; i++) {
+			posDesc[i] = s[i];
+		}
+	}
+
+	public void setDetName(String[] s) {
+		int n = s.length;
+		detName = new String[n];
+		for (int i = 0; i < n; i++) {
+			detName[i] = s[i];
+		}
+	}
+
+	public void setDetDesc(String[] s) {
+		int n = s.length;
+		detDesc = new String[n];
+		for (int i = 0; i < n; i++) {
+			detDesc[i] = s[i];
+		}
 	}
 
 	public void setXVals(double[][] x) {
@@ -154,81 +202,78 @@ public class OldData1D extends JCDefaultDataSource {
 		oldChart.setBatched(false);
 		fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
 	}
-	
-	   synchronized public void setDerivative(boolean b) {
-		      derivative = b;
-		      displayModeSwitched = true;
-		      updateDisplay();
-		   }
 
-	
-	   public void setSelectedPositioner(int n) {
-		      selectedPositioner = n;
-		      updateDisplay();
-//		       checkForMinMax();
-//		      userAutoScale.setXMinMax();
-//		      userAutoScale.setYMinMax();
+	synchronized public void setDerivative(boolean b) {
+		derivative = b;
+		displayModeSwitched = true;
+		updateDisplay();
+	}
 
-		   }
+	public void setSelectedPositioner(int n) {
+		selectedPositioner = n;
+		updateDisplay();
+		// checkForMinMax();
+		// userAutoScale.setXMinMax();
+		// userAutoScale.setYMinMax();
 
-	   public List getSelectedChartDetectors() {
-		      List list = new ArrayList();
+	}
 
-		      for (int i = 0; i < numberOfDetectors; i++) {
-		         if (oldChart.getDataView(dataViewNumber).getSeries(i).isVisible()) {
-		            list.add(i);
-		         }
-		      }
-		      return list;
-		   }
+	public List getSelectedChartDetectors() {
+		List list = new ArrayList();
 
-	   
-	   synchronized public void updateDisplay() {
-		      oldChart.setBatched(true);
-		      /**
-		       * OK. From the xVal and yVal data arrays, let us
-		       * decide if raw or derivative data needs to be
-		       * put in xvalues and yvalues arrays.
-		       */
-		      if (derivative) {
-		         if (displayModeSwitched) {
-		            xvalues = new double[1][numberOfPoints - 1];
-		            yvalues = new double[numberOfDetectors][numberOfPoints - 1];
-		         }
+		for (int i = 0; i < numberOfDetectors; i++) {
+			if (oldChart.getDataView(dataViewNumber).getSeries(i).isVisible()) {
+				list.add(i);
+			}
+		}
+		return list;
+	}
 
-		         for (int i = 0; i < numberOfPoints - 1; i++) {
-		            xvalues[0][i] = (xVal[selectedPositioner][i] + xVal[selectedPositioner][i + 1]) / 2.0;
-		         }
-		         for (int i = 0; i < numberOfPoints - 1; i++) {
-		            for (int j = 0; j < numberOfDetectors; j++) {
-		               yvalues[j][i] = (yVal[j][i + 1] - yVal[j][i]) /
-		                               ((xVal[selectedPositioner][i + 1] - xVal[selectedPositioner][i]));
-		            }
-		         }
-		         displayModeSwitched = false;
+	synchronized public void updateDisplay() {
+		oldChart.setBatched(true);
+		/**
+		 * OK. From the xVal and yVal data arrays, let us decide if raw or derivative
+		 * data needs to be put in xvalues and yvalues arrays.
+		 */
+		if (derivative) {
+			if (displayModeSwitched) {
+				xvalues = new double[1][numberOfPoints - 1];
+				yvalues = new double[numberOfDetectors][numberOfPoints - 1];
+			}
 
-		      } else {
+			for (int i = 0; i < numberOfPoints - 1; i++) {
+				xvalues[0][i] = (xVal[selectedPositioner][i] + xVal[selectedPositioner][i + 1]) / 2.0;
+			}
+			for (int i = 0; i < numberOfPoints - 1; i++) {
+				for (int j = 0; j < numberOfDetectors; j++) {
+					yvalues[j][i] = (yVal[j][i + 1] - yVal[j][i])
+							/ ((xVal[selectedPositioner][i + 1] - xVal[selectedPositioner][i]));
+				}
+			}
+			displayModeSwitched = false;
 
-		         if (displayModeSwitched) {
+		} else {
 
-		            xvalues = new double[1][numberOfPoints];
-		            yvalues = new double[numberOfDetectors][numberOfPoints];
-		         }
+			if (displayModeSwitched) {
 
-		         for (int i = 0; i < numberOfPoints; i++) {
-		            xvalues[0][i] = xVal[selectedPositioner][i];
-		         }
-		         for (int i = 0; i < numberOfPoints; i++) {
-		            for (int j = 0; j < numberOfDetectors; j++) {
-		               yvalues[j][i] = yVal[j][i];
-		            }
-		         }
-		         displayModeSwitched = false;
+				xvalues = new double[1][numberOfPoints];
+				yvalues = new double[numberOfDetectors][numberOfPoints];
+			}
 
-		      }
+			for (int i = 0; i < numberOfPoints; i++) {
+				xvalues[0][i] = xVal[selectedPositioner][i];
+			}
+			for (int i = 0; i < numberOfPoints; i++) {
+				for (int j = 0; j < numberOfDetectors; j++) {
+					yvalues[j][i] = yVal[j][i];
+				}
+			}
+			displayModeSwitched = false;
 
-		      oldChart.setBatched(false);
-		      fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
-		   }
+		}
+
+		oldChart.setBatched(false);
+		fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
+	}
 
 }
