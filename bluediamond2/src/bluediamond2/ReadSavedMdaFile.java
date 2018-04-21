@@ -45,7 +45,7 @@ public class ReadSavedMdaFile {
 	double[][] yVal;
 	double[][][] zVal;
 
-	OldData1D oldData1D;// = new OldData1D();
+	OldData1D oldData1D;
 
 	private final double HOLE_VALUE = Double.MAX_VALUE;
 
@@ -71,7 +71,7 @@ public class ReadSavedMdaFile {
 		this.saved_1D_ScanPanel = saved_1D_ScanPanel;
 	}
 	
-	public void setFile(File file) {
+	public void setFile(File file,OldData1D oldData1D) {
 		
 		inFile = file;
 		fileName = file.getName();
@@ -84,49 +84,43 @@ public class ReadSavedMdaFile {
 		int[] dims = new int[2];
 
 		if (dataRank == 1) {
-			oldData1D = new OldData1D(oldChart);
-			oldData1D.setNumPoints(rmd.getNumPoints(0));
+//			oldData1D = new OldData1D(oldChart);
+			this.oldData1D = oldData1D; 
 			numXPoints = rmd.getNumPoints(0);
 			numCurrentXPoint = rmd.getCurrentPoint(0);
-
-			oldData1D.setNumberOfCurrentPoints(numCurrentXPoint);
-
+			
 			numXPos = rmd.getNumPos(0);
 			numDets = rmd.getNumDets(0);
+			
+			oldData1D.setNumPoints(numXPoints);
+			oldData1D.setNumberOfCurrentPoints(numCurrentXPoint);
 
 			posXName = new String[numXPos];
 			posXDesc = new String[numXPos];
 			detName = new String[numDets];
 			detDesc = new String[numDets];
-
+			System.out.println(" Number of detectors = "+numDets);
 			posXName = rmd.getPosName(0);
 			posXDesc = rmd.getPosDesc(0);
 			detName = rmd.getDetName(0);
 			detDesc = rmd.getDetDesc(0);
-
+			
+			for (int i=0; i<numDets;i++) {
+				System.out.println(" Detector # "+ i+" description  = "+detDesc[i]);
+				System.out.println(" Detector # "+ i+" Name         = "+detName[i]);
+			}
+			
 			xVal = new double[numXPos][numCurrentXPoint];
 			yVal = new double[numDets][numCurrentXPoint];
 
 			xVal = rmd.getPosData(0);
 			yVal = rmd.getDetsData(0);
-			posMinMax1D();
-			
-			oldData1D.setNumPositioners(numXPos);
-			oldData1D.setNumberOfDetectors(numDets);
-			oldData1D.setFileName(fileName);
-			oldData1D.setDataViewNumber(dataViewNum);
-			oldData1D.setNumPoints(numCurrentXPoint);
-			  
-			 // Initialize the arrays.
-			oldData1D.initArrays(); 
-			 // set names for positioners and detectors
-			oldData1D.setPosName(posXName); 
-			oldData1D.setPosDesc(posXDesc); 
-			oldData1D.setDetName(detName);
-			oldData1D.setDetDesc(detDesc);
+			posMinMax1D();			
+			populate1DimScanData();			
+			populateOldData1D();
+			plotData();
+			dataViewNum++;
 
-
-			populate1DimScanData();
 		} else if (dataRank == 2) {
 			numCurrentYPoint = rmd.getCurrentPoint(0);
 			/**
@@ -284,10 +278,9 @@ public class ReadSavedMdaFile {
 					posXMax[i] = xVal[i][j];
 				}
 			}
-
 			posXMin[i] = getPrecisionedData(posXMin[i]);
 			posXMax[i] = getPrecisionedData(posXMax[i]);
-
+			System.out.println(" PosXMin "+posXMin[i]+"  posXMax = "+posXMax[i]);
 		}
 
 		for (int i = 0; i < numDets; i++) {
@@ -312,7 +305,7 @@ public class ReadSavedMdaFile {
 	}
 
 	public void populate1DimScanData() {
-		// System.out.println(" inFile = "+inFile.getName());
+		
 		if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
 			saved_1D_ScanPanel.addNewFile(inFile, dataViewNum);
 			saved_1D_ScanPanel.setPosName(posXName);
@@ -328,8 +321,6 @@ public class ReadSavedMdaFile {
 			saved_1D_ScanPanel.setVisible(true);
 			saved_1D_ScanPanel.populatePanel();
 			
-			oldChart.addDataView(dataViewNum);
-			oldChart.getDataView(dataViewNum).setDataSource(oldData1D);
 			
 			/*
 			 * ods = new OldOneDimDataSource(chart, inFile.getName(), dataViewNum);
@@ -357,9 +348,36 @@ public class ReadSavedMdaFile {
 			 * ods.displayDets(); 
 			 * ods.setDerivative(data.getDerivative());
 			 */
-			dataViewNum++;
+//			dataViewNum++;
 
 		}
+	}
+	
+	public void populateOldData1D() {
+		oldData1D.setNumPositioners(numXPos);
+		oldData1D.setNumberOfDetectors(numDets);
+		oldData1D.setFileName(fileName);
+		oldData1D.setDataViewNumber(dataViewNum);
+		oldData1D.setNumPoints(numCurrentXPoint);
+		  
+		 // Initialize the arrays.
+		oldData1D.initArrays(); 
+		 // set names for positioners and detectors
+		oldData1D.setPosName(posXName); 
+		oldData1D.setPosDesc(posXDesc); 
+		oldData1D.setDetName(detName);
+		oldData1D.setDetDesc(detDesc);
+		// Now fill up the X and Y values ods.setXVals(xVal); ods.setYVals(yVal); 
+		// set the min and max values for positioners 
+		 
+		oldData1D.setPosMinMax();
+//		ods.setDerivative(data.getDerivative());
 
+	}
+	public void plotData() {
+		oldChart.addDataView(dataViewNum);
+		oldChart.getDataView(dataViewNum).setDataSource(oldData1D);
+		oldData1D.displayDets(dataViewNum); 
+		oldData1D.updateDisplay();
 	}
 }

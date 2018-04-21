@@ -39,10 +39,16 @@ public class OldData1D extends JCDefaultDataSource {
 
 	JCAxis xaxis;
 	JCAxis yaxis;
+	double xAxisMin;
+	double xAxisMax;
+	double yAxisMin;
+	double yAxisMax;
+
 	ChartDataView hpDataView;
 	List<Integer> selectedDetectors = new ArrayList<Integer>();
 	boolean displayModeSwitched = true;
 	private final double HOLE_VALUE = Double.MAX_VALUE;
+	int[] posPrecision = { 5, 5, 5, 5 };
 
 	public OldData1D(JCChart c) {
 		oldChart = c;
@@ -137,6 +143,61 @@ public class OldData1D extends JCDefaultDataSource {
 		}
 	}
 
+	public void setPosMinMax() {
+		// System.out.println(" Old data num positioners = "+numberOfPositioners);
+		for (int i = 0; i < numberOfPositioners; i++) {
+			pMin[i] = xVal[i][0];
+			pMax[i] = xVal[i][0];
+
+			for (int j = 0; j < numberOfPoints; j++) {
+				if (xVal[i][j] < pMin[i]) {
+					pMin[i] = xVal[i][j];
+				}
+				if (xVal[i][j] > pMax[i]) {
+					pMax[i] = xVal[i][j];
+				}
+			}
+			posPrecision[i] = findPrecision(i);
+			pMin[i] = getPrecisionedData(i, pMin[i]);
+			pMax[i] = getPrecisionedData(i, pMax[i]);
+		}
+		checkForMinMax();
+		// userAutoScale.setXMinMax();
+	}
+
+	public double getPrecisionedData(int nPos, double d1) {
+		double d = Math.floor(d1 * Math.pow(10, posPrecision[nPos]) + 0.5);
+		d = d / Math.pow(10, posPrecision[nPos]);
+		return d;
+	}
+
+	private int findPrecision(int nPos) {
+		int n = 5;
+		double d1 = pMin[nPos];
+		double d2 = pMax[nPos];
+		double delta = d2 - d1;
+		double dx_np = delta / numberOfPoints;
+		double inv = 1.0 / dx_np;
+		double dPrec = Math.log10(inv) + 2.0;
+		long l = Math.round(dPrec);
+		n = (int) l;
+		return n;
+	}
+
+	public void checkForMinMax() {
+		for (int i = 0; i < numberOfPositioners; i++) {
+			if (pMin[i] > pMax[i]) {
+
+				double temp = pMax[i];
+				pMax[i] = pMin[i];
+				pMin[i] = temp;
+			}
+		}
+		xAxisMin = pMin[selectedPositioner];
+		xAxisMax = pMax[selectedPositioner];
+	}
+
+
 	public void addDetectorForDisplay(int i) {
 		if (!selectedDetectors.contains(i)) {
 			selectedDetectors.add(i);
@@ -150,7 +211,20 @@ public class OldData1D extends JCDefaultDataSource {
 		if (n > -1) {
 			selectedDetectors.remove(n);
 		}
+	}
 
+	public void displayDets(int n) {
+		setSelectedPositioner(0);
+
+		for (int i = 0; i < numberOfDetectors; i++) {
+			if (oldChart.getDataView(n).getSeries(i).isVisible()) {
+				addDetectorForDisplay(i);
+				setDetectorForDisplay(i, true);
+			} else {
+				removeDetectorForDisplay(i);
+				setDetectorForDisplay(i, false);
+			}
+		}
 	}
 
 	public void setSeriesColor(Color c, int n) {
@@ -211,8 +285,9 @@ public class OldData1D extends JCDefaultDataSource {
 
 	public void setSelectedPositioner(int n) {
 		selectedPositioner = n;
+		checkForMinMax();
+
 		updateDisplay();
-		// checkForMinMax();
 		// userAutoScale.setXMinMax();
 		// userAutoScale.setYMinMax();
 

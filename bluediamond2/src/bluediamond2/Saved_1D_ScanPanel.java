@@ -49,6 +49,8 @@ import javax.swing.ListSelectionModel;
 
 public class Saved_1D_ScanPanel extends JPanel {
 
+    ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
+
 	JCChart chart;
 	Map<Integer,JTabbedPane> oldPanelSelect = new HashMap<Integer, JTabbedPane>();
 	HpFileTableModel dm1 = new HpFileTableModel();
@@ -60,6 +62,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 	private int scanDataViewNum = 0;
 	private Old_1D_Panel old_1D_Panel;
 	private OldData1D oldData1D;
+	private Map<String, OldData1D> oldDataMap = new HashMap<String,OldData1D>();
 	
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
@@ -276,7 +279,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 		chart = new JCChart();
 		chartPanel.add(chart, BorderLayout.CENTER);
-		oldData1D = new OldData1D(chart);
 		
 		JPanel detectorPositionerTopPanel = new JPanel();
 		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 5, SpringLayout.SOUTH, markerChartPanel);
@@ -358,12 +360,25 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 		oldPanelSelect.put(0, tabbedPane_left);
 		oldPanelSelect.put(1, tabbedPane_right);
+		readSavedMdaFile.setSaved_1D_ScanPanel(this);
+		readSavedMdaFile.setSavedDataChart(chart);
+
 
 	}
 	
 	public JCChart getSaved_1D_Chart() {
 		return chart;
 	}
+	
+	
+	public void setFile(File inFile){
+		String inFileName = inFile.getName();
+	    oldData1D = new OldData1D(chart);
+	    oldDataMap.put(inFileName, oldData1D);
+		readSavedMdaFile.setFile(inFile,oldData1D);
+	}
+	
+	
 	private JTabbedPane getSelectTabPane(int n) {
 		int m = (n+1)%2;
 		return oldPanelSelect.get(m);
@@ -446,7 +461,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 		      old_1D_Panel.setDataViewNumber(n);
 		      JTabbedPane oldTab = getSelectTabPane(n);
 		      oldTab.addTab(str, old_1D_Panel);
-		      
+//		      oldData1D = new OldData1D(chart);
+
 		      oldList.add(str);
 		      populateFileTable(str);
 		      java.util.List list = oldData1D.getSelectedChartDetectors();

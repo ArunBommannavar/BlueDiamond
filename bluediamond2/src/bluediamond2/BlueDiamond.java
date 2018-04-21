@@ -66,7 +66,7 @@ public class BlueDiamond {
 	protected JCChart oldChart;
     JCChart3dJava2d chart3d = null;
     
-    ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
+//    ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
 
     CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
@@ -266,7 +266,7 @@ public class BlueDiamond {
         if (retVal == JFileChooser.APPROVE_OPTION) {
             inFile = jFileChooser1.getSelectedFile();
             mdaFilesPath = inFile.getAbsolutePath();
-            readSavedMdaFile.setFile(inFile);
+            saved_1D_ScanPanel.setFile(inFile);
         }
 	}
 
@@ -370,7 +370,6 @@ public class BlueDiamond {
 			
 			chart = mainPanel.getChart();
 			oldChart = mainPanel.getOldChart();
-			readSavedMdaFile.setSavedDataChart(oldChart);
 			chart3d = mainPanel.get3DChart(); 
 
 			data1D = new Data1D(chart);
@@ -388,16 +387,15 @@ public class BlueDiamond {
 			scanMonitor.setScan1PositionerParms(scan1PositionerParms);
 			scanMonitor.setScan1DetectorParms(scan1DetectorParms);
 			scanMonitor.setScan2PositionerParms(scan2PositionerParms);
-			
-//			scanMonitor.setMainPanel(mainPanel);
-			
+						
 			active_1D_ScanPanel = mainPanel.getActive_1D_ScanPanel();
 			scanMonitor.setActive_1D_ScanPanel(active_1D_ScanPanel);
+			
 			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
+			
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 			active_1D_ScanPanel.resetPositioners_1D();
-			readSavedMdaFile.setSaved_1D_ScanPanel(saved_1D_ScanPanel);
 			
 			scan1PositionerParms.createPosPVs();
 			countDownConnection.pendIO();
