@@ -238,10 +238,11 @@ public class Old_1D_Panel extends JPanel {
 
 		mp.addRow(new Object[] { str1, str2, new Double(d1), new Double(d2), rb1, jb1 });
 		int hrow = mp.getRowCount() - 1;
+		/*
 		if (selectedDetectorsForDisplay.contains(hrow)) {
 			rb1.doClick();
 		}
-
+*/
 	}
 
 	class EvenOddRenderer implements TableCellRenderer {
@@ -423,9 +424,9 @@ public class Old_1D_Panel extends JPanel {
 							if (mColIndex == 4) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								JRadioButton rb = (JRadioButton) obj;
-
+								System.out.println(" dataviewNumber = "+dataViewNumber);
 								Object dObj = chart.getDataView(dataViewNumber).getDataSource();
-
+								System.out.println(" chart Data View Number = "+((DataViewParms)dObj).getDataViewNum());
 								if (table.getName() == "Dets") {
 									((DetectorDisplay) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
 								} else if (table.getName() == "Pos") {

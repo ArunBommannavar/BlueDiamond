@@ -10,7 +10,7 @@ import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.data.JCDefaultDataSource;
 
-public class OldData1D extends JCDefaultDataSource {
+public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, PositionerDisplay,DataViewParms {
 
 	/**
 	 * 
@@ -34,9 +34,19 @@ public class OldData1D extends JCDefaultDataSource {
 	double[] pMax;
 	String[] posName;
 	String[] posDesc;
+
+	String[] posXName;
+	String[] posXDesc;
+
+	double[] posXMin;
+	double[] posXMax;
+
 	String[] detName;
 	String[] detDesc;
+	double[] detMin;
+	double[] detMax;
 
+	
 	JCAxis xaxis;
 	JCAxis yaxis;
 	double xAxisMin;
@@ -49,6 +59,8 @@ public class OldData1D extends JCDefaultDataSource {
 	boolean displayModeSwitched = true;
 	private final double HOLE_VALUE = Double.MAX_VALUE;
 	int[] posPrecision = { 5, 5, 5, 5 };
+	int pposPrecision = 4;
+
 
 	public OldData1D(JCChart c) {
 		oldChart = c;
@@ -60,7 +72,10 @@ public class OldData1D extends JCDefaultDataSource {
 
 	public void setDataViewNumber(int n) {
 		dataViewNumber = n;
+		System.out.println(" Saved data dataviewnumber = "+n);
 		oldChart.addDataView(dataViewNumber);
+		oldChart.getDataView(dataViewNumber).setDataSource(this);
+		System.out.println(" Chart Dataviews = "+oldChart.getDataView().size());
 		hpDataView = oldChart.getDataView(dataViewNumber);
 		xaxis = hpDataView.getXAxis();
 		yaxis = hpDataView.getYAxis();
@@ -143,8 +158,50 @@ public class OldData1D extends JCDefaultDataSource {
 		}
 	}
 
+
+	public void posDetMinMax() {
+
+		posXMin = new double[numberOfPositioners];
+		posXMax = new double[numberOfPositioners];
+
+		detMin = new double[numberOfDetectors];
+		detMax = new double[numberOfDetectors];
+
+		for (int i = 0; i < numberOfPositioners; i++) {
+			posXMin[i] = xVal[i][0];
+			posXMax[i] = xVal[i][0];
+
+			for (int j = 1; j < numberOfPoints; j++) {
+				if (xVal[i][j] < posXMin[i]) {
+					posXMin[i] = xVal[i][j];
+				}
+				if (xVal[i][j] > posXMax[i]) {
+					posXMax[i] = xVal[i][j];
+				}
+			}
+			posXMin[i] = getPrecisionedData(posXMin[i]);
+			posXMax[i] = getPrecisionedData(posXMax[i]);
+//			System.out.println(" PosXMin "+posXMin[i]+"  posXMax = "+posXMax[i]);
+		}
+
+		for (int i = 0; i < numberOfDetectors; i++) {
+			detMin[i] = yVal[i][0];
+			detMax[i] = yVal[i][0];
+
+			for (int j = 1; j < numberOfPoints; j++) {
+				if (yVal[i][j] < detMin[i]) {
+					detMin[i] = yVal[i][j];
+				}
+				if (yVal[i][j] > detMax[i]) {
+					detMax[i] = yVal[i][j];
+				}
+			}
+		}
+	}
+
+	
 	public void setPosMinMax() {
-		// System.out.println(" Old data num positioners = "+numberOfPositioners);
+		
 		for (int i = 0; i < numberOfPositioners; i++) {
 			pMin[i] = xVal[i][0];
 			pMax[i] = xVal[i][0];
@@ -165,6 +222,13 @@ public class OldData1D extends JCDefaultDataSource {
 		// userAutoScale.setXMinMax();
 	}
 
+	public double getPrecisionedData(double d1) {
+		double d = Math.floor(d1 * Math.pow(10, pposPrecision) + 0.5);
+		d = d / Math.pow(10, pposPrecision);
+		return d;
+	}
+
+	
 	public double getPrecisionedData(int nPos, double d1) {
 		double d = Math.floor(d1 * Math.pow(10, posPrecision[nPos]) + 0.5);
 		d = d / Math.pow(10, posPrecision[nPos]);
@@ -197,6 +261,21 @@ public class OldData1D extends JCDefaultDataSource {
 		xAxisMax = pMax[selectedPositioner];
 	}
 
+	public double[] getPosXMin() {
+		return posXMin;
+	}
+	
+	public double[] getPosXMax() {
+		return posXMax;
+	}
+	
+	public double[] getDetMin() {
+		return detMin;
+	}
+	
+	public double[] getDetMax() {
+		return detMax;
+	}
 
 	public void addDetectorForDisplay(int i) {
 		if (!selectedDetectors.contains(i)) {
@@ -349,6 +428,27 @@ public class OldData1D extends JCDefaultDataSource {
 
 		oldChart.setBatched(false);
 		fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
+	}
+
+	@Override
+	public int getSeriesSymbol(int n) {
+	       int m;
+	        m = oldChart.getDataView(0).getSeries(n).getStyle().getSymbolShape();
+	        return m;
+	  	}
+
+	@Override
+	public int getSeriesSymbolSize(int n) {
+	       int m;
+	        m = oldChart.getDataView(0).getSeries(n).getStyle().getSymbolSize();
+	        return m;
+	}
+
+	@Override
+	public int getSeriesThickness(int n) {
+        int m;
+        m = oldChart.getDataView(0).getSeries(n).getStyle().getLineWidth();
+        return m;
 	}
 
 }

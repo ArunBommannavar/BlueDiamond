@@ -25,11 +25,7 @@ public class ReadSavedMdaData {
 
 	  public ReadSavedMdaData() {
 	  }
-/*
-	  public static ReadSavedMdaData getInstance() {
-	    return readSavedMdaData;
-	  }
-*/
+
 	  public void setFileName(String str) {
 	    fileName = str;
 	    inFile = new File(fileName);

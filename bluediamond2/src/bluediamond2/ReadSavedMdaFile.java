@@ -99,15 +99,15 @@ public class ReadSavedMdaFile {
 			posXDesc = new String[numXPos];
 			detName = new String[numDets];
 			detDesc = new String[numDets];
-			System.out.println(" Number of detectors = "+numDets);
+//			System.out.println(" Number of detectors = "+numDets);
 			posXName = rmd.getPosName(0);
 			posXDesc = rmd.getPosDesc(0);
 			detName = rmd.getDetName(0);
 			detDesc = rmd.getDetDesc(0);
 			
 			for (int i=0; i<numDets;i++) {
-				System.out.println(" Detector # "+ i+" description  = "+detDesc[i]);
-				System.out.println(" Detector # "+ i+" Name         = "+detName[i]);
+//				System.out.println(" Detector # "+ i+" description  = "+detDesc[i]);
+//				System.out.println(" Detector # "+ i+" Name         = "+detName[i]);
 			}
 			
 			xVal = new double[numXPos][numCurrentXPoint];
@@ -115,6 +115,7 @@ public class ReadSavedMdaFile {
 
 			xVal = rmd.getPosData(0);
 			yVal = rmd.getDetsData(0);
+			
 			posMinMax1D();			
 			populate1DimScanData();			
 			populateOldData1D();
@@ -280,7 +281,7 @@ public class ReadSavedMdaFile {
 			}
 			posXMin[i] = getPrecisionedData(posXMin[i]);
 			posXMax[i] = getPrecisionedData(posXMax[i]);
-			System.out.println(" PosXMin "+posXMin[i]+"  posXMax = "+posXMax[i]);
+//			System.out.println(" PosXMin "+posXMin[i]+"  posXMax = "+posXMax[i]);
 		}
 
 		for (int i = 0; i < numDets; i++) {
@@ -303,9 +304,9 @@ public class ReadSavedMdaFile {
 		d = d / Math.pow(10, posPrecision);
 		return d;
 	}
-
+	
 	public void populate1DimScanData() {
-		
+	/*	
 		if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
 			saved_1D_ScanPanel.addNewFile(inFile, dataViewNum);
 			saved_1D_ScanPanel.setPosName(posXName);
@@ -319,7 +320,7 @@ public class ReadSavedMdaFile {
 			saved_1D_ScanPanel.setDetMax(detMax);
 
 			saved_1D_ScanPanel.setVisible(true);
-			saved_1D_ScanPanel.populatePanel();
+//			saved_1D_ScanPanel.populatePanel();
 			
 			
 			/*
@@ -347,10 +348,10 @@ public class ReadSavedMdaFile {
 			 * ods.setPosMinMax();
 			 * ods.displayDets(); 
 			 * ods.setDerivative(data.getDerivative());
-			 */
+			 
 //			dataViewNum++;
 
-		}
+		}*/
 	}
 	
 	public void populateOldData1D() {

@@ -46,10 +46,12 @@ import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 
 public class Saved_1D_ScanPanel extends JPanel {
 
-    ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
+//    ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
+
 
 	JCChart chart;
 	Map<Integer,JTabbedPane> oldPanelSelect = new HashMap<Integer, JTabbedPane>();
@@ -70,14 +72,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 	private JTextField yRangeMinTextBox;
 	private JTextField yRangeMaxTextBox;
 
-	String[] posName;
-	String[] posDesc;
-	String[] detName;
-	String[] detDesc;
-	double[] posMin;
-	double[] posMax;
-	double[] detMin;
-	double[] detMax;
+
 	private JTable table;
 	
 	/**
@@ -227,6 +222,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		panel_3.add(lblNewLabel, "cell 0 0,alignx trailing,growy");
 		
 		xRangeMinTextBox = new JTextField();
+		xRangeMinTextBox.setBackground(UIManager.getColor("TextField.background"));
 		panel_3.add(xRangeMinTextBox, "cell 1 0,grow");
 		xRangeMinTextBox.setColumns(10);
 		
@@ -329,6 +325,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 		             repaint();
 		          }
 		       };
+		table.setColumnSelectionAllowed(true);
+		table.setCellSelectionEnabled(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(204, 102, 0), new Color(204, 204, 0), new Color(204, 255, 153), new Color(204, 255, 153)));
 		table.setBackground(new Color(255, 255, 204));
@@ -338,8 +336,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 	    table.setName("Saved File");
 	    dm1.addTableModelListener(new HPFileTableModelListener(table));
 	    setPosHeaders(table);
+	    table.getColumn("Select").setCellRenderer(renderer1);
 	    table.setDefaultRenderer(Object.class, renderer1);
-
 		scrollPane.setViewportView(table);
 		detectorPositionerTopPanel.add(posDetPanel);
 		posDetPanel.setLayout(new GridLayout(0, 2, 0, 0));
@@ -360,8 +358,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 		oldPanelSelect.put(0, tabbedPane_left);
 		oldPanelSelect.put(1, tabbedPane_right);
-		readSavedMdaFile.setSaved_1D_ScanPanel(this);
-		readSavedMdaFile.setSavedDataChart(chart);
+//		readSavedMdaFile.setSaved_1D_ScanPanel(this);
+//		readSavedMdaFile.setSavedDataChart(chart);
 
 
 	}
@@ -373,102 +371,95 @@ public class Saved_1D_ScanPanel extends JPanel {
 	
 	public void setFile(File inFile){
 		String inFileName = inFile.getName();
+		ReadSavedMdaData rmd = new ReadSavedMdaData();
 	    oldData1D = new OldData1D(chart);
+	    
+	    oldData1D.setDataViewNumber(scanDataViewNum);
+	    chart.getDataView(scanDataViewNum).setName(inFileName);
 	    oldDataMap.put(inFileName, oldData1D);
-		readSavedMdaFile.setFile(inFile,oldData1D);
+	    old_1D_Panel = new Old_1D_Panel();
+	    old_1D_Panel.setChart(chart);
+	    old_1D_Panel.setDataViewNumber(scanDataViewNum);
+	    oldList.add(inFileName);
+	    populateFileTable(inFileName);
+
+	    JTabbedPane oldTab = getSelectTabPane(scanDataViewNum);
+	    oldTab.addTab(inFileName, old_1D_Panel);
+		
+		rmd.setFile(inFile);
+		rmd.readMdaData();
+		
+		int numCurrentXPoint = rmd.getCurrentPoint(0);
+		int numXPoints = rmd.getNumPoints(0);
+
+		oldData1D.setNumPoints(numXPoints);
+		oldData1D.setNumberOfCurrentPoints(numCurrentXPoint);
+		
+		int numXPos = rmd.getNumPos(0);
+		int numDets = rmd.getNumDets(0);
+
+		oldData1D.setNumPositioners(numXPos);
+		oldData1D.setNumberOfDetectors(numDets);
+
+		String[] posXName = new String[numXPos];
+		String[] posXDesc = new String[numXPos];
+		String[] detName = new String[numDets];
+		String[] detDesc = new String[numDets];
+
+        posXName = rmd.getPosName(0);
+        posXDesc = rmd.getPosDesc(0);
+        detName = rmd.getDetName(0);
+        detDesc = rmd.getDetDesc(0);
+
+		oldData1D.setPosName(posXName); 
+		oldData1D.setPosDesc(posXDesc); 
+		oldData1D.setDetName(detName);
+		oldData1D.setDetDesc(detDesc);
+		
+		double[][] xVal;
+		double[][] yVal;
+
+		xVal = new double[numXPos][numCurrentXPoint];
+		yVal = new double[numDets][numCurrentXPoint];
+
+		xVal = rmd.getPosData(0);
+		yVal = rmd.getDetsData(0);
+		oldData1D.initArrays();
+
+		oldData1D.setXVals(xVal);
+		oldData1D.setYVals(yVal);
+		
+
+		oldData1D.posDetMinMax();
+		double[] posXMin = oldData1D.getPosXMin();
+		double[] posXMax = oldData1D.getPosXMax();
+		double[] detMin  = oldData1D.getDetMin();
+		double[] detMax  = oldData1D.getDetMax();
+
+		populatePosPanel(numXPos, posXName,posXDesc,posXMin,posXMax); 
+		populateDetPanel(numDets, detName, detDesc, detMin, detMax);
+
+		oldData1D.updateDisplay();
+		
+//		java.util.List list = oldData1D.getSelectedChartDetectors();
+//		old_1D_Panel.setSelectedDetectorsForDisplay(list);
+
+
+		
+		scanDataViewNum++;
 	}
 	
-	
 	private JTabbedPane getSelectTabPane(int n) {
-		int m = (n+1)%2;
+		int m = (n)%2;
 		return oldPanelSelect.get(m);
 	}
 	
 	public boolean isListed(String str) {
 		return oldList.contains(str);
 	}
-	   public void setPosName(String[] s){
-		      int n = s.length;
-		      posName = new String[n];
-		      for (int i =0; i < n ; i++){
-		         posName[i] = s[i];
-		      }
-		   }
+	
 
-		   public void setPosDesc(String[] s){
-		      int n = s.length;
-		      posDesc = new String[n];
-		      for (int i =0; i < n ; i++){
-		         posDesc[i] = s[i];
-		      }
-		   }
 
-		   public void setDetName(String[] s){
-		      int n = s.length;
-		      detName = new String[n];
-		      for (int i =0; i < n ; i++){
-		         detName[i] = s[i];
-		      }
-		   }
-
-		   public void setDetDesc(String[] s){
-		      int n = s.length;
-		      detDesc = new String[n];
-		      for (int i =0; i < n ; i++){
-		         detDesc[i] = s[i];
-		      }
-		   }
-
-		   public void setPosMin(double[] d){
-		      int n= d.length;
-		      posMin = new double[n];
-
-		      for (int i=0; i < n; i++){
-		         posMin[i] = d[i];
-		      }
-		   }
-
-		   public void setPosMax(double[] d){
-		      int n= d.length;
-		      posMax = new double[n];
-		      for (int i=0; i < n; i++){
-		         posMax[i] = d[i];
-		      }
-		   }
-
-		   public void setDetMin(double[] d){
-		      int n= d.length;
-		      detMin = new double[n];
-		      for (int i=0; i < n; i++){
-		         detMin[i] = d[i];
-		      }
-		   }
-
-		   public void setDetMax(double[] d){
-		      int n= d.length;
-		      detMax = new double[n];
-		      for (int i=0; i < n; i++){
-		         detMax[i] = d[i];
-		      }
-		   }
-
-	   public void addNewFile(File fl, int n) {
-		     
-		      scanDataViewNum = n;
-		      String str = fl.getName();
-		      old_1D_Panel = new Old_1D_Panel();
-		      old_1D_Panel.setChart(chart);
-		      old_1D_Panel.setDataViewNumber(n);
-		      JTabbedPane oldTab = getSelectTabPane(n);
-		      oldTab.addTab(str, old_1D_Panel);
-//		      oldData1D = new OldData1D(chart);
-
-		      oldList.add(str);
-		      populateFileTable(str);
-		      java.util.List list = oldData1D.getSelectedChartDetectors();
-		      old_1D_Panel.setSelectedDetectorsForDisplay(list);
-
-		    }
 	   
 	   public void populateFileTable(String str) {
 			HpFileTableModel mp = (HpFileTableModel) table.getModel();
@@ -476,22 +467,23 @@ public class Saved_1D_ScanPanel extends JPanel {
 			table.getColumn("Select").setCellRenderer(new RadioButtonRenderer());
 			table.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
 
-			mp.addRow(new Object[] { str, rb1 });
+			mp.addRow(new Object[] { str, rb1 });	
 
 	   }
-	   public void populatePanel(){
-		      int numPos = posMin.length;
-		      int numDets = detMin.length;
-
-		      for (int i=0; i < numPos; i++){
-		    	  old_1D_Panel.addNewPosData(posName[i],posDesc[i],posMin[i],posMax[i]);
-		      }
-
+	   public void populateDetPanel(int numDets,String[] detName,String[] detDesc,double[] detMin,double[] detMax){
 		      for (int i=0; i < numDets; i++){
 		    	  old_1D_Panel.addNewDetData(detName[i],detDesc[i],detMin[i],detMax[i]);
 		      }
 		   }
 
+	   
+	   public void populatePosPanel(int numPos, String[] posXName,String[] posXDesc,double[] posXMin,double[] posXMax) {
+		      for (int i=0; i < numPos; i++){
+		    	  old_1D_Panel.addNewPosData(posXName[i],posXDesc[i],posXMin[i],posXMax[i]);
+		      }
+
+	   }
+	   
 	   public void setPosHeaders(JTable tb) {
 
 		      HpFileTableModel mp = (HpFileTableModel) tb.getModel();
@@ -527,6 +519,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		         int firstRow = e.getFirstRow();
 		         int lastRow = e.getLastRow();
 		         int mColIndex = e.getColumn();
+ 
 		         switch (e.getType()) {
 		         case TableModelEvent.INSERT:
 
@@ -556,9 +549,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 		                        JRadioButton rb = (JRadioButton) obj;
 
 //		                        Object dObj = chart.getDataView(dataViewNumber).getDataSource();
-
-		                        if (table.getName() == "Dets") {
-//		                           ((DetectorDisplay) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
+		                        System.out.println(" mColIndex = "+mColIndex+" Table name = "+table.getName());
+		                        if (table.getName() == "Saved File") {
+		                          System.out.println(" Pressed Select");
 		                        }
 		                     } 
 		                  }
@@ -584,6 +577,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		         Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
 		              table, value, isSelected, hasFocus, row, column);
 		         ((JLabel) renderer).setOpaque(true);
+		         ((JLabel)renderer).setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 		         Color foreground, background;
 		         if (hidden) {
 		            foreground = new Color(0xDC, 0xDC, 0xDC);
@@ -594,6 +588,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		         }
 		         renderer.setForeground(foreground);
 		         renderer.setBackground(background);
+		         setAlignmentX(DefaultTableCellRenderer.CENTER);
 		         return renderer;
 		      }
 		   }

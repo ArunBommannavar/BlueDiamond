@@ -11,10 +11,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -47,7 +51,7 @@ public class BlueDiamond {
 	boolean yAxisLog = false;
 	boolean showVMarkers = false;
 	boolean showHMarkers = false;
-	
+
 	ScanMonitor scanMonitor = null;
 	Scan1PositionerParms scan1PositionerParms = null;
 	Scan2PositionerParms scan2PositionerParms = null;
@@ -56,19 +60,17 @@ public class BlueDiamond {
 	Data1D data1D;
 	Data2D data2D;
 
-//	MainPanel_1 mainPanel;
+	// MainPanel_1 mainPanel;
 	MainPanel mainPanel;
 	Active_1D_ScanPanel active_1D_ScanPanel;
 	Active_2D_ScanPanel active_2D_ScanPanel;
 	Saved_1D_ScanPanel saved_1D_ScanPanel;
-	
+
 	protected JCChart chart;
 	protected JCChart oldChart;
-    JCChart3dJava2d chart3d = null;
-    
-//    ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
+	JCChart3dJava2d chart3d = null;
 
-    CountDownConnection countDownConnection = CountDownConnection.getInstance();
+	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	/**
 	 * Launch the application.
@@ -78,14 +80,14 @@ public class BlueDiamond {
 			public void run() {
 				try {
 					try {
-					    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-					        if ("Nimbus".equals(info.getName())) {
-					            UIManager.setLookAndFeel(info.getClassName());
-					            break;
-					        }
-					    }
+						for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+							if ("Nimbus".equals(info.getName())) {
+								UIManager.setLookAndFeel(info.getClassName());
+								break;
+							}
+						}
 					} catch (Exception e) {
-					    // If Nimbus is not available, you can set the GUI to another look and feel.
+						// If Nimbus is not available, you can set the GUI to another look and feel.
 					}
 					BlueDiamond window = new BlueDiamond();
 					window.frame.setVisible(true);
@@ -111,13 +113,13 @@ public class BlueDiamond {
 		programPath = new File(currentRelativePath.toAbsolutePath().toString());
 		frame = new JFrame();
 		frame.setBounds(20, 20, 1100, 770);
-		frame.setPreferredSize(new Dimension(1100,770));
+		frame.setPreferredSize(new Dimension(1100, 770));
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				closeApplication();
 			}
 		});
-//		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		// frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(logoPanel, java.awt.BorderLayout.CENTER);
 		// frame.getContentPane().getComponent(0).setName("BlueDiamond");
 
@@ -154,57 +156,57 @@ public class BlueDiamond {
 
 		JMenuItem mntmDerivative = new JMenuItem("Derivative");
 		mnUtil.add(mntmDerivative);
-		mntmDerivative.addActionListener(new ActionListener() {			
+		mntmDerivative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				derivative = !derivative;
 				data1D.setDerivative(derivative);
-				mntmDerivative.setText(((derivative)? "Raw":"Derivative"));
-				
-			}			
+				mntmDerivative.setText(((derivative) ? "Raw" : "Derivative"));
+
+			}
 		});
 
 		JMenuItem mntmYaxislog = new JMenuItem("y-axis->log");
 		mnUtil.add(mntmYaxislog);
-		
+
 		JMenu mnNewMenu = new JMenu("Markers");
 		mnUtil.add(mnNewMenu);
-		
+
 		JMenuItem mntmShowVMarkers = new JMenuItem("Hide V Markers");
 		mntmShowVMarkers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(showVMarkers) {
+				if (showVMarkers) {
 					active_1D_ScanPanel.showVMarkers();
-				}else {
+				} else {
 					active_1D_ScanPanel.hideVMarkers();
 				}
-				showVMarkers = !showVMarkers;				
-				mntmShowVMarkers.setText(((showVMarkers)?"Show V Marker":"Hide V Marker"));
+				showVMarkers = !showVMarkers;
+				mntmShowVMarkers.setText(((showVMarkers) ? "Show V Marker" : "Hide V Marker"));
 			}
 		});
 		mnNewMenu.add(mntmShowVMarkers);
-		
+
 		JMenuItem mntmShowHMarkers = new JMenuItem("Hide H Markers");
 		mntmShowHMarkers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(showHMarkers) {
+				if (showHMarkers) {
 					active_1D_ScanPanel.showHMarkers();
-				}else {
+				} else {
 					active_1D_ScanPanel.hideHMarkers();
 				}
 				showHMarkers = !showHMarkers;
-				mntmShowHMarkers.setText(((showHMarkers)?"Show H Marker":"Hide H Marker"));
+				mntmShowHMarkers.setText(((showHMarkers) ? "Show H Marker" : "Hide H Marker"));
 
 			}
 		});
 		mnNewMenu.add(mntmShowHMarkers);
-		
-		mntmYaxislog.addActionListener(new ActionListener(){
+
+		mntmYaxislog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				yAxisLog = !yAxisLog;
 				data1D.setLogLinear(yAxisLog);
-				mntmYaxislog.setText(((yAxisLog)? "Linear":"Logarithmic"));
-				
-			}			
+				mntmYaxislog.setText(((yAxisLog) ? "Linear" : "Logarithmic"));
+
+			}
 		});
 
 		JMenu mnMdafiles = new JMenu("mdaFiles");
@@ -230,7 +232,6 @@ public class BlueDiamond {
 		mnHelp.add(mntmAbout);
 		mntmAbout.addActionListener(new BlueDiamond_About_ActionAdapter(this));
 
-
 	}
 
 	public void closeApplication() {
@@ -238,7 +239,7 @@ public class BlueDiamond {
 			scanMonitor.disconnectChannel();
 		if (scan1PositionerParms != null)
 			scan1PositionerParms.disconnectChannel();
-		if (scan1DetectorParms !=null)
+		if (scan1DetectorParms != null)
 			scan1DetectorParms.disconnectChannel();
 		if (scan2PositionerParms != null)
 			scan2PositionerParms.disconnectChannel();
@@ -247,27 +248,51 @@ public class BlueDiamond {
 	}
 
 	public void mdaFileOpen_actionPerformed(ActionEvent e) {
-        /**
-         * Open an old mda file for display
-         */
-        File inFile;
-        JFileChooser jFileChooser1 = new JFileChooser(mdaFilesPath);
-        jFileChooser1.setMultiSelectionEnabled(false);
-        jFileChooser1.setFileFilter(new MDAfilter());
-        
-        int retVal = jFileChooser1.showOpenDialog(null);
-        /**
-         * After getting the filename tell the ReadSaveddata
-         * instance to read and the data from that file and
-         * depending on the Rank show either
-         * 1-D scans or 2-D scans.
-         *
-         */
-        if (retVal == JFileChooser.APPROVE_OPTION) {
-            inFile = jFileChooser1.getSelectedFile();
-            mdaFilesPath = inFile.getAbsolutePath();
-            saved_1D_ScanPanel.setFile(inFile);
-        }
+		/**
+		 * Open an old mda file for display
+		 */
+		File inFile;
+		JFileChooser jFileChooser1 = new JFileChooser(mdaFilesPath);
+		FileInputStream mdaFileInputStream = null;
+		jFileChooser1.setMultiSelectionEnabled(false);
+		jFileChooser1.setFileFilter(new MDAfilter());
+
+		int retVal = jFileChooser1.showOpenDialog(null);
+		/**
+		 * After getting the filename tell the ReadSaveddata instance to read and the
+		 * data from that file and depending on the Rank show either 1-D scans or 2-D
+		 * scans.
+		 *
+		 */
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+
+			inFile = jFileChooser1.getSelectedFile();
+			mdaFilesPath = inFile.getAbsolutePath();
+			Path paths = Paths.get(mdaFilesPath);
+			try {
+				byte[] mdaDataBytes = Files.readAllBytes(paths);
+				ByteArrayInputStream inBytes = new ByteArrayInputStream(mdaDataBytes);
+				DataInputStream inData = new DataInputStream(inBytes);
+
+				float version = inData.readFloat();
+				int scanNumber = inData.readInt();
+				int dataRank = inData.readInt();
+				
+//				System.out.println(" Version = "+version+"  scan number = "+scanNumber+" data rank = "+dataRank);
+				
+				inData.close();
+				if (dataRank==1) {
+					saved_1D_ScanPanel.setFile(inFile);
+				} else if(dataRank==2) {
+					// for reading and plotting 2D scans
+				}
+
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
 	}
 
 	public void about_actionPerformed(ActionEvent e) {
@@ -365,17 +390,17 @@ public class BlueDiamond {
 			scan2PositionerParms = new Scan2PositionerParms(scan2Str);
 
 			scan1PositionerParms.initPnPV_values();
-//			mainPanel = new MainPanel_1();
+			// mainPanel = new MainPanel_1();
 			mainPanel = new MainPanel();
-			
+
 			chart = mainPanel.getChart();
 			oldChart = mainPanel.getOldChart();
-			chart3d = mainPanel.get3DChart(); 
+			chart3d = mainPanel.get3DChart();
 
 			data1D = new Data1D(chart);
 			data2D = new Data2D(chart3d);
 			chart3d.getDataView(0).setElevationDataSource(data2D);
-			
+
 			mainPanel.set1DDataSource(data1D);
 			mainPanel.set2DDataSource(data2D);
 			chart.getDataView(0).setDataSource(data1D);
@@ -383,20 +408,20 @@ public class BlueDiamond {
 			scanMonitor = new ScanMonitor(scan1Str, scan2Str);
 			scanMonitor.setData1D(data1D);
 			scanMonitor.setData2D(data2D);
-			
+
 			scanMonitor.setScan1PositionerParms(scan1PositionerParms);
 			scanMonitor.setScan1DetectorParms(scan1DetectorParms);
 			scanMonitor.setScan2PositionerParms(scan2PositionerParms);
-						
+
 			active_1D_ScanPanel = mainPanel.getActive_1D_ScanPanel();
 			scanMonitor.setActive_1D_ScanPanel(active_1D_ScanPanel);
-			
+
 			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
-			
+
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 			active_1D_ScanPanel.resetPositioners_1D();
-			
+
 			scan1PositionerParms.createPosPVs();
 			countDownConnection.pendIO();
 
@@ -411,18 +436,18 @@ public class BlueDiamond {
 
 			scanMonitor.validate1DPositioners();
 			scanMonitor.validate2DPositioners();
-			scanMonitor.validateDets();			
-		
+			scanMonitor.validateDets();
+
 			scanMonitor.getScan1ValidPos();
 			scanMonitor.getScan1ValidDet();
 			scanMonitor.getScan2ValidPos();
 			scanMonitor.setMainPanel_1D_PositionerNames();
 			scanMonitor.setMainPanel_2D_X_PositionerNames();
 			scanMonitor.setMainPanel_2D_Y_PositionerNames();
-			scanMonitor.setMainPanel_1D_DetectorNames();			
+			scanMonitor.setMainPanel_1D_DetectorNames();
 
 			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
-			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());			
+			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());
 
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
@@ -430,7 +455,7 @@ public class BlueDiamond {
 
 			Thread scanMonitorThread = new Thread(scanMonitor);
 			scanMonitorThread.start();
-			initDisplay();		
+			initDisplay();
 			active_1D_ScanPanel.showVMarkers();
 			active_1D_ScanPanel.showHMarkers();
 			active_1D_ScanPanel.setMarkers("Start");
@@ -531,14 +556,13 @@ class TXTfilter extends javax.swing.filechooser.FileFilter {
 		return "txt files";
 	}
 }
+
 class MDAfilter extends javax.swing.filechooser.FileFilter {
-    public boolean accept(File f) {
-        return f.isDirectory() || f.getName().toLowerCase().endsWith(".mda");
-    }
+	public boolean accept(File f) {
+		return f.isDirectory() || f.getName().toLowerCase().endsWith(".mda");
+	}
 
-    public String getDescription() {
-        return "mda files";
-    }
+	public String getDescription() {
+		return "mda files";
+	}
 }
-
-
