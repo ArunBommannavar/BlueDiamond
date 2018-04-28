@@ -3,7 +3,7 @@ package bluediamond2;
 import java.awt.Color;
 import java.util.List;
 
-public interface DetectorDisplay {
+public interface DetectorDisplayI {
 	   public void setNumberOfDetectors(int n);
 	   public void addDetectorForDisplay(int i);
 	   public void removeDetectorForDisplay(int i);

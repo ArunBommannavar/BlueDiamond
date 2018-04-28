@@ -199,6 +199,14 @@ public class BlueDiamond {
 			}
 		});
 		mnNewMenu.add(mntmShowHMarkers);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Reset");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainPanel.getSelectedPanelIndex();
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem);
 
 		mntmYaxislog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -458,7 +466,7 @@ public class BlueDiamond {
 			initDisplay();
 			active_1D_ScanPanel.showVMarkers();
 			active_1D_ScanPanel.showHMarkers();
-			active_1D_ScanPanel.setMarkers("Start");
+			active_1D_ScanPanel.setMarkers();
 		}
 	}
 

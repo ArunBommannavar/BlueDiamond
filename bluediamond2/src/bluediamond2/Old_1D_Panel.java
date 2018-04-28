@@ -109,9 +109,13 @@ public class Old_1D_Panel extends JPanel {
 		
 		hideButton = new JButton("Hide");
 		showHidePanel.add(hideButton);
+		hideButton.addActionListener(new Old_1D_Panel_hideButton_actionAdapter(this));
+
 		
 		showButton = new JButton("Show");
 		showHidePanel.add(showButton);
+		showButton.addActionListener(new Old_1D_Panel_showButton_actionAdapter(this));
+		
 		posTable.setDefaultRenderer(Object.class, renderer1);
 		detTable.setDefaultRenderer(Object.class, renderer2);
 
@@ -235,15 +239,16 @@ public class Old_1D_Panel extends JPanel {
 		detTable.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
 		detTable.getColumn("Color").setCellRenderer(new JButtonRenderer());
 		detTable.getColumn("Color").setCellEditor(new JButtonEditor(new JCheckBox()));
-
+		rb1.doClick();
 		mp.addRow(new Object[] { str1, str2, new Double(d1), new Double(d2), rb1, jb1 });
 		int hrow = mp.getRowCount() - 1;
 		/*
 		if (selectedDetectorsForDisplay.contains(hrow)) {
 			rb1.doClick();
 		}
-*/
+		*/
 	}
+		
 
 	class EvenOddRenderer implements TableCellRenderer {
 
@@ -424,22 +429,22 @@ public class Old_1D_Panel extends JPanel {
 							if (mColIndex == 4) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								JRadioButton rb = (JRadioButton) obj;
-								System.out.println(" dataviewNumber = "+dataViewNumber);
 								Object dObj = chart.getDataView(dataViewNumber).getDataSource();
-								System.out.println(" chart Data View Number = "+((DataViewParms)dObj).getDataViewNum());
 								if (table.getName() == "Dets") {
-									((DetectorDisplay) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
+									((DetectorDisplayI) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
 								} else if (table.getName() == "Pos") {
-									((PositionerDisplay) dObj).setSelectedPositioner(firstRow);
+									((PositionerDisplayI) dObj).setSelectedPositioner(firstRow);
+									((PositionerDisplayI) dObj).checkForMinMax();
+									 ((UpdateDisplayI)dObj).updateDisplay();
 								}
 							} else if (mColIndex == 5) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								Object dObj = chart.getDataView(dataViewNumber).getDataSource();
 
 								StylePicker2 sp = new StylePicker2();
-								int thickness = ((DetectorDisplay) dObj).getSeriesThickness(firstRow);
-								int shape = ((DetectorDisplay) dObj).getSeriesSymbol(firstRow);
-								int symbolSize = ((DetectorDisplay) dObj).getSeriesSymbolSize(firstRow);
+								int thickness = ((DetectorDisplayI) dObj).getSeriesThickness(firstRow);
+								int shape = ((DetectorDisplayI) dObj).getSeriesSymbol(firstRow);
+								int symbolSize = ((DetectorDisplayI) dObj).getSeriesSymbolSize(firstRow);
 
 								sp.setThickness(thickness);
 								sp.setShape(shape);
@@ -449,19 +454,19 @@ public class Old_1D_Panel extends JPanel {
 
 								if (ret == 0) {
 									if (sp.isColorPicked()) {
-										((DetectorDisplay) dObj).setSeriesColor(sp.getSelectedColor(), firstRow);
+										((DetectorDisplayI) dObj).setSeriesColor(sp.getSelectedColor(), firstRow);
 									}
 
 									if (sp.isThicknessPicked()) {
-										((DetectorDisplay) dObj).setSeriesThickness(sp.getThickness(), firstRow);
+										((DetectorDisplayI) dObj).setSeriesThickness(sp.getThickness(), firstRow);
 									}
 
 									if (sp.isShapePicked()) {
-										((DetectorDisplay) dObj).setSeriesSymbol(sp.getShape(), firstRow);
+										((DetectorDisplayI) dObj).setSeriesSymbol(sp.getShape(), firstRow);
 									}
 
 									if (sp.isSymbolSizePicked()) {
-										((DetectorDisplay) dObj).setSeriesSymbolSize(sp.getSymbolSize(), firstRow);
+										((DetectorDisplayI) dObj).setSeriesSymbolSize(sp.getSymbolSize(), firstRow);
 									}
 								}
 							}
@@ -479,5 +484,45 @@ public class Old_1D_Panel extends JPanel {
 			}
 		}
 	}
+	
+	   public void hideButton_actionPerformed(ActionEvent e) {
+		      chart.getDataView(dataViewNumber).setVisible(false);
+		      setSelected(true);
+		      posTable.updateUI();
+		      detTable.updateUI();
+//		      userAutoScale.setXMinMax();
+		   }
+
+		   public void showButton_actionPerformed(ActionEvent e) {
+		      chart.getDataView(dataViewNumber).setVisible(true);
+		      setSelected(false);
+		      posTable.updateUI();
+		      detTable.updateUI();
+//		      userAutoScale.setXMinMax();
+
+		   }
+
 
 }
+
+class Old_1D_Panel_hideButton_actionAdapter implements ActionListener {
+	   private Old_1D_Panel adaptee;
+	   Old_1D_Panel_hideButton_actionAdapter(Old_1D_Panel adaptee) {
+	      this.adaptee = adaptee;
+	   }
+
+	   public void actionPerformed(ActionEvent e) {
+	      adaptee.hideButton_actionPerformed(e);
+	   }
+	}
+
+class Old_1D_Panel_showButton_actionAdapter implements ActionListener {
+	   private Old_1D_Panel adaptee;
+	   Old_1D_Panel_showButton_actionAdapter(Old_1D_Panel adaptee) {
+	      this.adaptee = adaptee;
+	   }
+
+	   public void actionPerformed(ActionEvent e) {
+	      adaptee.showButton_actionPerformed(e);
+	   }
+	}

@@ -1,6 +1,6 @@
 package bluediamond2;
 
-public interface DataViewParms {
+public interface DataViewParmsI {
     public int getDataViewNum();
 
 }

@@ -64,7 +64,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	private JTextField xRangeMaxTextField;
 	private JTextField yRangeMinTextField;
 	private JTextField yRangeMaxTextField;
-	
+
 	private Map<Integer, JCheckBox> posXMap = new HashMap<>();
 	private Map<Integer, DetectorColorPanel> detMap_1D = new HashMap<>();
 
@@ -77,10 +77,10 @@ public class Active_1D_ScanPanel extends JPanel {
 	boolean autoScale = true;
 	JCheckBox userCheckBox;
 	JCheckBox autoCheckBox;
-	
+
 	ButtonGroup posXButtonGroup = new ButtonGroup();
 	ButtonGroup autoUserGroup = new ButtonGroup();
-	
+
 	protected Data1D data1D;
 	private DetectorColorPanel detPanel;
 	JPanel detectorPanel_1D;
@@ -110,14 +110,13 @@ public class Active_1D_ScanPanel extends JPanel {
 	boolean hMarkersShowing = true;
 	boolean hMarkerSelected = false;
 	boolean vMarkerSelected = false;
-	
-	
+
 	JCMarker pickedMarker;
 	double pickedPoint;
 	double minMarker;
 	double maxMarker;
 	int precision = 4;
-	
+
 	JLabel lblLeftMarkerValue;
 	JLabel lblRightMarkerValue;
 	JLabel lblCenterMarkerValue;
@@ -126,27 +125,24 @@ public class Active_1D_ScanPanel extends JPanel {
 	JLabel scanStatusLabel;
 	JLabel scanDiffLabel;
 	JLabel scanCenterLabel;
-	
+
 	JLabel horzTopValue;
 	JLabel horzBotValue;
 	JLabel horzCenterValue;
 	JLabel horzWidthValue;
-	
+
 	JCLineStyle vMarkerCenterStyle;
 	JCLineStyle hMarkerCenterStyle;
 	double xAxisMin;
 	double xAxisMax;
 	double yAxisMin;
-	double yAxisMax;	
-	
+	double yAxisMax;
+
 	private PositionerPnPV[] scan1PosPnPV = new PositionerPnPV[4];
-	
+
 	JPanel detectorPanel_1D_1_30;
 	JPanel detectorPanel_1D_31_60;
 
-	JButton resetMarkerButton;
-	
-	
 	/**
 	 * Create the panel.
 	 */
@@ -154,7 +150,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
-		
+
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		springLayout.putConstraint(SpringLayout.NORTH, leftPanel, 10, SpringLayout.NORTH, this);
@@ -162,15 +158,19 @@ public class Active_1D_ScanPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.SOUTH, leftPanel, -5, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, leftPanel, 180, SpringLayout.WEST, this);
 		add(leftPanel);
-		
+
 		JPanel plotPanel = new JPanel();
-		plotPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42)), new BevelBorder(BevelBorder.RAISED, new Color(255, 69, 0), new Color(255, 69, 0), new Color(255, 69, 0), new Color(255, 69, 0))));
+		plotPanel.setBorder(new CompoundBorder(
+				new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42),
+						new Color(165, 42, 42), new Color(165, 42, 42)),
+				new BevelBorder(BevelBorder.RAISED, new Color(255, 69, 0), new Color(255, 69, 0), new Color(255, 69, 0),
+						new Color(255, 69, 0))));
 		springLayout.putConstraint(SpringLayout.NORTH, plotPanel, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, plotPanel, 5, SpringLayout.EAST, leftPanel);
 		springLayout.putConstraint(SpringLayout.SOUTH, plotPanel, -230, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, plotPanel, -5, SpringLayout.EAST, this);
 		add(plotPanel);
-		
+
 		detectorPanel_1D = new JPanel();
 		springLayout.putConstraint(SpringLayout.NORTH, detectorPanel_1D, 5, SpringLayout.SOUTH, plotPanel);
 		springLayout.putConstraint(SpringLayout.WEST, detectorPanel_1D, 5, SpringLayout.EAST, leftPanel);
@@ -178,7 +178,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.EAST, detectorPanel_1D, -5, SpringLayout.EAST, this);
 		SpringLayout sl_leftPanel = new SpringLayout();
 		leftPanel.setLayout(sl_leftPanel);
-		
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		sl_leftPanel.putConstraint(SpringLayout.SOUTH, tabbedPane, -310, SpringLayout.SOUTH, leftPanel);
 		tabbedPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
@@ -186,7 +186,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		sl_leftPanel.putConstraint(SpringLayout.WEST, tabbedPane, 5, SpringLayout.WEST, leftPanel);
 		sl_leftPanel.putConstraint(SpringLayout.EAST, tabbedPane, -5, SpringLayout.EAST, leftPanel);
 		leftPanel.add(tabbedPane);
-		
+
 		JPanel scanStatusResetPanel = new JPanel();
 		sl_leftPanel.putConstraint(SpringLayout.WEST, scanStatusResetPanel, 0, SpringLayout.WEST, tabbedPane);
 		sl_leftPanel.putConstraint(SpringLayout.SOUTH, scanStatusResetPanel, 60, SpringLayout.SOUTH, tabbedPane);
@@ -194,183 +194,169 @@ public class Active_1D_ScanPanel extends JPanel {
 		sl_leftPanel.putConstraint(SpringLayout.NORTH, scanStatusResetPanel, 5, SpringLayout.SOUTH, tabbedPane);
 		sl_leftPanel.putConstraint(SpringLayout.EAST, scanStatusResetPanel, 0, SpringLayout.EAST, tabbedPane);
 		leftPanel.add(scanStatusResetPanel);
-		
+
 		JPanel posPanel_1D = new JPanel();
 		sl_leftPanel.putConstraint(SpringLayout.NORTH, posPanel_1D, 5, SpringLayout.SOUTH, scanStatusResetPanel);
 		sl_leftPanel.putConstraint(SpringLayout.WEST, posPanel_1D, 0, SpringLayout.WEST, tabbedPane);
 		sl_leftPanel.putConstraint(SpringLayout.SOUTH, posPanel_1D, 100, SpringLayout.SOUTH, scanStatusResetPanel);
 		posPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		scanStatusResetPanel.setLayout(new GridLayout(3, 0, 0, 0));
-		
+
 		JPanel panel_1 = new JPanel();
 		scanStatusResetPanel.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
-		
+
 		scanStatusLabel = new JLabel("Scan Status");
 		scanStatusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(scanStatusLabel, BorderLayout.CENTER);
-		
+
 		JPanel panel_2 = new JPanel();
 		scanStatusResetPanel.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
-		
+
 		fileNameLabel = new JLabel("File Name");
 		fileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(fileNameLabel, BorderLayout.CENTER);
-		
+
 		JPanel panel_3 = new JPanel();
 		scanStatusResetPanel.add(panel_3);
 		panel_3.setLayout(new BorderLayout(0, 0));
-		
-		resetMarkerButton = new JButton("Reset Markers");
-		panel_3.add(resetMarkerButton, BorderLayout.CENTER);
 		sl_leftPanel.putConstraint(SpringLayout.EAST, posPanel_1D, 0, SpringLayout.EAST, tabbedPane);
 		leftPanel.add(posPanel_1D);
-		
-		resetMarkerButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setMarkers("Reset");
-				
-			}			
-		});
 
 		JPanel rangePanel_1D = new JPanel();
 		sl_leftPanel.putConstraint(SpringLayout.NORTH, rangePanel_1D, 5, SpringLayout.SOUTH, posPanel_1D);
-		
-				sl_leftPanel.putConstraint(SpringLayout.WEST, rangePanel_1D, 0, SpringLayout.WEST, tabbedPane);
-				sl_leftPanel.putConstraint(SpringLayout.SOUTH, rangePanel_1D, 144, SpringLayout.SOUTH, posPanel_1D);
+
+		sl_leftPanel.putConstraint(SpringLayout.WEST, rangePanel_1D, 0, SpringLayout.WEST, tabbedPane);
+		sl_leftPanel.putConstraint(SpringLayout.SOUTH, rangePanel_1D, 144, SpringLayout.SOUTH, posPanel_1D);
 		rangePanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		posPanel_1D.setLayout(new GridLayout(5, 0, 0, 0));
-		
+
 		JPanel panel = new JPanel();
-		panel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 255, 0), new Color(0, 255, 255)), null));
+		panel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0),
+				new Color(0, 255, 255), new Color(0, 255, 0), new Color(0, 255, 255)), null));
 		posPanel_1D.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblNewLabel = new JLabel("Positioners");
 		lblNewLabel.setForeground(Color.BLUE);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel);
-		
+
 		JPanel panel_4 = new JPanel();
 		posPanel_1D.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
-		
+
 		xPositionerCheckBox_1 = new JCheckBox("x_positioner_1");
 		xPositionerCheckBox_1.setSelected(true);
 		panel_4.add(xPositionerCheckBox_1, BorderLayout.CENTER);
 		posXMap.put(0, xPositionerCheckBox_1);
-		
+
 		JPanel panel_5 = new JPanel();
 		posPanel_1D.add(panel_5);
 		panel_5.setLayout(new BorderLayout(0, 0));
-		
+
 		xPositionerCheckBox_2 = new JCheckBox("x_positioner_2");
 		panel_5.add(xPositionerCheckBox_2, BorderLayout.CENTER);
 		posXMap.put(1, xPositionerCheckBox_2);
 
-		
 		JPanel panel_6 = new JPanel();
 		posPanel_1D.add(panel_6);
 		panel_6.setLayout(new BorderLayout(0, 0));
-		
+
 		xPositionerCheckBox_3 = new JCheckBox("x_positioner_3");
 		panel_6.add(xPositionerCheckBox_3, BorderLayout.CENTER);
 		posXMap.put(2, xPositionerCheckBox_3);
-		
+
 		JPanel panel_7 = new JPanel();
 		posPanel_1D.add(panel_7);
 		panel_7.setLayout(new BorderLayout(0, 0));
-		
+
 		xPositionerCheckBox_4 = new JCheckBox("x_positioner_4");
 		panel_7.add(xPositionerCheckBox_4, BorderLayout.CENTER);
 		posXMap.put(3, xPositionerCheckBox_4);
 		sl_leftPanel.putConstraint(SpringLayout.EAST, rangePanel_1D, 0, SpringLayout.EAST, tabbedPane);
-		
+
 		posXButtonGroup.add(xPositionerCheckBox_1);
 		posXButtonGroup.add(xPositionerCheckBox_2);
 		posXButtonGroup.add(xPositionerCheckBox_3);
 		posXButtonGroup.add(xPositionerCheckBox_4);
-		
+
 		xPositionerCheckBox_1.addActionListener(new Active_1D_ScanPanel_xPositionerCheckBox_1_actionAdapter(this));
 		xPositionerCheckBox_2.addActionListener(new Active_1D_ScanPanel_xPositionerCheckBox_2_actionAdapter(this));
 		xPositionerCheckBox_3.addActionListener(new Active_1D_ScanPanel_xPositionerCheckBox_3_actionAdapter(this));
 		xPositionerCheckBox_4.addActionListener(new Active_1D_ScanPanel_xPositionerCheckBox_4_actionAdapter(this));
 
-		
 		JPanel vertPanel_1D = new JPanel();
 		vertPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		tabbedPane.addTab("Vertical", null, vertPanel_1D, null);
 		vertPanel_1D.setLayout(new GridLayout(5, 0, 0, 0));
-		
+
 		JPanel leftMarkerPanel_1D = new JPanel();
 		leftMarkerPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		vertPanel_1D.add(leftMarkerPanel_1D);
 		leftMarkerPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel leftMarkerPanel_1D_valueButton = new JPanel();
 		leftMarkerPanel_1D.add(leftMarkerPanel_1D_valueButton, BorderLayout.CENTER);
 		leftMarkerPanel_1D_valueButton.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel_11 = new JPanel();
 		leftMarkerPanel_1D_valueButton.add(panel_11, BorderLayout.CENTER);
 		panel_11.setLayout(new BorderLayout(0, 0));
-		
+
 		lblLeftMarkerValue = new JLabel("Left Marker Value");
 		lblLeftMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_11.add(lblLeftMarkerValue, BorderLayout.SOUTH);
-		
+
 		JPanel panel_12 = new JPanel();
 		leftMarkerPanel_1D_valueButton.add(panel_12, BorderLayout.SOUTH);
 		panel_12.setLayout(new BorderLayout(0, 0));
-		
+
 		JButton btnLeftMarkerButton = new JButton("Move");
 		panel_12.add(btnLeftMarkerButton);
-		
+
 		JPanel leftMarkerPanel_1D_LeftLabelPanel = new JPanel();
 		leftMarkerPanel_1D_LeftLabelPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		leftMarkerPanel_1D.add(leftMarkerPanel_1D_LeftLabelPanel, BorderLayout.WEST);
 		leftMarkerPanel_1D_LeftLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblLeftV = new JLabel("LEFT");
 		lblLeftV.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblLeftV.setHorizontalAlignment(SwingConstants.CENTER);
 		leftMarkerPanel_1D_LeftLabelPanel.add(lblLeftV);
 		lblLeftV.setUI(new VerticalLabelUI(false));
 
-		
 		JPanel rightMarkerPanel_1D = new JPanel();
 		rightMarkerPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		vertPanel_1D.add(rightMarkerPanel_1D);
 		rightMarkerPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel rightMarkerPanel_1D_valueButton = new JPanel();
 		rightMarkerPanel_1D.add(rightMarkerPanel_1D_valueButton, BorderLayout.CENTER);
 		rightMarkerPanel_1D_valueButton.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel_13 = new JPanel();
 		rightMarkerPanel_1D_valueButton.add(panel_13, BorderLayout.CENTER);
 		panel_13.setLayout(new BorderLayout(0, 0));
-		
+
 		lblRightMarkerValue = new JLabel("Right Marker Value");
 		lblRightMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_13.add(lblRightMarkerValue, BorderLayout.CENTER);
-		
+
 		JPanel panel_14 = new JPanel();
 		rightMarkerPanel_1D_valueButton.add(panel_14, BorderLayout.SOUTH);
 		panel_14.setLayout(new BorderLayout(0, 0));
-		
+
 		JButton btnRightMarkerButton = new JButton("Move");
 		panel_14.add(btnRightMarkerButton);
-		
+
 		JPanel rightMarkerPanel_1D_RightLabelPanel = new JPanel();
 		rightMarkerPanel_1D_RightLabelPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		rightMarkerPanel_1D.add(rightMarkerPanel_1D_RightLabelPanel, BorderLayout.WEST);
 		rightMarkerPanel_1D_RightLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblRightV = new JLabel("RIGHT");
 		lblRightV.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblRightV.setHorizontalAlignment(SwingConstants.CENTER);
@@ -381,106 +367,106 @@ public class Active_1D_ScanPanel extends JPanel {
 		centerMarkerPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		vertPanel_1D.add(centerMarkerPanel_1D);
 		centerMarkerPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel centerMarkerPanel_1D_valueButton = new JPanel();
 		centerMarkerPanel_1D.add(centerMarkerPanel_1D_valueButton, BorderLayout.CENTER);
 		centerMarkerPanel_1D_valueButton.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel_15 = new JPanel();
 		centerMarkerPanel_1D_valueButton.add(panel_15);
 		panel_15.setLayout(new BorderLayout(0, 0));
-		
+
 		lblCenterMarkerValue = new JLabel("Center Marker Value");
 		lblCenterMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_15.add(lblCenterMarkerValue, BorderLayout.CENTER);
-		
+
 		JPanel panel_16 = new JPanel();
 		centerMarkerPanel_1D_valueButton.add(panel_16, BorderLayout.SOUTH);
 		panel_16.setLayout(new BorderLayout(0, 0));
-		
+
 		JButton btnCenterMarkerButton = new JButton("Move");
 		panel_16.add(btnCenterMarkerButton);
-		
+
 		JPanel centerMarkerPanel_1D_CenterLabelPanel = new JPanel();
 		centerMarkerPanel_1D_CenterLabelPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		centerMarkerPanel_1D.add(centerMarkerPanel_1D_CenterLabelPanel, BorderLayout.WEST);
 		centerMarkerPanel_1D_CenterLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblCenterV = new JLabel("CENTER");
 		lblCenterV.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCenterV.setHorizontalAlignment(SwingConstants.CENTER);
 		centerMarkerPanel_1D_CenterLabelPanel.add(lblCenterV);
 		lblCenterV.setUI(new VerticalLabelUI(false));
-		
+
 		JPanel widthMarkerPanel_1D = new JPanel();
 		widthMarkerPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		vertPanel_1D.add(widthMarkerPanel_1D);
 		widthMarkerPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel widthMarkerScanPanel_1D = new JPanel();
 		widthMarkerPanel_1D.add(widthMarkerScanPanel_1D, BorderLayout.CENTER);
 		widthMarkerScanPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		lblWidthMarkerValue = new JLabel("Width Marker Value");
 		lblWidthMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		widthMarkerScanPanel_1D.add(lblWidthMarkerValue, BorderLayout.CENTER);
-		
+
 		JPanel widthMarkerPanel_1D_WidthLabelPanel = new JPanel();
 		widthMarkerPanel_1D_WidthLabelPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		widthMarkerPanel_1D.add(widthMarkerPanel_1D_WidthLabelPanel, BorderLayout.WEST);
 		widthMarkerPanel_1D_WidthLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblWidthV = new JLabel("WIDTH");
 		lblWidthV.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblWidthV.setHorizontalAlignment(SwingConstants.CENTER);
 		widthMarkerPanel_1D_WidthLabelPanel.add(lblWidthV);
 		lblWidthV.setUI(new VerticalLabelUI(false));
-		
+
 		JPanel centerDiffPanel_1D = new JPanel();
 		centerDiffPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		vertPanel_1D.add(centerDiffPanel_1D);
 		centerDiffPanel_1D.setLayout(new GridLayout(2, 0, 0, 0));
-		
+
 		JPanel scanCenterPanel_1D = new JPanel();
 		scanCenterPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		centerDiffPanel_1D.add(scanCenterPanel_1D);
 		scanCenterPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		scanCenterLabel = new JLabel("scan center");
 		scanCenterLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		scanCenterPanel_1D.add(scanCenterLabel, BorderLayout.CENTER);
-		
+
 		JPanel diffPanel_1D = new JPanel();
 		diffPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		centerDiffPanel_1D.add(diffPanel_1D);
 		diffPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		scanDiffLabel = new JLabel("Scan Diff");
 		scanDiffLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		diffPanel_1D.add(scanDiffLabel, BorderLayout.CENTER);
-		
+
 		JPanel horzPanel_1D = new JPanel();
 		horzPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.ORANGE));
 		tabbedPane.addTab("Horizontal", null, horzPanel_1D, null);
 		horzPanel_1D.setLayout(new GridLayout(4, 0, 0, 0));
-		
+
 		JPanel horzTopPanel_1D = new JPanel();
 		horzTopPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		horzPanel_1D.add(horzTopPanel_1D);
 		horzTopPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel horzTopValuePanel = new JPanel();
 		horzTopPanel_1D.add(horzTopValuePanel, BorderLayout.CENTER);
 		horzTopValuePanel.setLayout(new BorderLayout(0, 0));
-		
+
 		horzTopValue = new JLabel("New label");
 		horzTopValue.setHorizontalAlignment(SwingConstants.CENTER);
 		horzTopValuePanel.add(horzTopValue, BorderLayout.CENTER);
-		
+
 		JPanel horzTopLabelPanel = new JPanel();
 		horzTopPanel_1D.add(horzTopLabelPanel, BorderLayout.WEST);
 		horzTopLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblTop = new JLabel("Top");
 		lblTop.setHorizontalAlignment(SwingConstants.CENTER);
 		horzTopLabelPanel.add(lblTop);
@@ -490,19 +476,19 @@ public class Active_1D_ScanPanel extends JPanel {
 		horzBottomPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		horzPanel_1D.add(horzBottomPanel_1D);
 		horzBottomPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel horzBottomValuePanel = new JPanel();
 		horzBottomPanel_1D.add(horzBottomValuePanel, BorderLayout.CENTER);
 		horzBottomValuePanel.setLayout(new BorderLayout(0, 0));
-		
+
 		horzBotValue = new JLabel("New label");
 		horzBotValue.setHorizontalAlignment(SwingConstants.CENTER);
 		horzBottomValuePanel.add(horzBotValue, BorderLayout.CENTER);
-		
+
 		JPanel horzBottomLabelPanel = new JPanel();
 		horzBottomPanel_1D.add(horzBottomLabelPanel, BorderLayout.WEST);
 		horzBottomLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblBottom = new JLabel("Bottom");
 		lblBottom.setHorizontalAlignment(SwingConstants.CENTER);
 		horzBottomLabelPanel.add(lblBottom);
@@ -512,96 +498,95 @@ public class Active_1D_ScanPanel extends JPanel {
 		horzCenterPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		horzPanel_1D.add(horzCenterPanel_1D);
 		horzCenterPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel horzCenterValuePanel = new JPanel();
 		horzCenterPanel_1D.add(horzCenterValuePanel, BorderLayout.CENTER);
 		horzCenterValuePanel.setLayout(new BorderLayout(0, 0));
-		
+
 		horzCenterValue = new JLabel("New label");
 		horzCenterValue.setHorizontalAlignment(SwingConstants.CENTER);
 		horzCenterValuePanel.add(horzCenterValue, BorderLayout.CENTER);
-		
+
 		JPanel horzCenterLabelPanel = new JPanel();
 		horzCenterPanel_1D.add(horzCenterLabelPanel, BorderLayout.WEST);
 		horzCenterLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblCenter = new JLabel("Center");
 		lblCenter.setHorizontalAlignment(SwingConstants.CENTER);
 		horzCenterLabelPanel.add(lblCenter);
 		lblCenter.setUI(new VerticalLabelUI(false));
-		
+
 		JPanel horzWidthPanel_1D = new JPanel();
 		horzWidthPanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		horzPanel_1D.add(horzWidthPanel_1D);
 		horzWidthPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel horzWidthValuePanel = new JPanel();
 		horzWidthPanel_1D.add(horzWidthValuePanel, BorderLayout.CENTER);
 		horzWidthValuePanel.setLayout(new BorderLayout(0, 0));
-		
+
 		horzWidthValue = new JLabel("New label");
 		horzWidthValue.setHorizontalAlignment(SwingConstants.CENTER);
 		horzWidthValuePanel.add(horzWidthValue, BorderLayout.CENTER);
-		
+
 		JPanel horzWidthLabelPanel = new JPanel();
 		horzWidthPanel_1D.add(horzWidthLabelPanel, BorderLayout.WEST);
 		horzWidthLabelPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JLabel lblWidth = new JLabel("Width");
 		lblWidth.setHorizontalAlignment(SwingConstants.CENTER);
 		horzWidthLabelPanel.add(lblWidth);
 		lblWidth.setUI(new VerticalLabelUI(false));
 
-		
 		leftPanel.add(rangePanel_1D);
 		rangePanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		rangePanel_1D.add(tabbedPane_1, BorderLayout.CENTER);
-		
+
 		JPanel x_rangePanel_1D = new JPanel();
 		x_rangePanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		tabbedPane_1.addTab("X-Range", null, x_rangePanel_1D, null);
 		x_rangePanel_1D.setLayout(new MigLayout("", "[][grow]", "[][]"));
-		
+
 		JLabel xRangeMinLabel = new JLabel("Min");
 		x_rangePanel_1D.add(xRangeMinLabel, "cell 0 0,alignx trailing");
-		
+
 		xRangeMinTextField = new JTextField();
 		x_rangePanel_1D.add(xRangeMinTextField, "cell 1 0,growx");
 		xRangeMinTextField.setColumns(10);
-		
+
 		JLabel xRangeMaxLabel = new JLabel("Max");
 		x_rangePanel_1D.add(xRangeMaxLabel, "cell 0 1,alignx trailing");
-		
+
 		xRangeMaxTextField = new JTextField();
 		x_rangePanel_1D.add(xRangeMaxTextField, "cell 1 1,growx");
 		xRangeMaxTextField.setColumns(10);
-		
+
 		JPanel y_rangePanel_1D = new JPanel();
 		y_rangePanel_1D.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		tabbedPane_1.addTab("Y-Range", null, y_rangePanel_1D, null);
 		y_rangePanel_1D.setLayout(new MigLayout("", "[][grow]", "[][]"));
-		
+
 		JLabel yRangeMinLabel = new JLabel("Min");
 		y_rangePanel_1D.add(yRangeMinLabel, "cell 0 0,alignx trailing");
-		
+
 		yRangeMinTextField = new JTextField();
 		y_rangePanel_1D.add(yRangeMinTextField, "cell 1 0,growx");
 		yRangeMinTextField.setColumns(10);
-		
+
 		JLabel yRangeMaxLabel = new JLabel("Max");
 		y_rangePanel_1D.add(yRangeMaxLabel, "cell 0 1,alignx trailing");
-		
+
 		yRangeMaxTextField = new JTextField();
 		y_rangePanel_1D.add(yRangeMaxTextField, "cell 1 1,growx");
 		yRangeMaxTextField.setColumns(10);
-		
+
 		JPanel panel_8 = new JPanel();
 		panel_8.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.GREEN));
 		rangePanel_1D.add(panel_8, BorderLayout.SOUTH);
-		
+
 		userCheckBox = new JCheckBox("User");
 		panel_8.add(userCheckBox);
 		userCheckBox.addActionListener(new ActionListener() {
@@ -623,7 +608,6 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 		});
 
-		
 		autoCheckBox = new JCheckBox("Auto");
 		autoCheckBox.setSelected(true);
 		panel_8.add(autoCheckBox);
@@ -633,7 +617,7 @@ public class Active_1D_ScanPanel extends JPanel {
 				setAutoScale(true);
 			}
 		});
-		
+
 		autoUserGroup.add(autoCheckBox);
 		autoUserGroup.add(userCheckBox);
 
@@ -641,20 +625,24 @@ public class Active_1D_ScanPanel extends JPanel {
 		plotPanel.add(chart, BorderLayout.CENTER);
 		add(detectorPanel_1D);
 		detectorPanel_1D.setLayout(new BorderLayout(0, 0));
-		
+
 		JTabbedPane detectorTabbedPane_1D = new JTabbedPane(JTabbedPane.TOP);
 		detectorTabbedPane_1D.setBorder(new LineBorder(new Color(255, 0, 0), 2));
 		detectorPanel_1D.add(detectorTabbedPane_1D, BorderLayout.CENTER);
-		
+
 		detectorPanel_1D_1_30 = new JPanel();
-		detectorPanel_1D_1_30.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(255, 222, 173), new Color(255, 222, 173), new Color(255, 222, 173), new Color(255, 222, 173)), new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42), new Color(165, 42, 42))));
+		detectorPanel_1D_1_30.setBorder(new CompoundBorder(
+				new BevelBorder(BevelBorder.RAISED, new Color(255, 222, 173), new Color(255, 222, 173),
+						new Color(255, 222, 173), new Color(255, 222, 173)),
+				new BevelBorder(BevelBorder.RAISED, new Color(165, 42, 42), new Color(165, 42, 42),
+						new Color(165, 42, 42), new Color(165, 42, 42))));
 		detectorTabbedPane_1D.addTab("Detectors 1-30", null, detectorPanel_1D_1_30, null);
 		detectorPanel_1D_1_30.setLayout(new GridLayout(10, 3, 2, 0));
-		
+
 		detectorPanel_1D_31_60 = new JPanel();
 		detectorTabbedPane_1D.addTab("Detectors 31-60", null, detectorPanel_1D_31_60, null);
 		detectorPanel_1D_31_60.setLayout(new GridLayout(10, 3, 0, 0));
-		
+
 		chart.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				chart_mousePressed(e);
@@ -664,7 +652,7 @@ public class Active_1D_ScanPanel extends JPanel {
 				chart_mouseReleased(e);
 			}
 		});
-		
+
 		chart.addMouseMotionListener(new MouseMotionAdapter() {
 			public void mouseDragged(MouseEvent e) {
 				chart_mouseDragged(e);
@@ -672,27 +660,28 @@ public class Active_1D_ScanPanel extends JPanel {
 		});
 		dataView = chart.getDataView(0);
 		addDetectorPanels_1D();
-        vMarker1 = new JCMarker();
-        vMarker1.setAssociatedWithYAxis(false);
+		vMarker1 = new JCMarker();
+		vMarker1.setAssociatedWithYAxis(false);
 
-        vMarker2 = new JCMarker();
-        vMarker2.setAssociatedWithYAxis(false);
+		vMarker2 = new JCMarker();
+		vMarker2.setAssociatedWithYAxis(false);
 
-        vMarkerCenter = new JCMarker();
-        vMarkerCenter.setAssociatedWithYAxis(false);
+		vMarkerCenter = new JCMarker();
+		vMarkerCenter.setAssociatedWithYAxis(false);
 
-        hMarker1 = new JCMarker();
-        hMarker1.setAssociatedWithYAxis(true);
+		hMarker1 = new JCMarker();
+		hMarker1.setAssociatedWithYAxis(true);
 
-        hMarker2 = new JCMarker();
-        hMarker2.setAssociatedWithYAxis(true);
+		hMarker2 = new JCMarker();
+		hMarker2.setAssociatedWithYAxis(true);
 
-        hMarkerCenter = new JCMarker();
-        hMarkerCenter.setAssociatedWithYAxis(true);
+		hMarkerCenter = new JCMarker();
+		hMarkerCenter.setAssociatedWithYAxis(true);
 
- 		this.updateUI();
+		this.updateUI();
 
 	}
+
 	public static void runSafe(Runnable task) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			task.run();
@@ -700,6 +689,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			SwingUtilities.invokeLater(task);
 		}
 	}
+
 	public boolean between(double i, double minValueInclusive, double maxValueInclusive) {
 		if (i >= minValueInclusive && i <= maxValueInclusive)
 			return true;
@@ -708,87 +698,86 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public boolean isVerticalMarkerInRange() {
-		
+
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
 		boolean checkRange = between(vMarker1.getValue(), xaxis.getMin(), xaxis.getMax());
-		checkRange = checkRange & between(vMarker2.getValue(), xaxis.getMin(), xaxis.getMax());		
+		checkRange = checkRange & between(vMarker2.getValue(), xaxis.getMin(), xaxis.getMax());
 		return checkRange;
 	}
-	
+
 	public boolean isHorizontalMarkerInRange() {
-		
+
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
 		boolean checkRange = between(hMarker1.getValue(), yaxis.getMin(), yaxis.getMax());
 		checkRange = checkRange & between(hMarker2.getValue(), yaxis.getMin(), yaxis.getMax());
-		
+
 		return checkRange;
 	}
-	
-	
-	public void setMarkers(String whoCalled) {
-		
+
+	public void setMarkers() {
+
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
-			runSafe(new Runnable() {
-				public void run() {
+		runSafe(new Runnable() {
+			public void run() {
 
-					double d1 = xaxis.getMin();
-					double d2 = xaxis.getMax();
-					double d3 = d1 + (0.25 * (d2 - d1));
-					double d4 = d1 + (0.75 * (d2 - d1));
-					double d5 = (d3 + d4) / 2.0;
+				double d1 = xaxis.getMin();
+				double d2 = xaxis.getMax();
+				double d3 = d1 + (0.25 * (d2 - d1));
+				double d4 = d1 + (0.75 * (d2 - d1));
+				double d5 = (d3 + d4) / 2.0;
 
-					vMarker1.setValue(d3);
-					vMarker2.setValue(d4);
-					vMarkerCenter.setValue(d5);
+				vMarker1.setValue(d3);
+				vMarker2.setValue(d4);
+				vMarkerCenter.setValue(d5);
 
-					vMarker1Pos = vMarker1.getValue();
-					vMarker2Pos = vMarker2.getValue();
-					vMarkerCenterPos = vMarkerCenter.getValue();
+				vMarker1Pos = vMarker1.getValue();
+				vMarker2Pos = vMarker2.getValue();
+				vMarkerCenterPos = vMarkerCenter.getValue();
 
-					setLeftMarkerValue(vMarker1Pos);
-					setRightMarkerValue(vMarker2Pos);
-					setCenterMarkerValue(vMarkerCenterPos);
-					setWidthMarkerValue(getWidth(d3, d4));
-					updateScanCenterDiff();
+				setLeftMarkerValue(vMarker1Pos);
+				setRightMarkerValue(vMarker2Pos);
+				setCenterMarkerValue(vMarkerCenterPos);
+				setWidthMarkerValue(getWidth(d3, d4));
+				updateScanCenterDiff();
 
-					d1 = yaxis.getMin();
-					d2 = yaxis.getMax();
-					d3 = d1 + (0.25 * (d2 - d1));
-					d4 = d1 + (0.75 * (d2 - d1));
-					d5 = (d3 + d4) / 2.0;
+				d1 = yaxis.getMin();
+				d2 = yaxis.getMax();
+				d3 = d1 + (0.25 * (d2 - d1));
+				d4 = d1 + (0.75 * (d2 - d1));
+				d5 = (d3 + d4) / 2.0;
 
-					hMarker1.setValue(d3);
-					hMarker2.setValue(d4);
-					hMarkerCenter.setValue(d5);
+				hMarker1.setValue(d3);
+				hMarker2.setValue(d4);
+				hMarkerCenter.setValue(d5);
 
-					hMarker1Pos = hMarker1.getValue();
-					hMarker2Pos = hMarker2.getValue();
-					hMarkerCenterPos = hMarkerCenter.getValue();
+				hMarker1Pos = hMarker1.getValue();
+				hMarker2Pos = hMarker2.getValue();
+				hMarkerCenterPos = hMarkerCenter.getValue();
 
-					setHorzTopValue(hMarker2Pos);
-					setHorzBotValue(hMarker1Pos);
-					setHorzCenterValue(hMarkerCenterPos);
-					setHorzWidthValue(getWidth(d3, d4));
-				
-					data1D.updateChartDisplay();
-				}
-			});
-		
+				setHorzTopValue(hMarker2Pos);
+				setHorzBotValue(hMarker1Pos);
+				setHorzCenterValue(hMarkerCenterPos);
+				setHorzWidthValue(getWidth(d3, d4));
+
+				data1D.updateChartDisplay();
+			}
+		});
+
 	}
-	
-	public void setXAxisTitle(String str){
+
+	public void setXAxisTitle(String str) {
 		JCAxis xAxis = chart.getDataView(0).getXAxis();
-		xAxis.setTitle(new JCAxisTitle(str));		
+		xAxis.setTitle(new JCAxisTitle(str));
 	}
 
 	public void xCheckBox1_actionPerformed(ActionEvent e) {
 		data1D.setSelectedPositioner(0);
 		selectedPositioner = 0;
 		scanCenter = data1D.getScanCenter();
-		setMarkers("xCheckBox1_actionPerformed");
+		setMarkers();
 		setScanCenterLabel(scanCenter);
 		updateScanCenterDiff();
 		updateUserAuto();
@@ -801,7 +790,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		data1D.setSelectedPositioner(1);
 		selectedPositioner = 1;
 		scanCenter = data1D.getScanCenter();
-		setMarkers("xCheckBox2_actionPerformed");
+		setMarkers();
 		setScanCenterLabel(scanCenter);
 		updateScanCenterDiff();
 		updateUserAuto();
@@ -814,20 +803,20 @@ public class Active_1D_ScanPanel extends JPanel {
 		data1D.setSelectedPositioner(2);
 		selectedPositioner = 2;
 		scanCenter = data1D.getScanCenter();
-		setMarkers("xCheckBox3_actionPerformed");
+		setMarkers();
 		setScanCenterLabel(scanCenter);
 		updateScanCenterDiff();
 		updateUserAuto();
 		JCheckBox jb = ((JCheckBox) (e.getSource()));
 		String str = jb.getText();
 		setXAxisTitle(str);
-		}
+	}
 
 	public void xCheckBox4_actionPerformed(ActionEvent e) {
 		data1D.setSelectedPositioner(3);
 		selectedPositioner = 3;
 		scanCenter = data1D.getScanCenter();
-		setMarkers("xCheckBox4_actionPerformed");
+		setMarkers();
 		setScanCenterLabel(scanCenter);
 		updateScanCenterDiff();
 		updateUserAuto();
@@ -838,7 +827,8 @@ public class Active_1D_ScanPanel extends JPanel {
 
 	public JCChart getChart() {
 		return chart;
-	}	
+	}
+
 	public void set1DDataSource(Data1D d1) {
 		data1D = d1;
 	}
@@ -886,7 +876,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 
 			chart.setBatched(false);
-			
+
 		}
 		if (pickedMarker == null && hMarkersShowing) {
 
@@ -933,52 +923,51 @@ public class Active_1D_ScanPanel extends JPanel {
 		}
 	}
 
-    public void addVMarkers() {
-        dataView.addMarker(vMarker1);
-        dataView.addMarker(vMarker2);
-        dataView.addMarker(vMarkerCenter);
-    }
-    
-     public void showVMarkers() {
-        addVMarkers();
-        updateVMarkers();
-    }    
-    
-    public void addHMarkers() {
-        dataView.addMarker(hMarker1);
-        dataView.addMarker(hMarker2);
-        dataView.addMarker(hMarkerCenter);
-    }
-    
-    public void showHMarkers() {
-    	addHMarkers();
-    	updateHMarkers();    	
-    }
-    
-    public void hideVMarkers() {
+	public void addVMarkers() {
+		dataView.addMarker(vMarker1);
+		dataView.addMarker(vMarker2);
+		dataView.addMarker(vMarkerCenter);
+	}
 
-        vMarker1Pos = vMarker1.getValue();
-        dataView.removeMarker(vMarker1);
+	public void showVMarkers() {
+		addVMarkers();
+		updateVMarkers();
+	}
 
-        vMarker2Pos = vMarker2.getValue();
-        dataView.removeMarker(vMarker2);
+	public void addHMarkers() {
+		dataView.addMarker(hMarker1);
+		dataView.addMarker(hMarker2);
+		dataView.addMarker(hMarkerCenter);
+	}
 
-        vMarkerCenterPos = vMarkerCenter.getValue();
-        dataView.removeMarker(vMarkerCenter);
-    }
+	public void showHMarkers() {
+		addHMarkers();
+		updateHMarkers();
+	}
 
-    public void hideHMarkers() {
+	public void hideVMarkers() {
 
-        hMarker1Pos = hMarker1.getValue();
-        dataView.removeMarker(hMarker1);
+		vMarker1Pos = vMarker1.getValue();
+		dataView.removeMarker(vMarker1);
 
-        hMarker2Pos = hMarker2.getValue();
-        dataView.removeMarker(hMarker2);
+		vMarker2Pos = vMarker2.getValue();
+		dataView.removeMarker(vMarker2);
 
-        hMarkerCenterPos = hMarkerCenter.getValue();
-        dataView.removeMarker(hMarkerCenter);
-    }
+		vMarkerCenterPos = vMarkerCenter.getValue();
+		dataView.removeMarker(vMarkerCenter);
+	}
 
+	public void hideHMarkers() {
+
+		hMarker1Pos = hMarker1.getValue();
+		dataView.removeMarker(hMarker1);
+
+		hMarker2Pos = hMarker2.getValue();
+		dataView.removeMarker(hMarker2);
+
+		hMarkerCenterPos = hMarkerCenter.getValue();
+		dataView.removeMarker(hMarkerCenter);
+	}
 
 	public void moveVmarker(JCMarker mrkr, double d) {
 		double d1;
@@ -995,6 +984,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		updateScanCenterDiff();
 
 	}
+
 	public void updateVMarkers() {
 		runSafe(new Runnable() {
 			public void run() {
@@ -1008,6 +998,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 		});
 	}
+
 	public void updateScanCenterDiff() {
 		runSafe(new Runnable() {
 			public void run() {
@@ -1016,7 +1007,6 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 		});
 	}
-
 
 	public void updateHMarkers() {
 		runSafe(new Runnable() {
@@ -1031,12 +1021,12 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 		});
 	}
-	
+
 	public void moveHmarker(JCMarker mrkr, double d) {
 		double d1;
 		double d2;
 		double dCenter;
-//		double dWidth;
+		// double dWidth;
 
 		mrkr.setValue(d);
 		d1 = hMarker1.getValue();
@@ -1046,7 +1036,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		updateHMarkers();
 
 	}
-	
+
 	public void setHorzTopValue(double d) {
 		d = getPrecisionedData(d);
 		String str = Double.toString(d);
@@ -1071,10 +1061,9 @@ public class Active_1D_ScanPanel extends JPanel {
 		horzWidthValue.setText(str);
 	}
 
-
 	public void chart_mouseDragged(MouseEvent e) {
 		Point point;
-//		String str;
+		// String str;
 
 		double pickedPoint;
 		if (vMarkerSelected) {
@@ -1092,7 +1081,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			pickedPoint = getPrecisionedData(pickedPoint);
 			moveVmarker(pickedMarker, pickedPoint);
 			chart.setBatched(false);
-			
+
 		} else if (hMarkerSelected) {
 			chart.setBatched(true);
 			point = e.getPoint();
@@ -1107,11 +1096,11 @@ public class Active_1D_ScanPanel extends JPanel {
 			moveHmarker(pickedMarker, pickedPoint);
 
 			chart.setBatched(false);
-			
+
 		}
 		data1D.updateChartDisplay();
 	}
-	
+
 	public JCMarker getLeftMarker() {
 		return vMarker1;
 	}
@@ -1147,6 +1136,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	public double getMaxY() {
 		return yaxis.getMax();
 	}
+
 	public double getPrecisionedData(double d1) {
 		double d = Math.floor(d1 * Math.pow(10, precision) + 0.5);
 		d = d / Math.pow(10, precision);
@@ -1167,6 +1157,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		// d = getPrecisionedData(d);
 		return d;
 	}
+
 	public void setLeftMarkerValue(double d) {
 		d = getPrecisionedData(d);
 		String str = Double.toString(d);
@@ -1202,7 +1193,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		d = getPrecisionedData(d);
 		String str = Double.toString(d);
 		scanDiffLabel.setText("Diff = " + str);
-		
+
 	}
 
 	public void setScanStatus(String str) {
@@ -1212,7 +1203,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setFileName(String str) {
 		fileNameLabel.setText(str);
 	}
-	
+
 	public void setAutoScale(boolean b) {
 		autoScale = b;
 		data1D.setAutoScale(b);
@@ -1227,6 +1218,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		data1D.updateChartDisplay();
 
 	}
+
 	public void setUserXmin(double d) {
 
 		xRangeMinTextField.setText(String.valueOf(d));
@@ -1237,7 +1229,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public void showAlert(String str) {
-		JOptionPane.showMessageDialog(this,str);
+		JOptionPane.showMessageDialog(this, str);
 
 	}
 
@@ -1266,20 +1258,21 @@ public class Active_1D_ScanPanel extends JPanel {
 		jb.setVisible(b);
 	}
 
-	public void resetPositioners_1D(){
-		for (int i=0;i<4;i++){
-			setXPositionerVisible_1D(i,false);
+	public void resetPositioners_1D() {
+		for (int i = 0; i < 4; i++) {
+			setXPositionerVisible_1D(i, false);
 		}
 	}
-	
+
 	public String getPosName(int pos) {
 		JCheckBox jb1D = posXMap.get(pos);
 		String posName = jb1D.getText();
 		return posName;
 	}
-	
+
 	public void setXPositionerName_1D(int pos, String str) {
-//		System.out.println(" In MainPanel setXPositionerName_1D  "+" Pos = "+pos+"  str = "+str);
+		// System.out.println(" In MainPanel setXPositionerName_1D "+" Pos = "+pos+" str
+		// = "+str);
 		JCheckBox jb = posXMap.get(pos);
 		String firstPart;
 		String secondPart;
@@ -1304,17 +1297,18 @@ public class Active_1D_ScanPanel extends JPanel {
 		jb.setText(pvDescription.getDescription());
 		pvDescription.disconnectChannel();
 	}
-	public String getPositionerName(int pos){
+
+	public String getPositionerName(int pos) {
 		String ret = "";
 		JCheckBox jb = posXMap.get(pos);
 		ret = jb.getText();
 		return ret;
 	}
-	
+
 	public void setDetVisible(int det, boolean b) {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		detPanel.setVisible(b);
-		
+
 	}
 
 	public void setDetEnable(int det, boolean b) {
@@ -1322,6 +1316,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		detPanel.setEnabled(b);
 	}
+
 	public void addDetectorPanels_1D() {
 
 		for (int i = 0; i < 30; i++) {
@@ -1330,8 +1325,9 @@ public class Active_1D_ScanPanel extends JPanel {
 			detPanel.addJDetCheckBoxName(Integer.toString(i));
 			detPanel.addDetColorButtonName(Integer.toString(i));
 
-			detPanel.getDetPanelButton().addActionListener(new Active_1D_ScanPanel_detPanelButton_actionAdapter(this));			
-			detPanel.getDetPanelCheckBox().addItemListener(new Active_1D_ScanPanel_detPanelCheckBox_actionAdapter(this));
+			detPanel.getDetPanelButton().addActionListener(new Active_1D_ScanPanel_detPanelButton_actionAdapter(this));
+			detPanel.getDetPanelCheckBox()
+					.addItemListener(new Active_1D_ScanPanel_detPanelCheckBox_actionAdapter(this));
 
 			detPanel.setEnabled(false);
 			detPanel.setVisible(false);
@@ -1348,14 +1344,17 @@ public class Active_1D_ScanPanel extends JPanel {
 
 			detPanel.addJDetCheckBoxName(Integer.toString(i));
 			detPanel.addDetColorButtonName(Integer.toString(i));
-			detPanel.getDetPanelButton().addActionListener(new Active_1D_ScanPanel_detPanelButton_actionAdapter(this));			
-			detPanel.getDetPanelCheckBox().addItemListener(new Active_1D_ScanPanel_detPanelCheckBox_actionAdapter(this));
+			detPanel.getDetPanelButton().addActionListener(new Active_1D_ScanPanel_detPanelButton_actionAdapter(this));
+			detPanel.getDetPanelCheckBox()
+					.addItemListener(new Active_1D_ScanPanel_detPanelCheckBox_actionAdapter(this));
 			detMap_1D.put(i, detPanel);
 			detectorPanel_1D_31_60.add(detPanel);
 		}
 	}
+
 	public void setDetectorName(int det, String str) {
-//		System.out.println(" In MainPanel setDetectorName  "+" det = "+det+"  str = "+str);
+		// System.out.println(" In MainPanel setDetectorName "+" det = "+det+" str =
+		// "+str);
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		JCheckBox jb = detPanel.getDetPanelCheckBox();
 		String firstPart;
@@ -1378,39 +1377,41 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb);
 		pvDescription.makeEpicsDataObject();
-//		new Thread (pvDescription).start();
-//		countDownConnection.pendIO();
+		// new Thread (pvDescription).start();
+		// countDownConnection.pendIO();
 		detName = pvDescription.getDescription();
 		jb.setText(detName);
 		pvDescription.disconnectChannel();
 	}
 
-	public String getDetectorName(int det){
+	public String getDetectorName(int det) {
 		String ret = "";
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		JCheckBox jb = detPanel.getDetPanelCheckBox();
-//		ret = jb.getName();
+		// ret = jb.getName();
 		ret = jb.getText();
 		return ret;
 	}
-	public void resetDetectors(){
-		
-		for (int i=0;i<60;i++){
-				setDetVisible(i,false);
-			}
+
+	public void resetDetectors() {
+
+		for (int i = 0; i < 60; i++) {
+			setDetVisible(i, false);
+		}
 	}
 
-	public void detectorStatus1D(String str,boolean b){
+	public void detectorStatus1D(String str, boolean b) {
 		int n = Integer.parseInt(str);
 		data1D.setDetectorForDisplay(n, b);
 	}
-	public void detectorColorStatus1D(String str){
+
+	public void detectorColorStatus1D(String str) {
 		int nm = Integer.parseInt(str);
 		StylePicker2 sp = new StylePicker2();
 		int thickness = data1D.getSeriesThickness(nm);
 		int shape = data1D.getSeriesSymbol(nm);
 		int symbolSize = data1D.getSeriesSymbolSize(nm);
-//		Color lineColor = data1D.getSeriesLineColor(nm);
+		// Color lineColor = data1D.getSeriesLineColor(nm);
 		sp.setThickness(thickness);
 		sp.setShape(shape);
 		sp.setSymbolSize(symbolSize);
@@ -1434,7 +1435,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	public void setScan1PosPv(PositionerPnPV[] pp) {
 		for (int i = 0; i < 4; i++) {
 			scan1PosPnPV[i] = pp[i];
@@ -1566,31 +1567,36 @@ class Active_1D_ScanPanel_xPositionerCheckBox_4_actionAdapter implements ActionL
 		adaptee.xCheckBox4_actionPerformed(e);
 	}
 }
+
 class Active_1D_ScanPanel_detPanelCheckBox_actionAdapter implements ItemListener {
 
 	private Active_1D_ScanPanel adaptee;
-	Active_1D_ScanPanel_detPanelCheckBox_actionAdapter(Active_1D_ScanPanel adaptee){
+
+	Active_1D_ScanPanel_detPanelCheckBox_actionAdapter(Active_1D_ScanPanel adaptee) {
 		this.adaptee = adaptee;
 	}
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		Object eObject = e.getSource();		
-		JCheckBox dd = (JCheckBox)eObject;
-		adaptee.detectorStatus1D(dd.getName(),dd.isSelected());
-	}	
+		Object eObject = e.getSource();
+		JCheckBox dd = (JCheckBox) eObject;
+		adaptee.detectorStatus1D(dd.getName(), dd.isSelected());
+	}
 }
+
 class Active_1D_ScanPanel_detPanelButton_actionAdapter implements ActionListener {
 
 	private Active_1D_ScanPanel adaptee;
-	Active_1D_ScanPanel_detPanelButton_actionAdapter(Active_1D_ScanPanel adaptee){
+
+	Active_1D_ScanPanel_detPanelButton_actionAdapter(Active_1D_ScanPanel adaptee) {
 		this.adaptee = adaptee;
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object eObject = e.getSource();
-		JButton jButton = (JButton)eObject;
+		JButton jButton = (JButton) eObject;
 		adaptee.detectorColorStatus1D(jButton.getName());
-		
+
 	}
 }
-

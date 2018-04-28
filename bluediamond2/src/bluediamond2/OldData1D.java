@@ -10,7 +10,7 @@ import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.data.JCDefaultDataSource;
 
-public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, PositionerDisplay,DataViewParms {
+public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, PositionerDisplayI,DataViewParmsI,UpdateDisplayI,XRangeI {
 
 	/**
 	 * 
@@ -72,10 +72,8 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 
 	public void setDataViewNumber(int n) {
 		dataViewNumber = n;
-		System.out.println(" Saved data dataviewnumber = "+n);
 		oldChart.addDataView(dataViewNumber);
 		oldChart.getDataView(dataViewNumber).setDataSource(this);
-		System.out.println(" Chart Dataviews = "+oldChart.getDataView().size());
 		hpDataView = oldChart.getDataView(dataViewNumber);
 		xaxis = hpDataView.getXAxis();
 		yaxis = hpDataView.getYAxis();
@@ -159,7 +157,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 	}
 
 
-	public void posDetMinMax() {
+	public void calculatePosDetMinMax() {
 
 		posXMin = new double[numberOfPositioners];
 		posXMax = new double[numberOfPositioners];
@@ -196,56 +194,17 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 					detMax[i] = yVal[i][j];
 				}
 			}
+			detMin[i] = getPrecisionedData(detMin[i]);
+			detMax[i] = getPrecisionedData(detMax[i]);
+
 		}
 	}
 
-	
-	public void setPosMinMax() {
-		
-		for (int i = 0; i < numberOfPositioners; i++) {
-			pMin[i] = xVal[i][0];
-			pMax[i] = xVal[i][0];
-
-			for (int j = 0; j < numberOfPoints; j++) {
-				if (xVal[i][j] < pMin[i]) {
-					pMin[i] = xVal[i][j];
-				}
-				if (xVal[i][j] > pMax[i]) {
-					pMax[i] = xVal[i][j];
-				}
-			}
-			posPrecision[i] = findPrecision(i);
-			pMin[i] = getPrecisionedData(i, pMin[i]);
-			pMax[i] = getPrecisionedData(i, pMax[i]);
-		}
-		checkForMinMax();
-		// userAutoScale.setXMinMax();
-	}
 
 	public double getPrecisionedData(double d1) {
 		double d = Math.floor(d1 * Math.pow(10, pposPrecision) + 0.5);
 		d = d / Math.pow(10, pposPrecision);
 		return d;
-	}
-
-	
-	public double getPrecisionedData(int nPos, double d1) {
-		double d = Math.floor(d1 * Math.pow(10, posPrecision[nPos]) + 0.5);
-		d = d / Math.pow(10, posPrecision[nPos]);
-		return d;
-	}
-
-	private int findPrecision(int nPos) {
-		int n = 5;
-		double d1 = pMin[nPos];
-		double d2 = pMax[nPos];
-		double delta = d2 - d1;
-		double dx_np = delta / numberOfPoints;
-		double inv = 1.0 / dx_np;
-		double dPrec = Math.log10(inv) + 2.0;
-		long l = Math.round(dPrec);
-		n = (int) l;
-		return n;
 	}
 
 	public void checkForMinMax() {
@@ -261,19 +220,51 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 		xAxisMax = pMax[selectedPositioner];
 	}
 
-	public double[] getPosXMin() {
+	public void setPosXMin(int n,double d) {
+		pMin[n] = d;		
+	}
+	
+	public void setPosXMax(int n,double d) {
+		pMax[n] = d;		
+	}
+	
+	public void setDetMin(int n,double d) {
+		detMin[n] = d;		
+	}
+	
+	public void setDetMax(int n,double d) {
+		detMax[n] = d;		
+	}
+	
+	public double getPosXMin(int n) {
+		return pMin[n];
+	}
+	
+	public double getPosXMax(int n) {
+		return pMax[n];
+	}
+	
+	public double getDetMin(int n) {
+		return detMin[n];
+	}
+	
+	public double getDetMax(int n) {
+		return detMax[n];
+	}
+	
+	public double[] getPosXMinArray() {
 		return posXMin;
 	}
 	
-	public double[] getPosXMax() {
+	public double[] getPosXMaxArray() {
 		return posXMax;
 	}
 	
-	public double[] getDetMin() {
+	public double[] getDetMinArray() {
 		return detMin;
 	}
 	
-	public double[] getDetMax() {
+	public double[] getDetMaxArray() {
 		return detMax;
 	}
 
@@ -293,7 +284,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 	}
 
 	public void displayDets(int n) {
-		setSelectedPositioner(0);
+//		setSelectedPositioner(0);
 
 		for (int i = 0; i < numberOfDetectors; i++) {
 			if (oldChart.getDataView(n).getSeries(i).isVisible()) {
@@ -338,16 +329,18 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 	public void setDetectorForDisplay(int n, boolean b) {
 		oldChart.setBatched(true);
 
-		xaxis = oldChart.getDataView(dataViewNumber).getXAxis();
-		yaxis = oldChart.getDataView(dataViewNumber).getYAxis();
+		hpDataView = oldChart.getDataView(dataViewNumber);
+
+		xaxis = hpDataView.getXAxis();
+		yaxis = hpDataView.getYAxis();
 
 		if (b) {
 			addDetectorForDisplay(n);
 		} else {
 			removeDetectorForDisplay(n);
 		}
-		oldChart.getDataView(dataViewNumber).getSeries(n).setVisible(b);
-		oldChart.getDataView(dataViewNumber).getSeries(n).setIncluded(b);
+		hpDataView.getSeries(n).setVisible(b);
+		hpDataView.getSeries(n).setIncluded(b);
 
 		yaxis.setMinIsDefault(true);
 		yaxis.setMaxIsDefault(true);
@@ -364,14 +357,16 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplay, P
 
 	public void setSelectedPositioner(int n) {
 		selectedPositioner = n;
-		checkForMinMax();
 
-		updateDisplay();
 		// userAutoScale.setXMinMax();
 		// userAutoScale.setYMinMax();
 
 	}
 
+	public int getSelectedPositioner() {
+		return selectedPositioner;
+	}
+	
 	public List getSelectedChartDetectors() {
 		List list = new ArrayList();
 

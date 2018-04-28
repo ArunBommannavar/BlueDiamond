@@ -371,7 +371,7 @@ public class ReadSavedMdaFile {
 		// Now fill up the X and Y values ods.setXVals(xVal); ods.setYVals(yVal); 
 		// set the min and max values for positioners 
 		 
-		oldData1D.setPosMinMax();
+		oldData1D.calculatePosDetMinMax();
 //		ods.setDerivative(data.getDerivative());
 
 	}

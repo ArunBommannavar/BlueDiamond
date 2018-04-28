@@ -300,7 +300,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			 */
 			data1D.setXAxisScale();
 			data1D.setYAxisScale();
-			active_1D_ScanPanel.setMarkers(" ");
+			active_1D_ScanPanel.setMarkers();
 
 			/*
 			 * Now lets plot the data.
@@ -330,7 +330,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 			double d = data1D.getScanCenter();
 			active_1D_ScanPanel.setScanCenterLabel(d);
-			active_1D_ScanPanel.setMarkers("dstate");
+			active_1D_ScanPanel.setMarkers();
 			active_1D_ScanPanel.updateScanCenterDiff();
 			active_1D_ScanPanel.updateUserAuto();
 			
@@ -454,7 +454,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		data1D.setXAxisScale();
 		data1D.setYAxisScale();
-		active_1D_ScanPanel.setMarkers("initPosDet1D");
+		active_1D_ScanPanel.setMarkers();
 		active_1D_ScanPanel.updateVMarkers();
 		active_1D_ScanPanel.updateHMarkers();
 		active_1D_ScanPanel.updateUserAuto();
