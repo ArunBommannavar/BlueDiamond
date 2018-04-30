@@ -30,8 +30,10 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	double[][] xTemp;
 	double[][] yTemp;
 
+	/*
 	double[] pMin;
-	double[] pMax;
+	double[] pMax;	
+	*/
 	String[] posName;
 	String[] posDesc;
 
@@ -102,8 +104,8 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	public void initArrays() {
 		xVal = new double[numberOfPositioners][numberOfPoints];
 		yVal = new double[numberOfDetectors][numberOfPoints];
-		pMin = new double[numberOfPositioners];
-		pMax = new double[numberOfPositioners];
+		posXMin = new double[numberOfPositioners];
+		posXMax = new double[numberOfPositioners];
 		xvalues = new double[1][numberOfPoints];
 		yvalues = new double[numberOfDetectors][numberOfPoints];
 	}
@@ -179,7 +181,6 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 			}
 			posXMin[i] = getPrecisionedData(posXMin[i]);
 			posXMax[i] = getPrecisionedData(posXMax[i]);
-//			System.out.println(" PosXMin "+posXMin[i]+"  posXMax = "+posXMax[i]);
 		}
 
 		for (int i = 0; i < numberOfDetectors; i++) {
@@ -206,7 +207,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		d = d / Math.pow(10, pposPrecision);
 		return d;
 	}
-
+/*
 	public void checkForMinMax() {
 		for (int i = 0; i < numberOfPositioners; i++) {
 			if (pMin[i] > pMax[i]) {
@@ -219,13 +220,13 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		xAxisMin = pMin[selectedPositioner];
 		xAxisMax = pMax[selectedPositioner];
 	}
-
+*/
 	public void setPosXMin(int n,double d) {
-		pMin[n] = d;		
+		posXMin[n] = d;		
 	}
 	
 	public void setPosXMax(int n,double d) {
-		pMax[n] = d;		
+		posXMax[n] = d;		
 	}
 	
 	public void setDetMin(int n,double d) {
@@ -237,11 +238,11 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	}
 	
 	public double getPosXMin(int n) {
-		return pMin[n];
+		return posXMin[n];
 	}
 	
 	public double getPosXMax(int n) {
-		return pMax[n];
+		return posXMax[n];
 	}
 	
 	public double getDetMin(int n) {
@@ -323,7 +324,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		oldChart.setBatched(true);
 		oldChart.getDataView(dataViewNumber).getSeries(j).getStyle().setSymbolSize(n);
 		oldChart.setBatched(false);
-		fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
+		fireChartDataEvent(ChartDataEvent.RESET, 0, 0); 
 	}
 
 	public void setDetectorForDisplay(int n, boolean b) {
@@ -364,6 +365,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	}
 
 	public int getSelectedPositioner() {
+		System.out.println(" Selected Positioner  "+selectedPositioner);
 		return selectedPositioner;
 	}
 	

@@ -51,6 +51,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Saved_1D_ScanPanel extends JPanel {
 
@@ -76,13 +78,14 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	JTabbedPane tabbedPane_left;
 	private JTable table;
-
 	
 	JCMarker vMarker1;
 	JCMarker vMarker2;
 	JCMarker vMarkerCenter;
 	
 	boolean xScaleAuto = true;
+	JCheckBox userCheckBox;
+	JCheckBox autoCheckBox;
 
 	/**
 	 * Create the panel.
@@ -281,11 +284,23 @@ public class Saved_1D_ScanPanel extends JPanel {
 		panel.add(panel_2, BorderLayout.SOUTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
 
-		JCheckBox userCheckBox = new JCheckBox("User");
+		userCheckBox = new JCheckBox("User");
+		userCheckBox.setEnabled(false);
+		userCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setXScaleAuto(!userCheckBox.isSelected());
+			}
+		});
 		userCheckBox.setBackground(new Color(95, 158, 160));
 		panel_2.add(userCheckBox, BorderLayout.WEST);
 
-		JCheckBox autoCheckBox = new JCheckBox("Auto");
+		autoCheckBox = new JCheckBox("Auto");
+		autoCheckBox.setEnabled(false);
+		autoCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setXScaleAuto(autoCheckBox.isSelected());
+			}
+		});
 		autoCheckBox.setBackground(new Color(95, 158, 160));
 		autoCheckBox.setSelected(true);
 		panel_2.add(autoCheckBox, BorderLayout.EAST);
@@ -403,13 +418,34 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	public void setXScaleAuto(boolean b) {
 		xScaleAuto = b;
+		
+		PositionerDisplayI positionerDisplayI;
+		int selectedPositioner;
+		double xMin;
+		double xMax;
+		double tempXMin;
+		double tempXMax;
+		
+		
+		List dataViewList = chart.getDataView();
+		
+		
+		positionerDisplayI = ((PositionerDisplayI)chart.getDataView(0).getDataSource());		
+		selectedPositioner = positionerDisplayI.getSelectedPositioner();
+		xMin =((XRangeI)positionerDisplayI).getPosXMin(selectedPositioner) ;
+		xMax =((XRangeI)positionerDisplayI).getPosXMax(selectedPositioner) ;	
+		
+		
+		
 	}
 	
 	public boolean getXScaleAuto() {
 		return xScaleAuto;
 	}
 	
-	
+	public boolean isXScaleAuto() {
+		return ((xScaleAuto)?true:false);
+	}
 	
 	public void setFile(File inFile) {
 		String inFileName = inFile.getName();
@@ -483,7 +519,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		java.util.List list = oldData1D.getSelectedChartDetectors();
 		old_1D_Panel.setSelectedDetectorsForDisplay(list);
-
+		autoCheckBox.setEnabled(true);
+		userCheckBox.setEnabled(true);
 		scanDataViewNum++;
 	}
 
@@ -495,18 +532,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 	}
 	
-	public boolean isXScaleAuto() {
-		return ((xScaleAuto)?true:false);
-	}
-
-	
-	public void setChartXAxisAutoScale() {
-        List dataViewList = chart.getDataView();
-        
-        ChartDataView dataView = (ChartDataView) dataViewList.get(0);
-        
-		
-	}
 	
 	public void populateFileTable(String str) {
 		HpFileTableModel mp = (HpFileTableModel) table.getModel();
@@ -515,6 +540,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		table.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
 
 		mp.addRow(new Object[] { str, rb1 });
+		rb1.setSelected(true);
 
 	}
 
@@ -597,9 +623,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 								JRadioButton rb = (JRadioButton) obj;
 
 								// Object dObj = chart.getDataView(dataViewNumber).getDataSource();
-								System.out.println(" mColIndex = " + mColIndex + " Table name = " + table.getName());
 								if (table.getName() == "Saved File") {
-									System.out.println(" Pressed Select");
+									System.out.println(" Pressed Select "+rb.isSelected());
 								}
 							}
 						}

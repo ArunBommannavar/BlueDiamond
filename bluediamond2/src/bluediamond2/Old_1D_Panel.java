@@ -434,7 +434,7 @@ public class Old_1D_Panel extends JPanel {
 									((DetectorDisplayI) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
 								} else if (table.getName() == "Pos") {
 									((PositionerDisplayI) dObj).setSelectedPositioner(firstRow);
-									((PositionerDisplayI) dObj).checkForMinMax();
+									((PositionerDisplayI) dObj).calculatePosDetMinMax();
 									 ((UpdateDisplayI)dObj).updateDisplay();
 								}
 							} else if (mColIndex == 5) {
