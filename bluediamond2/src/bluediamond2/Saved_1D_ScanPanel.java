@@ -69,7 +69,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 	private Old_1D_Panel old_1D_Panel;
 	private OldData1D oldData1D;
 	private Map<String, OldData1D> oldDataMap = new HashMap<String, OldData1D>();
-
+	private Map<String, ChartDataView> dataViewMap = new HashMap<String, ChartDataView>();
+	
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
 	ButtonGroup autoUserGroup = new ButtonGroup();
@@ -86,6 +87,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 	boolean xScaleAuto = true;
 	JCheckBox userCheckBox;
 	JCheckBox autoCheckBox;
+	
+	double displayXMin;
+	double displayXMax;
 
 	/**
 	 * Create the panel.
@@ -314,7 +318,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		chart = new JCChart();
 		chartPanel.add(chart, BorderLayout.CENTER);
-
+		
 		vMarker1 = new JCMarker();
 		vMarker1.setAssociatedWithYAxis(false);
 
@@ -439,6 +443,31 @@ public class Saved_1D_ScanPanel extends JPanel {
 		
 	}
 	
+	public void setDisplayXMin() {
+		
+		int mapSize = dataViewMap.size();
+		
+		for (int i=0; i< mapSize;i++) {
+			
+		}
+		
+	}
+	
+	public void setDisplayXMax() {
+		
+	}
+	
+	
+	public double getDisplayXMin() {
+		
+		return displayXMin;
+	}
+	
+	public double getDisplayXMax() {
+		return displayXMax;
+	}
+	
+
 	public boolean getXScaleAuto() {
 		return xScaleAuto;
 	}
@@ -455,6 +484,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 		oldData1D.setDataViewNumber(scanDataViewNum);
 		chart.getDataView(scanDataViewNum).setName(inFileName);
 		oldDataMap.put(inFileName, oldData1D);
+		dataViewMap.put(inFileName, oldData1D.getHpDataView());
+		
 		old_1D_Panel = new Old_1D_Panel();
 		old_1D_Panel.setChart(chart);
 		old_1D_Panel.setDataViewNumber(scanDataViewNum);
@@ -540,6 +571,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 		table.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
 
 		mp.addRow(new Object[] { str, rb1 });
+		
+		rb1.setHorizontalAlignment(SwingConstants.CENTER);
 		rb1.setSelected(true);
 
 	}
@@ -620,11 +653,14 @@ public class Saved_1D_ScanPanel extends JPanel {
 							// Column mColIndex changed
 							if (mColIndex == 1) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
+								Object fileNameObject = mp.getValueAt(firstRow, 0);
+								
 								JRadioButton rb = (JRadioButton) obj;
 
 								// Object dObj = chart.getDataView(dataViewNumber).getDataSource();
 								if (table.getName() == "Saved File") {
-									System.out.println(" Pressed Select "+rb.isSelected());
+									
+									
 								}
 							}
 						}
@@ -651,7 +687,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 			Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 					column);
 			((JLabel) renderer).setOpaque(true);
-			((JLabel) renderer).setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+			((JLabel) renderer).setHorizontalAlignment(SwingConstants.CENTER);
+			
+//			((JLabel) renderer).setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 			Color foreground, background;
 			if (hidden) {
 				foreground = new Color(0xDC, 0xDC, 0xDC);
@@ -662,6 +700,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 			}
 			renderer.setForeground(foreground);
 			renderer.setBackground(background);
+			
 			setAlignmentX(DefaultTableCellRenderer.CENTER);
 			return renderer;
 		}
@@ -670,9 +709,12 @@ public class Saved_1D_ScanPanel extends JPanel {
 	class RadioButtonRenderer implements TableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
+			/*
 			if (value == null) {
 				return null;
 			}
+			*/
+			
 			return (Component) value;
 		}
 	}

@@ -85,6 +85,11 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		return dataViewNumber;
 	}
 
+	public ChartDataView getHpDataView() {		
+		
+		return hpDataView;		
+	}
+	
 	public void setNumPoints(int n) {
 		numberOfPoints = n;
 	}
