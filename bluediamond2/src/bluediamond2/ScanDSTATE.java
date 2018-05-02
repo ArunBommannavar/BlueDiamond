@@ -8,6 +8,7 @@ import edu.ciw.hpcat.epics.data.EpicsDataObject;
 
 
 public class ScanDSTATE implements PropertyChangeListener{
+	
 	EpicsDataObject pvObject = null;
 	String pvName;
 	int val = -1;

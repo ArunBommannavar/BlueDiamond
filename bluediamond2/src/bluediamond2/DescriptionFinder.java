@@ -16,7 +16,6 @@ public class DescriptionFinder implements Runnable {
 	public DescriptionFinder(String str,JCheckBox jc){
 		pvName = str;
 		jCheckBox = jc;
-
 	}
 	
 	public void setSearch(){

@@ -498,6 +498,7 @@ public class Old_1D_Panel extends JPanel {
 		      setSelected(false);
 		      posTable.updateUI();
 		      detTable.updateUI();
+		      
 //		      userAutoScale.setXMinMax();
 
 		   }

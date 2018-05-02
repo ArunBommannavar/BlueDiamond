@@ -56,8 +56,6 @@ import java.awt.event.ActionEvent;
 
 public class Saved_1D_ScanPanel extends JPanel {
 
-	// ReadSavedMdaFile readSavedMdaFile = ReadSavedMdaFile.getInstance();
-
 	JCChart chart;
 	HpFileTableModel dm1 = new HpFileTableModel();
 	TableCellRenderer renderer1 = new EvenOddRenderer();

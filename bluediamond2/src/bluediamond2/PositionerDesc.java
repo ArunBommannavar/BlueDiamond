@@ -67,8 +67,6 @@ public class PositionerDesc implements PropertyChangeListener{
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 	      Object evtObj = evt.getNewValue();
-	      descStr = ((EpicsDataObject)evtObj).getVal();
-//	      changes.firePropertyChange(changePropertyName, new Object() , this);
-		
+	      descStr = ((EpicsDataObject)evtObj).getVal();		
 	}
 }

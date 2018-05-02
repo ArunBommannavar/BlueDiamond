@@ -7,6 +7,7 @@ import java.beans.PropertyChangeSupport;
 import edu.ciw.hpcat.epics.data.*;
 
 public class ScanVAL implements PropertyChangeListener {
+	
 	EpicsDataObject pvObject = null;
 	double val = -99.0;
 	String pvName;

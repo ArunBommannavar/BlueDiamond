@@ -58,7 +58,7 @@ public class PositionerNV implements PropertyChangeListener {
 		init = b;
 	}
 
-	@Override
+	
 	public void propertyChange(PropertyChangeEvent evt) {
 		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
 		temp = evtObj.getVal();

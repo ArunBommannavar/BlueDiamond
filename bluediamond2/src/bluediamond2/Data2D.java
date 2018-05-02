@@ -8,9 +8,7 @@ import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
 
 public class Data2D extends JCDefault3dGridDataSource {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1086522056399066124L;
 	int numberOfXPositioners = 4;
 	int numberOfYPositioners = 4;

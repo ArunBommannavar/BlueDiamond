@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class MdaPositioner {
+	
 	  int posNum;
 	  String posName = "";
 	  String posDesc = "";

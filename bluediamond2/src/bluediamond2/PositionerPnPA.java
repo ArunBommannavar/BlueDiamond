@@ -64,9 +64,6 @@ public class PositionerPnPA implements PropertyChangeListener{
 
 		for (int i = 0; i < strVal.length; i++) {
 			val[i]= Double.parseDouble(strVal[i]);
-		}
-
-		
+		}		
 	}
-
 }

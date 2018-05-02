@@ -30,10 +30,6 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	double[][] xTemp;
 	double[][] yTemp;
 
-	/*
-	double[] pMin;
-	double[] pMax;	
-	*/
 	String[] posName;
 	String[] posDesc;
 
@@ -47,7 +43,6 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	String[] detDesc;
 	double[] detMin;
 	double[] detMax;
-
 	
 	JCAxis xaxis;
 	JCAxis yaxis;

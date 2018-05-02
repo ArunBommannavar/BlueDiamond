@@ -6,6 +6,7 @@ import java.beans.PropertyChangeSupport;
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
 
 public class ScanDATA implements PropertyChangeListener {
+	
 	   EpicsDataObject pvObject = null;
 	   String pvName;
 	   int val = -1;

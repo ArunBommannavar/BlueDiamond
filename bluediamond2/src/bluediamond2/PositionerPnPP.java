@@ -26,8 +26,7 @@ public class PositionerPnPP implements PropertyChangeListener{
 
 	public double getDoubleVal(){
 	
-		return val;
-		
+		return val;		
 	}
 
 	@Override

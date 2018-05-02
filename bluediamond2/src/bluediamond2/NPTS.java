@@ -58,8 +58,7 @@ public class NPTS implements PropertyChangeListener{
 	public void propertyChange(PropertyChangeEvent evt) {
 	       EpicsDataObject evtObj = (EpicsDataObject)evt.getNewValue();	      
 	       val = Integer.parseInt(evtObj.getVal());
-//	       temp = evtObj.getVal();
-	   	  changes.firePropertyChange(changePropertyName, new Object(), evtObj);   
+	   	   changes.firePropertyChange(changePropertyName, new Object(), evtObj);   
 
 	}
 

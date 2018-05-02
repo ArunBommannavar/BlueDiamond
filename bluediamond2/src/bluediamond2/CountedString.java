@@ -6,8 +6,8 @@ import java.io.IOException;
 public class CountedString {
 
 	  public CountedString() {
+		  
 	  }
-
 
 	  public static int getCorrectedByteSize(int n) {
 	    int cor = 0;

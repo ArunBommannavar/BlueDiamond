@@ -55,7 +55,6 @@ public class Active_2D_ScanPanel extends JPanel {
     double pickedY;
     private final double HOLE_VALUE = Double.MAX_VALUE;
 
-
     ButtonGroup xPos_2DGroup = new ButtonGroup();
     ButtonGroup yPos_2DGroup = new ButtonGroup();
 	private Map<Integer, JCheckBox> posX2DMap = new HashMap<>();

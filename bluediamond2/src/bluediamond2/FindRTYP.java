@@ -36,5 +36,4 @@ public class FindRTYP implements Runnable {
 		PVDescription description = new PVDescription(firstPart, secondPart, rtyp, jCheckBox);
 		new Thread(description).start();
 	}
-
 }

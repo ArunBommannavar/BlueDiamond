@@ -51,7 +51,6 @@ public class SaveFileName implements PropertyChangeListener {
 	      Object evtObj = evt.getNewValue();
 	      ret = (EpicsDataObject)evtObj;
 	      val = ret.getVal();
-	   	  changes.firePropertyChange(changePropertyName, "-99", val);   
-
+	   	  changes.firePropertyChange(changePropertyName, "-99", val);  
 	}
 }

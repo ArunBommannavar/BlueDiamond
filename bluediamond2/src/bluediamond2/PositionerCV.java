@@ -30,7 +30,6 @@ public class PositionerCV implements PropertyChangeListener {
 	public double getDoubleVal() {
 
 		return val;
-
 	}
 
 	@Override

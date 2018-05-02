@@ -30,7 +30,7 @@ public class DetectorPV implements PropertyChangeListener{
 		return val;
 	}
 
-	@Override
+	
 	public void propertyChange(PropertyChangeEvent evt) {
 		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
 		val = evtObj.getVal();		

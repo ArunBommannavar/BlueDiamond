@@ -9,9 +9,7 @@ import java.io.File;
 //import java.net.URL;
 
 public class LogoPanel extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3762474256519181220L;
 	private BufferedImage image;   
 	/**

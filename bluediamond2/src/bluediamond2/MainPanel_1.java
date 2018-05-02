@@ -73,9 +73,7 @@ import javax.swing.JComboBox;
 
 
 public class MainPanel_1 extends JPanel/* implements ActionListener*/ {
-	/**
-	 * 
-	 */
+
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 	private JTextField xRangeMin_textField_1D;
 	private JTextField xRangeMax_textField_1D;

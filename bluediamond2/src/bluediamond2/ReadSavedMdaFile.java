@@ -84,7 +84,6 @@ public class ReadSavedMdaFile {
 		int[] dims = new int[2];
 
 		if (dataRank == 1) {
-//			oldData1D = new OldData1D(oldChart);
 			this.oldData1D = oldData1D; 
 			numXPoints = rmd.getNumPoints(0);
 			numCurrentXPoint = rmd.getCurrentPoint(0);

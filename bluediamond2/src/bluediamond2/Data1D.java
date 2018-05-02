@@ -11,9 +11,6 @@ import com.klg.jclass.chart.data.JCDefaultDataSource;
 
 public class Data1D extends JCDefaultDataSource {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7676041947267691757L;
 	int numberOfPositioners = 4;
 	int numberOfDetectors = 60;

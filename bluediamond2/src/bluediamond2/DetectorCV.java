@@ -13,32 +13,36 @@ public class DetectorCV implements PropertyChangeListener {
 	String temp;
 	boolean ready = true;
 
-	   public DetectorCV(String str, int i) {		   
-		   pvName = str + ".D" + String.format("%02d", i) + "CV";
-	    }
-		public void createPV() {
-			pvObject = new EpicsDataObject(pvName, true);
-			pvObject.addPropertyChangeListener("val", this);
-		}
-		public void disconnectChannel() {
-			if (pvObject != null) {
-				pvObject.setDropPv(true);
-			}
-		}
+	public DetectorCV(String str, int i) {
+		pvName = str + ".D" + String.format("%02d", i) + "CV";
+	}
 
-		public void setReady(boolean b){
-			ready = b;
-			
+	public void createPV() {
+		pvObject = new EpicsDataObject(pvName, true);
+		pvObject.addPropertyChangeListener("val", this);
+	}
+
+	public void disconnectChannel() {
+		if (pvObject != null) {
+			pvObject.setDropPv(true);
 		}
-		synchronized public double getDoubleVal() {
-			
-			return val;
-		}
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-		       EpicsDataObject evtObj = (EpicsDataObject)evt.getNewValue();
-		       temp = evtObj.getVal();
-		       val = Double.parseDouble(temp);			       
-		}
+	}
+
+	public void setReady(boolean b) {
+		ready = b;
+
+	}
+
+	synchronized public double getDoubleVal() {
+
+		return val;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
+		temp = evtObj.getVal();
+		val = Double.parseDouble(temp);
+	}
 
 }

@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class MdaTrigger {
+	
     int trigNum;
     String trigName="";
     float trigCommand;

@@ -7,6 +7,7 @@ import java.beans.PropertyChangeSupport;
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
 
 public class ScanBUSY implements PropertyChangeListener{
+	
 	EpicsDataObject pvObject;
 	String pvName;
 	int val  = 0;

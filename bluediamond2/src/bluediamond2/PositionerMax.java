@@ -31,6 +31,5 @@ public class PositionerMax implements PropertyChangeListener{
 	public void propertyChange(PropertyChangeEvent evt) {
 	       EpicsDataObject evtObj = (EpicsDataObject)evt.getNewValue();	      
 	       val = Double.parseDouble( evtObj.getVal());
-		
 	}
 }

@@ -34,8 +34,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.Font;
 
-//import javax.swing.JFrame;
-
 public class BlueDiamond {
 
 	LogoPanel logoPanel = new LogoPanel();

@@ -33,5 +33,4 @@ public class PositionerRelAbs implements PropertyChangeListener {
 		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
 		val = evtObj.getVal();
 	}
-
 }

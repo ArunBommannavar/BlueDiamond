@@ -79,12 +79,5 @@ public class MainPanel extends JPanel {
 		}
 		System.out.println("  Selected view = "+mainTabbedPane.getSelectedIndex());
 	}
-	/*
-	public void setScan1PosPv() {
-		
-	}
-	public void setScan2PosPv() {
-		
-	}
-	*/
+
 }

@@ -20,7 +20,6 @@ public class PVDescription implements Runnable {
 		secondPart = str2;
 		recordType = rc;
 		jCheckBox = jc;
-
 	}
 
 	public boolean makeEpicsDataObject() {

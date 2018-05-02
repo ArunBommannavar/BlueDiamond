@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class ScanEXSC implements PropertyChangeListener {
+	
 	EpicsDataObject pvObject = null;
 	String pvName;
 	int val = -1;

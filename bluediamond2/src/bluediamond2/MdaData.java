@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 
 public class MdaData {
 
-
 	  /**
 	   * Header
 	   */
@@ -21,8 +20,6 @@ public class MdaData {
 	  int numPos;
 	  int numDets;
 	  int numTrigs;
-
-
 
 	  MdaPositioner[] pos;
 	  MdaDetector[] det;

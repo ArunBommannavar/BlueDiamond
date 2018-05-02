@@ -39,7 +39,6 @@ public class RangePanel extends JPanel {
 	JPanel yPanel;
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
-
 	/**
 	 * Create the panel.
 	 */

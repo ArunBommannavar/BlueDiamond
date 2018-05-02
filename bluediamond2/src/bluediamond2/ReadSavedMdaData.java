@@ -24,6 +24,7 @@ public class ReadSavedMdaData {
 	  MdaData[] mdaData;
 
 	  public ReadSavedMdaData() {
+		  
 	  }
 
 	  public void setFileName(String str) {

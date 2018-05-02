@@ -6,6 +6,7 @@ import java.util.List;
 import edu.ciw.hpcat.epics.data.CountDownConnection;
 
 public class Scan1DetectorParms {
+	
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 	private int numberOfDetectors = 60;
 	DetectorPV[] detPV = new DetectorPV[numberOfDetectors];

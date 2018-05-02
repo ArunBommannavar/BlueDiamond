@@ -660,14 +660,10 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 				 * A new data point is available. Check for scan1 in progress. If the scan1 is
 				 * in progress then read new value for each detectors and tell the plot
 				 */
-//				System.out.println(" In run doScan1Val ");
-
 				doScan1Val();
 			}
 
 			else if (scan1AfterScanDataReady) {
-				// scan1AfterScanDataReady = false;
-//				System.out.println(" In run updateData1DAfterScan ");
 
 				updateData1DAfterScan();
 			}

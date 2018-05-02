@@ -11,9 +11,6 @@ public class PositionerScanMode implements PropertyChangeListener {
 
 	EpicsDataObject ret;
 
-	/*
-	 * PnSM Positioner n step-mode Menu ("LINEAR", "TABLE", "FLY")
-	 */
 	public PositionerScanMode(String str, int i) {
 		pvName = str + ".P" + String.valueOf(i) + "SM";
 	}

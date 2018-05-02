@@ -312,9 +312,6 @@ public class VertHorzTabPanel extends JPanel {
 		JButton resetMarkerButton = new JButton("Reset Markers");
 		panel_16.add(resetMarkerButton);
 
-
-
-
 	}
 
 }

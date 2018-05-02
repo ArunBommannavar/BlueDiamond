@@ -6,6 +6,7 @@ import java.util.List;
 import edu.ciw.hpcat.epics.data.CountDownConnection;
 
 public class Scan1PositionerParms {
+	
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	private String scanPv;

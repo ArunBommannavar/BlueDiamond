@@ -13,7 +13,6 @@ public class PositionerPnRA implements PropertyChangeListener{
 	int cpt;
 
 	public PositionerPnRA(String str, int i) {
-//		pvName = str + ".P" + String.valueOf(i) + "CA";
 		pvName = str + ".P" + String.valueOf(i) + "RA";
 	}
 

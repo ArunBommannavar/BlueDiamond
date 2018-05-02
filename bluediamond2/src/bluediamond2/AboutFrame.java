@@ -93,6 +93,5 @@ class AboutFrame_exit_ActionAdapter implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		adaptee.closeAboutFrame();
 		
-	}
-	
+	}	
 }

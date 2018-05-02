@@ -49,7 +49,6 @@ public class ExtraPV {
             if (size > 0) {
                 pvName = CountedString.getCountedString(in);
 
-       //         System.out.println(" Extra PV Name = "+pvName);
             }
             size = in.readInt();
             if (size > 0) {
@@ -57,7 +56,6 @@ public class ExtraPV {
             }
 
             pvType = in.readInt();
- //           System.out.println(" Extra PV type = "+pvType);
             if (pvType != 0) {
             }
 

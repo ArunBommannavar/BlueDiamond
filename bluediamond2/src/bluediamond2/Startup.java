@@ -9,6 +9,7 @@ public class Startup implements Runnable {
 	Scan2PositionerParms scan2PositionerParms;
 	
 	public Startup(){
+		
 
 	}
 	

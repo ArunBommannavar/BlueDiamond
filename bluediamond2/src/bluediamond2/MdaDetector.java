@@ -12,6 +12,7 @@ public class MdaDetector {
 	  double[] data;
 
 	  public MdaDetector() {
+		  
 	  }
 
 	  public void setDetNum(int n) {
