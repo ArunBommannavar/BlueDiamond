@@ -205,7 +205,7 @@ public class Old_1D_Panel extends JPanel {
 		return hidden;
 	}
 
-	public void setSelected(boolean b) {
+	public void setHidden(boolean b) {
 		hidden = b;
 	}
 
@@ -487,7 +487,9 @@ public class Old_1D_Panel extends JPanel {
 	
 	   public void hideButton_actionPerformed(ActionEvent e) {
 		      chart.getDataView(dataViewNumber).setVisible(false);
-		      setSelected(true);
+		      ((UpdateDisplayI)chart.getDataView(dataViewNumber).getDataSource()).updateDisplay();
+
+		      setHidden(true);
 		      posTable.updateUI();
 		      detTable.updateUI();
 //		      userAutoScale.setXMinMax();
@@ -495,7 +497,8 @@ public class Old_1D_Panel extends JPanel {
 
 		   public void showButton_actionPerformed(ActionEvent e) {
 		      chart.getDataView(dataViewNumber).setVisible(true);
-		      setSelected(false);
+		      ((UpdateDisplayI)chart.getDataView(dataViewNumber).getDataSource()).updateDisplay();
+		      setHidden(false);
 		      posTable.updateUI();
 		      detTable.updateUI();
 		      

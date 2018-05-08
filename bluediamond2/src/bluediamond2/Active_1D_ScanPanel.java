@@ -89,6 +89,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	JCAxis xaxis;
 	JCAxis yaxis;
 	ChartDataView dataView;
+	
 	JCMarker vMarker1;
 	JCMarker vMarker2;
 	JCMarker vMarkerCenter;
@@ -121,7 +122,6 @@ public class Active_1D_ScanPanel extends JPanel {
 	JLabel lblRightMarkerValue;
 	JLabel lblCenterMarkerValue;
 	JLabel lblWidthMarkerValue;
-	JLabel fileNameLabel;
 	JLabel scanStatusLabel;
 	JLabel scanDiffLabel;
 	JLabel scanCenterLabel;
@@ -133,11 +133,34 @@ public class Active_1D_ScanPanel extends JPanel {
 
 	JCLineStyle vMarkerCenterStyle;
 	JCLineStyle hMarkerCenterStyle;
+	
+	String checkText;
+	boolean checkTextValid;
+	
+	
+	String dx1Text;
+	String dx2Text;
+	String dy1Text;
+	String dy2Text;
+	
+	boolean dx1Boolean;
+	boolean dx2Boolean;
+	boolean dy1Boolean;
+	boolean dy2Boolean;	
+	
+	double dx1;
+	double dx2;
+	double dy1;
+	double dy2;
+
+	String fileHeader= "";
+	
+	/*
 	double xAxisMin;
 	double xAxisMax;
 	double yAxisMin;
 	double yAxisMax;
-
+    */
 	private PositionerPnPV[] scan1PosPnPV = new PositionerPnPV[4];
 
 	JPanel detectorPanel_1D_1_30;
@@ -213,10 +236,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		JPanel panel_2 = new JPanel();
 		scanStatusResetPanel.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
-
-		fileNameLabel = new JLabel("File Name");
-		fileNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_2.add(fileNameLabel, BorderLayout.CENTER);
 
 		JPanel panel_3 = new JPanel();
 		scanStatusResetPanel.add(panel_3);
@@ -554,6 +573,26 @@ public class Active_1D_ScanPanel extends JPanel {
 		x_rangePanel_1D.add(xRangeMinLabel, "cell 0 0,alignx trailing");
 
 		xRangeMinTextField = new JTextField();
+		xRangeMinTextField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dx1Text = xRangeMinTextField.getText();
+				dx1Boolean = validateTextFieldEntry(dx1Text);
+				if(!dx1Boolean) {
+					showAlert(" Invalid entry");
+					xRangeMinTextField.setText(String.valueOf(getMinX()));
+				} else {
+					// if user then update the plot
+					if(!getAutoScale()) {
+						data1D.setxAxisUserMin(Double.parseDouble(dx1Text));
+						data1D.setXAxisScale();
+						setMarkers();
+					}
+				}
+				
+				
+				
+			}
+		});
 		x_rangePanel_1D.add(xRangeMinTextField, "cell 1 0,growx");
 		xRangeMinTextField.setColumns(10);
 
@@ -561,6 +600,24 @@ public class Active_1D_ScanPanel extends JPanel {
 		x_rangePanel_1D.add(xRangeMaxLabel, "cell 0 1,alignx trailing");
 
 		xRangeMaxTextField = new JTextField();
+		xRangeMaxTextField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dx2Text = xRangeMaxTextField.getText();
+				dx2Boolean = validateTextFieldEntry(dx2Text);
+				if(!dx2Boolean) {
+					showAlert(" Invalid entry");
+					xRangeMaxTextField.setText(String.valueOf(getMaxX()));
+				} else {
+					// if user then update the plot
+					if(!getAutoScale()) {
+						data1D.setxAxisUserMax(Double.parseDouble(dx2Text));
+						data1D.setXAxisScale();
+						setMarkers();
+					}
+				}
+
+			}
+		});
 		x_rangePanel_1D.add(xRangeMaxTextField, "cell 1 1,growx");
 		xRangeMaxTextField.setColumns(10);
 
@@ -573,6 +630,23 @@ public class Active_1D_ScanPanel extends JPanel {
 		y_rangePanel_1D.add(yRangeMinLabel, "cell 0 0,alignx trailing");
 
 		yRangeMinTextField = new JTextField();
+		yRangeMinTextField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dy1Text = yRangeMinTextField.getText();
+				dy1Boolean = validateTextFieldEntry(dy1Text);
+
+				if(!dy1Boolean) {
+					showAlert(" Invalid Entry ");
+					yRangeMinTextField.setText(String.valueOf(getMinY()));
+				}else {
+					if(!getAutoScale()) {
+						data1D.setyAxisUserMin(Double.parseDouble(dy1Text));
+						data1D.setYAxisScale();
+						setMarkers();
+					}
+				}
+			}
+		});
 		y_rangePanel_1D.add(yRangeMinTextField, "cell 1 0,growx");
 		yRangeMinTextField.setColumns(10);
 
@@ -580,6 +654,22 @@ public class Active_1D_ScanPanel extends JPanel {
 		y_rangePanel_1D.add(yRangeMaxLabel, "cell 0 1,alignx trailing");
 
 		yRangeMaxTextField = new JTextField();
+		yRangeMaxTextField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dy2Text = yRangeMaxTextField.getText();
+				dy2Boolean = validateTextFieldEntry(dy2Text);
+				if(!dy2Boolean) {
+					showAlert(" Invalid Entry ");
+					yRangeMaxTextField.setText(String.valueOf(getMaxY()));
+				}else {
+					if(!getAutoScale()) {
+						data1D.setyAxisUserMax(Double.parseDouble(dy2Text));
+						data1D.setYAxisScale();
+						setMarkers();
+					}
+				}
+			}
+		});
 		y_rangePanel_1D.add(yRangeMaxTextField, "cell 1 1,growx");
 		yRangeMaxTextField.setColumns(10);
 
@@ -591,19 +681,31 @@ public class Active_1D_ScanPanel extends JPanel {
 		panel_8.add(userCheckBox);
 		userCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setAutoScale(false);
-				double dx1 = Double.parseDouble(xRangeMinTextField.getText());
-				double dx2 = Double.parseDouble(xRangeMaxTextField.getText());
-				double dy1 = Double.parseDouble(yRangeMinTextField.getText());
-				double dy2 = Double.parseDouble(yRangeMaxTextField.getText());
-
+				setAutoScale(false);				
+				dx1Text = xRangeMinTextField.getText();				
+				dx2Text = xRangeMaxTextField.getText();
+				dy1Text = yRangeMinTextField.getText();
+				dy2Text = yRangeMaxTextField.getText();				
+				
+				dx1 = Double.parseDouble(dx1Text);
+				dx2 = Double.parseDouble(dx2Text);
+				dy1 = Double.parseDouble(dy1Text);
+				dy2 = Double.parseDouble(dy2Text);
+				
 				if ((dx2 <= dx1) || (dy2 <= dy1)) {
-					showAlert(" xMin should be less than xMax");
-
+					showAlert(" xMin should be less than xMax AND yMin must be less than yMax");
+					setAutoScale(true);		
 				} else {
 					data1D.setxAxisUserMin(dx1);
 					data1D.setxAxisUserMax(dx2);
+					
+					data1D.setyAxisUserMin(dy1);
+					data1D.setyAxisUserMax(dy2);
+					
 					data1D.setXAxisScale();
+					data1D.setYAxisScale();
+					
+					setMarkers();
 				}
 			}
 		});
@@ -615,15 +717,17 @@ public class Active_1D_ScanPanel extends JPanel {
 		autoCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setAutoScale(true);
+				updateUserAuto();
 			}
 		});
 
 		autoUserGroup.add(autoCheckBox);
 		autoUserGroup.add(userCheckBox);
 
-		chart = new JCChart();
+		chart = new JCChart(JCChart.PLOT);
 		plotPanel.add(chart, BorderLayout.CENTER);
 		add(detectorPanel_1D);
+		chart.getHeader().setVisible(true);
 		detectorPanel_1D.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane detectorTabbedPane_1D = new JTabbedPane(JTabbedPane.TOP);
@@ -658,6 +762,8 @@ public class Active_1D_ScanPanel extends JPanel {
 				chart_mouseDragged(e);
 			}
 		});
+		
+		
 		dataView = chart.getDataView(0);
 		addDetectorPanels_1D();
 		vMarker1 = new JCMarker();
@@ -765,7 +871,6 @@ public class Active_1D_ScanPanel extends JPanel {
 				data1D.updateChartDisplay();
 			}
 		});
-
 	}
 
 	public void setXAxisTitle(String str) {
@@ -829,6 +934,9 @@ public class Active_1D_ScanPanel extends JPanel {
 		return chart;
 	}
 
+	public void setChartHeader(String str) {
+		((JLabel)chart.getHeader()).setText(str);
+	}
 	public void set1DDataSource(Data1D d1) {
 		data1D = d1;
 	}
@@ -1063,7 +1171,6 @@ public class Active_1D_ScanPanel extends JPanel {
 
 	public void chart_mouseDragged(MouseEvent e) {
 		Point point;
-		// String str;
 
 		double pickedPoint;
 		if (vMarkerSelected) {
@@ -1199,33 +1306,48 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setScanStatus(String str) {
 		scanStatusLabel.setText("Scan " + str);
 	}
-
+/*
 	public void setFileName(String str) {
 		fileNameLabel.setText(str);
 	}
-
+*/
 	public void setAutoScale(boolean b) {
 		autoScale = b;
+		
 		data1D.setAutoScale(b);
 		if (b) {
 			updateUserAuto();
 		}
+		
 	}
 
+	public boolean getAutoScale() {
+		return autoScale;
+	}
 	public void updateUserAuto() {
-		setUserXmin(this.getMinX());
-		setUserXMax(this.getMaxX());
 		data1D.updateChartDisplay();
 
+		setUserXminText(this.getMinX());
+		setUserXMaxText(this.getMaxX());
+		setUserYminText(this.getMinY());
+		setUserYMaxText(this.getMaxY());
+
 	}
 
-	public void setUserXmin(double d) {
-
+	public void setUserXminText(double d) {
 		xRangeMinTextField.setText(String.valueOf(d));
 	}
 
-	public void setUserXMax(double d) {
+	public void setUserXMaxText(double d) {
 		xRangeMaxTextField.setText(String.valueOf(d));
+	}
+
+	public void setUserYminText(double d) {
+		yRangeMinTextField.setText(String.valueOf(d));
+	}
+
+	public void setUserYMaxText(double d) {
+		yRangeMaxTextField.setText(String.valueOf(d));
 	}
 
 	public void showAlert(String str) {

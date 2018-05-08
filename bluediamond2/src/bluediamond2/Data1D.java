@@ -51,9 +51,17 @@ public class Data1D extends JCDefaultDataSource {
 	public Data1D(JCChart c) {
 		this.chart = c;
 		dataView = chart.getDataView(0);
+		xaxis = chart.getDataView(0).getXAxis();
+		yaxis = chart.getDataView(0).getYAxis();
+
+		xaxis.setMinIsDefault(true);
+		xaxis.setMaxIsDefault(true);
+		yaxis.setMinIsDefault(true);
+		yaxis.setMaxIsDefault(true);
+
+		
 	}
 	public void setNumberOfPoints(int n) {
-//		System.out.println(" In Data1D setNumberOfPoints");
 		npts = n;
 	}
 
@@ -66,8 +74,8 @@ public class Data1D extends JCDefaultDataSource {
 
 	void setSelectedPositioner(int n) {
 		selectedPositioner = n;
-//		System.out.println(" Selected Positioner = "+n);
 		setXAxisScale();
+		setYAxisScale();
 		updateChartDisplay(cpt,npts);
 	}
 
@@ -103,7 +111,6 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setChartData(int sp) {
-//		System.out.println("setChartData");
 		selectedPositioner = sp;
 
 		for (int i = 0; i < npts; i++) {
@@ -112,7 +119,6 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setChartRawData() {
-//		System.out.println(" setChartRawData ");
 		for (int i = 0; i < npts; i++) {
 			xvalues[0][i] = xVals[selectedPositioner][i];
 		}
@@ -186,6 +192,7 @@ public class Data1D extends JCDefaultDataSource {
 		autoScale = b;
 		if(b){
 			setXAxisScale();
+			setYAxisScale();
 		}
 	}
 		
@@ -209,16 +216,16 @@ public class Data1D extends JCDefaultDataSource {
 		chart.setBatched(true);
 		yaxis = chart.getDataView(0).getYAxis();
 
-		yaxis.setMinIsDefault(true);
-		yaxis.setMaxIsDefault(true);
 
 		if (autoScale){
+			yaxis.setMinIsDefault(true);
+			yaxis.setMaxIsDefault(true);
 
-		}else{
-			
+		}else{			
 			yaxis.setMin(yaxisUserMin);
 			yaxis.setMax(yaxisUserMax);
 		}
+				
 		chart.setBatched(false);
 		runSafe(new Runnable() {
 			public void run() {
@@ -264,13 +271,16 @@ public class Data1D extends JCDefaultDataSource {
 		}
 
 		delta = 0.1 * (tempXmax - tempXmin);
-		xaxis = dataView.getXAxis();
+//		xaxis = dataView.getXAxis();
 		xaxis.setMin(tempXmin - delta);
 		xaxis.setMax(tempXmax + delta);
 		}else{
 			
 			xaxis.setMin(xaxisUserMin);
 			xaxis.setMax(xaxisUserMax);
+			xaxis.setMinIsDefault(false);
+			xaxis.setMaxIsDefault(false);
+
 		}
 		chart.setBatched(false);
 		runSafe(new Runnable() {

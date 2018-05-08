@@ -18,8 +18,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +32,7 @@ import java.util.Map;
 import java.awt.BorderLayout;
 
 import com.klg.jclass.chart.ChartDataView;
+import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.JCMarker;
 
@@ -44,6 +49,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -62,25 +69,49 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	boolean hidden = false;
 
-	java.util.List<String> oldList = new ArrayList<String>();
 	private int scanDataViewNum = 0;
 	private Old_1D_Panel old_1D_Panel;
 	private OldData1D oldData1D;
+	
+	java.util.List<String> oldList = new ArrayList<String>();
 	private Map<String, OldData1D> oldDataMap = new HashMap<String, OldData1D>();
 	private Map<String, ChartDataView> dataViewMap = new HashMap<String, ChartDataView>();
 	
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
-	ButtonGroup autoUserGroup = new ButtonGroup();
 	private JTextField yRangeMinTextBox;
 	private JTextField yRangeMaxTextBox;
+
+	ButtonGroup autoUserGroup = new ButtonGroup();
 
 	JTabbedPane tabbedPane_left;
 	private JTable table;
 	
+	JCAxis xaxis;
+	JCAxis yaxis;
+
+	boolean vMarkersShowing = true;
+	boolean vMarkerSelected = false;
+	JCMarker pickedMarker;
+	double pickedPoint;
+	double minMarker;
+	double maxMarker;
+
+
+	
 	JCMarker vMarker1;
 	JCMarker vMarker2;
 	JCMarker vMarkerCenter;
+	double vMarker1Pos;
+	double vMarker2Pos;
+	double vMarkerCenterPos;
+	double scanCenter;
+	int precision = 4;
+	
+	JLabel lblLeftMarkerValue;
+	JLabel lblCenterMarkerValue;
+	JLabel lblWidthMarkerValue;
+	JLabel lblRightMarkerValue;
 	
 	boolean xScaleAuto = true;
 	JCheckBox userCheckBox;
@@ -148,6 +179,11 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		JPanel panel_7 = new JPanel();
 		leftPanel.add(panel_7, BorderLayout.CENTER);
+		panel_7.setLayout(new BorderLayout(0, 0));
+		
+		lblLeftMarkerValue = new JLabel("New label");
+		lblLeftMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_7.add(lblLeftMarkerValue, BorderLayout.CENTER);
 
 		JPanel panel_8 = new JPanel();
 		leftPanel.add(panel_8, BorderLayout.WEST);
@@ -169,6 +205,11 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		JPanel panel_9 = new JPanel();
 		rightPanel.add(panel_9, BorderLayout.CENTER);
+		panel_9.setLayout(new BorderLayout(0, 0));
+		
+		lblRightMarkerValue = new JLabel("New label");
+		lblRightMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_9.add(lblRightMarkerValue, BorderLayout.CENTER);
 
 		JPanel panel_10 = new JPanel();
 		rightPanel.add(panel_10, BorderLayout.WEST);
@@ -192,6 +233,11 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		JPanel panel_11 = new JPanel();
 		centerPanel.add(panel_11, BorderLayout.CENTER);
+		panel_11.setLayout(new BorderLayout(0, 0));
+		
+		lblCenterMarkerValue = new JLabel("New label");
+		lblCenterMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_11.add(lblCenterMarkerValue, BorderLayout.CENTER);
 
 		JPanel panel_12 = new JPanel();
 		centerPanel.add(panel_12, BorderLayout.WEST);
@@ -214,6 +260,11 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		JPanel panel_13 = new JPanel();
 		widthPanel.add(panel_13, BorderLayout.CENTER);
+		panel_13.setLayout(new BorderLayout(0, 0));
+		
+		lblWidthMarkerValue = new JLabel("New label");
+		lblWidthMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_13.add(lblWidthMarkerValue, BorderLayout.CENTER);
 
 		JPanel panel_14 = new JPanel();
 		widthPanel.add(panel_14, BorderLayout.WEST);
@@ -314,8 +365,27 @@ public class Saved_1D_ScanPanel extends JPanel {
 		markerChartPanel.add(chartPanel);
 		chartPanel.setLayout(new BorderLayout(0, 0));
 
-		chart = new JCChart();
+//		chart = new JCChart();
+		chart  = new JCChart(JCChart.PLOT);
+//		chart = new ZoomXChart();
+		chart.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				chart_mousePressed(e);
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				chart_mouseReleased(e);
+			}
+		});
+
+		chart.addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseDragged(MouseEvent e) {
+				chart_mouseDragged(e);
+			}
+		});
+
 		chartPanel.add(chart, BorderLayout.CENTER);
+		
 		
 		vMarker1 = new JCMarker();
 		vMarker1.setAssociatedWithYAxis(false);
@@ -421,40 +491,47 @@ public class Saved_1D_ScanPanel extends JPanel {
 	public void setXScaleAuto(boolean b) {
 		xScaleAuto = b;
 		
-		PositionerDisplayI positionerDisplayI;
 		int selectedPositioner;
-		double xMin;
-		double xMax;
 		double tempXMin;
 		double tempXMax;
+		ChartDataView tempDataView;
+		OldData1D tempOldData1D;
+		String tempFileNameString;
 		
+		double xMin = Double.MAX_VALUE;
+		double xMax = Double.MIN_VALUE;
+
 		
-		List dataViewList = chart.getDataView();
-		
-		
-		positionerDisplayI = ((PositionerDisplayI)chart.getDataView(0).getDataSource());		
-		selectedPositioner = positionerDisplayI.getSelectedPositioner();
-		xMin =((XRangeI)positionerDisplayI).getPosXMin(selectedPositioner) ;
-		xMax =((XRangeI)positionerDisplayI).getPosXMax(selectedPositioner) ;	
-		
-		
-		
-	}
-	
-	public void setDisplayXMin() {
-		
-		int mapSize = dataViewMap.size();
-		
-		for (int i=0; i< mapSize;i++) {
-			
+				
+		for (Map.Entry<String,ChartDataView> entry :dataViewMap.entrySet()) {
+			tempDataView = entry.getValue();
+			tempFileNameString = entry.getKey();
+			if(tempDataView.isVisible()) {
+				
+				tempOldData1D = oldDataMap.get(tempFileNameString);
+				selectedPositioner = tempOldData1D.getSelectedPositioner();
+				tempXMin = tempOldData1D.getSelectedPositionerXMin();
+				if (tempXMin <xMin)xMin = tempXMin;
+				
+				tempXMax = tempOldData1D.getSelectedPositionerXMax();
+				if (tempXMax >xMax)xMax = tempXMax;
+				
+				tempDataView.getXAxis().setMin(xMin);
+				tempDataView.getXAxis().setMax(xMax);
+				
+			}			
 		}
-		
+		showVMarkers();
+		chart.update();	
 	}
 	
-	public void setDisplayXMax() {
-		
+	public void setDisplayXMin(double d) {
+		displayXMin = d;		
 	}
 	
+	public void setDisplayXMax(double d) {
+		displayXMax = d;		
+	}
 	
 	public double getDisplayXMin() {
 		
@@ -465,7 +542,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		return displayXMax;
 	}
 	
-
 	public boolean getXScaleAuto() {
 		return xScaleAuto;
 	}
@@ -481,6 +557,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		oldData1D.setDataViewNumber(scanDataViewNum);
 		chart.getDataView(scanDataViewNum).setName(inFileName);
+
 		oldDataMap.put(inFileName, oldData1D);
 		dataViewMap.put(inFileName, oldData1D.getHpDataView());
 		
@@ -550,12 +627,16 @@ public class Saved_1D_ScanPanel extends JPanel {
 		old_1D_Panel.setSelectedDetectorsForDisplay(list);
 		autoCheckBox.setEnabled(true);
 		userCheckBox.setEnabled(true);
+		setXScaleAuto(true);
+//		showVMarkers();
+//		setMarkers();
 		scanDataViewNum++;
 	}
 
 	public boolean isListed(String str) {
 		return oldList.contains(str);
 	}
+	
 	
 	public void printOldDataMinMax() {		
 		
@@ -652,11 +733,22 @@ public class Saved_1D_ScanPanel extends JPanel {
 							if (mColIndex == 1) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								Object fileNameObject = mp.getValueAt(firstRow, 0);
+								String fileName= fileNameObject.toString();
 								
 								JRadioButton rb = (JRadioButton) obj;
 
+								if(rb.isSelected()) {
+									dataViewMap.get(fileName).setVisible(true);
+									chart.update();
+
+								}else {
+									dataViewMap.get(fileName).setVisible(false);
+									chart.update();
+								}
+									
 								// Object dObj = chart.getDataView(dataViewNumber).getDataSource();
 								if (table.getName() == "Saved File") {
+									
 									
 									
 								}
@@ -746,4 +838,236 @@ public class Saved_1D_ScanPanel extends JPanel {
 			super.fireEditingStopped();
 		}
 	}
+	
+	
+	public static void runSafe(Runnable task) {
+		if (SwingUtilities.isEventDispatchThread()) {
+			task.run();
+		} else {
+			SwingUtilities.invokeLater(task);
+		}
+	}
+
+	public JCMarker getLeftMarker() {
+		return vMarker1;
+	}
+
+	public JCMarker getRightMarker() {
+		return vMarker2;
+	}
+
+	public JCMarker getCenterMarker() {
+		return vMarkerCenter;
+	}
+
+	public void setMarkers() {
+		xaxis = chart.getDataView(0).getXAxis();
+		yaxis = chart.getDataView(0).getYAxis();
+
+
+		runSafe(new Runnable() {
+			public void run() {
+
+				double d1 = xaxis.getMin();
+				double d2 = xaxis.getMax();
+				double d3 = d1 + (0.25 * (d2 - d1));
+				double d4 = d1 + (0.75 * (d2 - d1));
+				double d5 = (d3 + d4) / 2.0;
+
+				vMarker1.setValue(d3);
+				vMarker2.setValue(d4);
+				vMarkerCenter.setValue(d5);
+
+				vMarker1Pos = vMarker1.getValue();
+				vMarker2Pos = vMarker2.getValue();
+				vMarkerCenterPos = vMarkerCenter.getValue();
+
+				setLeftMarkerValue(vMarker1Pos);
+				setRightMarkerValue(vMarker2Pos);
+				setCenterMarkerValue(vMarkerCenterPos);
+				setWidthMarkerValue(getWidth(d3, d4));
+
+//				updateScanCenterDiff();
+
+		}
+		});
+	}
+	public void showVMarkers() {
+		setMarkers();
+		addVMarkers();
+		updateVMarkers();
+
+	}
+	public void addVMarkers() {
+		chart.getDataView(0).addMarker(vMarker1);
+		chart.getDataView(0).addMarker(vMarker2);
+		chart.getDataView(0).addMarker(vMarkerCenter);
+	}
+
+	public void updateVMarkers() {
+		runSafe(new Runnable() {
+			public void run() {
+				vMarker1Pos = vMarker1.getValue();
+				vMarker2Pos = vMarker2.getValue();
+				vMarkerCenterPos = vMarkerCenter.getValue();
+				setLeftMarkerValue(vMarker1Pos);
+				setRightMarkerValue(vMarker2Pos);
+				setCenterMarkerValue(vMarkerCenterPos);
+				setWidthMarkerValue(vMarker2Pos - vMarker1Pos);
+			}
+		});
+	}
+	
+	public void setLeftMarkerValue(double d) {
+		d = getPrecisionedData(d);
+		String str = Double.toString(d);
+		lblLeftMarkerValue.setText(str);
+	}
+
+	public void setRightMarkerValue(double d) {
+		d = getPrecisionedData(d);
+		String str = Double.toString(d);
+		lblRightMarkerValue.setText(str);
+	}
+
+	public void setCenterMarkerValue(double d) {
+		d = getPrecisionedData(d);
+		String str = Double.toString(d);
+		lblCenterMarkerValue.setText(str);
+	}
+
+	public void setWidthMarkerValue(double d) {
+		d = getPrecisionedData(d);
+		String str = Double.toString(d);
+		lblWidthMarkerValue.setText(str);
+	}
+	public double getWidth(double d1, double d2) {
+
+		double d = d2 - d1;
+		return d;
+	}
+	public double getPrecisionedData(double d1) {
+		double d = Math.floor(d1 * Math.pow(10, precision) + 0.5);
+		d = d / Math.pow(10, precision);
+		return d;
+	}
+	
+	public double getMinX() {
+		return xaxis.getMin();
+	}
+
+	public double getMaxX() {
+		return xaxis.getMax();
+	}
+
+	public void chart_mousePressed(MouseEvent e) {
+		JCMarker mrk1;
+		JCMarker mrk2;
+		double dm1;
+		double dm2;
+		double dd;
+
+		Point point = e.getPoint();
+		com.klg.jclass.chart.JCLineStyle ll;
+
+		if (vMarkersShowing) {
+			chart.setBatched(true);
+
+			mrk1 = getLeftMarker();
+			mrk2 = getRightMarker();
+
+			minMarker = getMinX();
+			maxMarker = getMaxX();
+
+			dm1 = mrk1.getValue();
+			dm2 = mrk2.getValue();
+
+			dd = (maxMarker - minMarker) * 0.01;
+
+			pickedPoint = chart.getDataView(0).coordToDataCoord((int) point.getX(), (int) point.getY()).getX();
+			if (pickedPoint < (dm1 + dd) && pickedPoint > (dm1 - dd)) {
+				pickedMarker = mrk1;
+				ll = pickedMarker.getLineStyle();
+				ll.setColor(Color.RED);
+				vMarkerSelected = true;
+
+			} else if (pickedPoint < (dm2 + dd) && pickedPoint > (dm2 - dd)) {
+				pickedMarker = mrk2;
+				ll = pickedMarker.getLineStyle();
+				ll.setColor(Color.RED);
+				vMarkerSelected = true;
+
+			} else {
+				pickedMarker = null;
+				vMarkerSelected = false;
+			}
+
+			chart.setBatched(false);
+
+		}
+		chart.update();
+//		data1D.updateChartDisplay();
+
+	}
+
+	public void chart_mouseReleased(MouseEvent e) {
+		if (vMarkerSelected ) {
+			chart.setBatched(true);
+			com.klg.jclass.chart.JCLineStyle ll = pickedMarker.getLineStyle();
+			ll.setColor(Color.BLACK);
+			pickedMarker = null;
+			chart.setBatched(false);
+			chart.update();
+//			data1D.updateChartDisplay();
+		}
+	}
+	public void chart_mouseDragged(MouseEvent e) {
+		Point point;
+
+		double pickedPoint;
+		if (vMarkerSelected) {
+			chart.setBatched(true);
+			point = e.getPoint();
+
+			pickedPoint = chart.getDataView(0).coordToDataCoord((int) point.getX(), (int) point.getY()).getX();
+			if (pickedPoint < minMarker) {
+				pickedPoint = minMarker;
+			}
+			if (pickedPoint > maxMarker) {
+				pickedPoint = maxMarker;
+			}
+
+			pickedPoint = getPrecisionedData(pickedPoint);
+			moveVmarker(pickedMarker, pickedPoint);
+			chart.setBatched(false);
+
+		} 
+		chart.update();
+//		data1D.updateChartDisplay();
+	}
+
+	public void moveVmarker(JCMarker mrkr, double d) {
+		double d1;
+		double d2;
+		double dCenter;
+
+		mrkr.setValue(d);
+		d1 = vMarker1.getValue();
+		d2 = vMarker2.getValue();
+		dCenter = getCenter(d1, d2);
+		vMarkerCenter.setValue(dCenter);
+
+		updateVMarkers();
+//		updateScanCenterDiff();
+
+	}
+	public double getCenter(double d1, double d2) {
+
+		double d = (d1 + d2) / 2.0;
+		// d = getPrecisionedData(d);
+
+		return d;
+	}
+
+	
 }

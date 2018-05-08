@@ -439,7 +439,7 @@ public class BlueDiamond {
 			scanMonitor.createScanPVS();
 
 			countDownConnection.pendIO();
-
+			
 			scanMonitor.validate1DPositioners();
 			scanMonitor.validate2DPositioners();
 			scanMonitor.validateDets();
@@ -462,9 +462,12 @@ public class BlueDiamond {
 			Thread scanMonitorThread = new Thread(scanMonitor);
 			scanMonitorThread.start();
 			initDisplay();
+			
+			
 			active_1D_ScanPanel.showVMarkers();
 			active_1D_ScanPanel.showHMarkers();
 			active_1D_ScanPanel.setMarkers();
+			active_1D_ScanPanel.updateUserAuto();
 		}
 	}
 

@@ -21,7 +21,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	int dataViewNumber;
 	int numberOfPositioners;
 	int numberOfDetectors;
-	int selectedPositioner;
+	int selectedPositioner = 0;
 	int numberOfPoints;
 	int numberOfCurrentPoints;
 	boolean derivative = false;
@@ -74,6 +74,11 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		hpDataView = oldChart.getDataView(dataViewNumber);
 		xaxis = hpDataView.getXAxis();
 		yaxis = hpDataView.getYAxis();
+		xaxis.setMinIsDefault(true);
+		xaxis.setMaxIsDefault(true);
+		yaxis.setMinIsDefault(true);
+		yaxis.setMaxIsDefault(true);
+
 	}
 
 	public int getDataViewNum() {
@@ -199,6 +204,10 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 			detMax[i] = getPrecisionedData(detMax[i]);
 
 		}
+		xAxisMin = posXMin[selectedPositioner];
+		xAxisMax = posXMax[selectedPositioner];
+		
+
 	}
 
 
@@ -252,6 +261,45 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	public double getDetMax(int n) {
 		return detMax[n];
 	}
+		
+	public double getSelectedPositionerXMin() {
+		return posXMin[selectedPositioner];
+	}
+	
+	public double getSelectedPositionerXMax() {
+		return posXMax[selectedPositioner];
+	}
+	
+	
+	public double getSelectedDetMin() {
+		double ret = 0;
+		double tempRet = 0;
+		
+		int numSelectedDets = selectedDetectors.size();
+		
+		for (int i=0; i<numSelectedDets;i++) {
+			tempRet = getDetMin(i);
+			ret = Math.min(tempRet, ret);
+		}
+		
+		return ret;
+	}
+	
+	public double getSelectedDetMax() {
+		double ret = 0;
+		double tempRet = 0;
+		
+		int numSelectedDets = selectedDetectors.size();
+		
+		for (int i=0; i<numSelectedDets;i++) {
+			tempRet = getDetMax(i);
+			ret = Math.max(tempRet, ret);
+		}
+		
+		return ret;
+
+	}
+	
 	
 	public double[] getPosXMinArray() {
 		return posXMin;
@@ -365,7 +413,6 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	}
 
 	public int getSelectedPositioner() {
-		System.out.println(" Selected Positioner  "+selectedPositioner);
 		return selectedPositioner;
 	}
 	
@@ -422,7 +469,6 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 			displayModeSwitched = false;
 
 		}
-
 		oldChart.setBatched(false);
 		fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
 	}

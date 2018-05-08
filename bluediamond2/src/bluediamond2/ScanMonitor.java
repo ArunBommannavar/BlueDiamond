@@ -280,7 +280,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	private void updateData1DAfterScan() {
 		scan1AfterScanDataReady = false;
 		scan1CPT = scan1CPTObj.getValue();
-//		System.out.println(" After updateData1DAfterScan 1 "+scan1CPT);
 		if (scan1CPT > 0) {
 			data1D.setNumberOfPoints(scan1CPT);
 			data1D.setCurrentPoint(scan1CPT);
@@ -298,6 +297,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			/*
 			 * The data are loaded in xVals and yVals Now to determine the xaxis min and max
 			 */
+			data1D.setChartRawData();
 			data1D.setXAxisScale();
 			data1D.setYAxisScale();
 			active_1D_ScanPanel.setMarkers();
@@ -392,8 +392,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	}
 	
 	public void initPosDet1D() {
-
-//		System.out.println(" In initPosDet1D " );
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
@@ -630,7 +628,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		}		
 		
 		else if (propertyName.equals("FileName")) {
-			active_1D_ScanPanel.setFileName(srcString);
+//			active_1D_ScanPanel.setFileName(srcString);
+			active_1D_ScanPanel.setChartHeader(srcString);
 		}
 	}
 
