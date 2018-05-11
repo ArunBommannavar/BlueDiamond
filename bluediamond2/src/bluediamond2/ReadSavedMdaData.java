@@ -255,7 +255,9 @@ public class ReadSavedMdaData {
 	          extraPV[i1].readData(inData);
 	        }
 	      }
-	    }
+	  
+	      inData.close();
+	      }
 	    catch (IOException e) {
 
 	    }

@@ -288,7 +288,12 @@ public class BlueDiamond {
 				
 				inData.close();
 				if (dataRank==1) {
-					saved_1D_ScanPanel.setFile(inFile);
+					
+					String inFileName = inFile.getName();
+					if(!saved_1D_ScanPanel.isListed(inFileName)) {
+						inData.close();
+							saved_1D_ScanPanel.setFile(inFile);
+					}
 				} else if(dataRank==2) {
 					// for reading and plotting 2D scans
 				}

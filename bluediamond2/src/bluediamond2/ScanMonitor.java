@@ -51,6 +51,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	CPT scan2CPTObj;
 
 	SaveFileName saveFileNameObj;
+	ScanStatusMessage scanStatusMessageObj;
 
 	int scan1NumberOfPoints = 0;
 	int scan2NumberOfPoints = 0;
@@ -86,6 +87,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan1NPTSObj = new NPTS(scan1Prefix + ".NPTS");
 		scan2NPTSObj = new NPTS(scan2Prefix + ".NPTS");
 		saveFileNameObj = new SaveFileName(scan1Prefix);
+		scanStatusMessageObj = new ScanStatusMessage(scan1Prefix+".SMSG");
 
 		scan1VALObj = new ScanVAL(scan1Prefix + ".VAL");
 		scan1EXSCObj = new ScanEXSC(scan1Prefix + ".EXSC");
@@ -102,6 +104,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2NPTSObj.createPV();
 		saveFileNameObj.createPV();
 		saveFileNameObj.addPropertyChangeListener("FileName", this);
+		scanStatusMessageObj.createPV();
+		scanStatusMessageObj.addPropertyChangeListener("ScanMessage", this);
+		
 
 		scan1BUSYObj.createPV();
 		scan1BUSYObj.addPropertyChangeListener("SCAN1BUSY", this);
@@ -573,9 +578,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			if (srcString.equals("1")) {
 				// setScan1EXSCStatus(true & !scan2InProgress);
 				setScan1EXSCStatus(true);
-				active_1D_ScanPanel.setScanStatus("in progress");
+//				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
-				active_1D_ScanPanel.setScanStatus("Done");
+//				active_1D_ScanPanel.setScanStatus("Done");
 				if(!scan2InProgress) {
 					setScan1InProgress(false);
 					setScan1EXSCStatus(false);
@@ -599,7 +604,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		} else if (propertyName.equals("SCAN2EXSC")) {
 			if (srcString.equals("1")) {
 				setScan2EXSCStatus(true);
-				active_1D_ScanPanel.setScanStatus("in progress");
+//				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
 				setScan2EXSCStatus(false);
 				setHasScan2Parms(false);
@@ -630,6 +635,10 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		else if (propertyName.equals("FileName")) {
 //			active_1D_ScanPanel.setFileName(srcString);
 			active_1D_ScanPanel.setChartHeader(srcString);
+		}
+		
+		else if(propertyName.equals("ScanMessage")) {
+			active_1D_ScanPanel.setScanStatus(srcString);
 		}
 	}
 

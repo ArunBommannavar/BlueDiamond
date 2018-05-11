@@ -51,7 +51,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	double yAxisMin;
 	double yAxisMax;
 
-	ChartDataView hpDataView;
+	ChartDataView hpDataView = null;
 	List<Integer> selectedDetectors = new ArrayList<Integer>();
 	boolean displayModeSwitched = true;
 	private final double HOLE_VALUE = Double.MAX_VALUE;
@@ -69,9 +69,8 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 
 	public void setDataViewNumber(int n) {
 		dataViewNumber = n;
-		oldChart.addDataView(dataViewNumber);
-		oldChart.getDataView(dataViewNumber).setDataSource(this);
 		hpDataView = oldChart.getDataView(dataViewNumber);
+		hpDataView.setName(fileName);
 		xaxis = hpDataView.getXAxis();
 		yaxis = hpDataView.getYAxis();
 		xaxis.setMinIsDefault(true);
@@ -86,8 +85,11 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	}
 
 	public ChartDataView getHpDataView() {		
+
+		return hpDataView;	
 		
-		return hpDataView;		
+
+		
 	}
 	
 	public void setNumPoints(int n) {

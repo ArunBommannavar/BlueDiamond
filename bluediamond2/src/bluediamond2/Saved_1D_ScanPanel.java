@@ -36,15 +36,13 @@ import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.JCMarker;
 
-import bluediamond2.Old_1D_Panel.EvenOddRenderer;
-import bluediamond2.Old_1D_Panel.HpTableModel;
-import bluediamond2.Old_1D_Panel.RadioButtonEditor;
-import bluediamond2.Old_1D_Panel.RadioButtonRenderer;
 
 import javax.swing.JTabbedPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -69,13 +67,15 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	boolean hidden = false;
 
-	private int scanDataViewNum = 0;
+	private int scanDataViewNum = 1;
 	private Old_1D_Panel old_1D_Panel;
-	private OldData1D oldData1D;
 	
 	java.util.List<String> oldList = new ArrayList<String>();
-	private Map<String, OldData1D> oldDataMap = new HashMap<String, OldData1D>();
-	private Map<String, ChartDataView> dataViewMap = new HashMap<String, ChartDataView>();
+	private Map<String, OldFileList> oldFileListMap = new HashMap<String,OldFileList >();
+	
+//	private Map<String, OldData1D> oldDataMap = new HashMap<String, OldData1D>();
+//	private Map<String, ChartDataView> dataViewMap = new HashMap<String, ChartDataView>();
+	
 	
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
@@ -497,12 +497,40 @@ public class Saved_1D_ScanPanel extends JPanel {
 		ChartDataView tempDataView;
 		OldData1D tempOldData1D;
 		String tempFileNameString;
+		OldFileList tempOldFileList;
 		
 		double xMin = Double.MAX_VALUE;
 		double xMax = Double.MIN_VALUE;
 
 		
+		/*
+		 * Loop through all dataViews. They are available through OldFileListMap
+		 * 
+		 */
+		
+		for (Map.Entry<String, OldFileList> entry :oldFileListMap.entrySet()){
+			tempFileNameString = entry.getKey();
+			tempOldFileList = entry.getValue();
+			tempDataView = tempOldFileList.getChartDataView();
+			
+			if(tempDataView.isVisible()) {
+				tempOldData1D = tempOldFileList.getOldData1D();
+				selectedPositioner = tempOldData1D.getSelectedPositioner();
+				tempXMin = tempOldData1D.getSelectedPositionerXMin();
+				if (tempXMin <xMin)xMin = tempXMin;
 				
+				tempXMax = tempOldData1D.getSelectedPositionerXMax();
+				if (tempXMax >xMax)xMax = tempXMax;
+				
+				tempDataView.getXAxis().setMin(xMin);
+				tempDataView.getXAxis().setMax(xMax);
+				
+			}			
+
+			
+		}
+		
+		/*		
 		for (Map.Entry<String,ChartDataView> entry :dataViewMap.entrySet()) {
 			tempDataView = entry.getValue();
 			tempFileNameString = entry.getKey();
@@ -521,6 +549,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 				
 			}			
 		}
+		
+		*/
 		showVMarkers();
 		chart.update();	
 	}
@@ -553,18 +583,32 @@ public class Saved_1D_ScanPanel extends JPanel {
 	public void setFile(File inFile) {
 		String inFileName = inFile.getName();
 		ReadSavedMdaData rmd = new ReadSavedMdaData();
-		oldData1D = new OldData1D(chart);
+
+		chart.addDataView(scanDataViewNum);
+
+		OldFileList oldFileList = new OldFileList(inFileName);
+		OldData1D oldData1D = new OldData1D(chart);
+		oldData1D.setFileName(inFileName);
+		oldFileList.addOldData1D(oldData1D);
 
 		oldData1D.setDataViewNumber(scanDataViewNum);
-		chart.getDataView(scanDataViewNum).setName(inFileName);
-
-		oldDataMap.put(inFileName, oldData1D);
-		dataViewMap.put(inFileName, oldData1D.getHpDataView());
+//		chart.setd
+		
+		
+		chart.getDataView(scanDataViewNum).setDataSource(oldData1D);
+		oldFileList.addChartDataView(chart.getDataView(scanDataViewNum));
+		
+//		oldFileList.addChartDataView(oldData1D.getHpDataView());
+//		oldDataMap.put(inFileName, oldData1D);
+//		dataViewMap.put(inFileName, oldData1D.getHpDataView());
 		
 		old_1D_Panel = new Old_1D_Panel();
 		old_1D_Panel.setChart(chart);
 		old_1D_Panel.setDataViewNumber(scanDataViewNum);
 		oldList.add(inFileName);
+		oldFileList.addOld_1D_Panel(old_1D_Panel);
+		oldFileListMap.put(inFileName, oldFileList);
+
 		populateFileTable(inFileName);
 
 		tabbedPane_left.addTab(inFileName, old_1D_Panel);
@@ -630,6 +674,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		setXScaleAuto(true);
 //		showVMarkers();
 //		setMarkers();
+		
 		scanDataViewNum++;
 	}
 
@@ -734,21 +779,22 @@ public class Saved_1D_ScanPanel extends JPanel {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								Object fileNameObject = mp.getValueAt(firstRow, 0);
 								String fileName= fileNameObject.toString();
-								
 								JRadioButton rb = (JRadioButton) obj;
-
+								OldFileList oldFileList1 = oldFileListMap.get(fileName);
+								ChartDataView chartDataView1 = oldFileList1.getChartDataView();
+          
 								if(rb.isSelected()) {
-									dataViewMap.get(fileName).setVisible(true);
+									
+									chartDataView1.setVisible(true);
 									chart.update();
 
 								}else {
-									dataViewMap.get(fileName).setVisible(false);
+									chartDataView1.setVisible(false);
 									chart.update();
 								}
 									
 								// Object dObj = chart.getDataView(dataViewNumber).getDataSource();
-								if (table.getName() == "Saved File") {
-									
+								if (table.getName() == "Saved File") {								
 									
 									
 								}
@@ -1067,7 +1113,97 @@ public class Saved_1D_ScanPanel extends JPanel {
 		// d = getPrecisionedData(d);
 
 		return d;
-	}
+	}	
+}
 
-	
+class TabManager {
+    JTabbedPane tabbedPane;
+    String[] titles;
+    JComponent[] components;
+/* 
+    public TabManager(JTabbedPane tabbedPane, String[] titles,
+                      JComponent[] components) {
+        this.tabbedPane = tabbedPane;
+        this.titles = titles;
+        this.components = components;
+        setTabs(titles);
+    }
+ */
+    public TabManager(JTabbedPane tabbedPane) {
+    	 this.tabbedPane = tabbedPane;
+    }
+    
+    public void setTabs(String[] titles) {
+        removeTabs(titles);
+        addTabs(titles);
+    }
+ 
+    private void addTabs(String[] titles) {
+        String[] tabTitles = getTabTitles();
+        for(int i = 0; i < titles.length; i++) {
+            String title = titles[i];
+            if(!contains(tabTitles, title)) {
+                insert(title);
+            }
+        }
+    }
+ 
+    private void insert(String title) {
+        String[] tabTitles = getTabTitles();
+        int index = getIndex(tabTitles, title);
+        JComponent component = components[getIndex(title)];
+        if(index == -1) {
+            tabbedPane.addTab(title, component);
+        } else {
+            tabbedPane.insertTab(title, null, component, null, index);
+        }
+    }
+ 
+    private int getIndex(String[] array, String insert) {
+        int insertIndex = getIndex(insert);
+        for(int i = 0; i < array.length; i++) {
+            int index = getIndex(array[i]);
+            if(insertIndex < index) {;
+                return i;
+            }
+        }
+        return -1;
+    }
+ 
+    private int getIndex(String str) {
+        for(int i = 0; i < titles.length; i++) {
+            if(titles[i].equals(str)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+ 
+    private void removeTabs(String[] titles) {
+        String[] tabTitles = getTabTitles();
+        for(int i = tabTitles.length-1; i >= 0; i--) {
+            String title = tabTitles[i];
+            if(!contains(titles, title)) {
+                tabbedPane.removeTabAt(i);
+            }
+        }
+    }
+ 
+    private boolean contains(String[] array, String element) {
+        for(int i = 0; i < array.length; i++) {
+            if(array[i].equals(element)) {
+                return true;
+            }
+        }
+        return false;
+    }                
+ 
+    private String[] getTabTitles() {
+        int tabCount = tabbedPane.getTabCount();
+        String[] titles = new String[tabCount];
+        for(int i = 0; i < tabCount; i++) {
+            titles[i] = tabbedPane.getTitleAt(i);
+        }
+        return titles;
+    }
 }

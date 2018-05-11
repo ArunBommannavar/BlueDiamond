@@ -77,7 +77,5 @@ public class MainPanel extends JPanel {
 			active_1D_ScanPanel.setMarkers();
 		
 		}
-		System.out.println("  Selected view = "+mainTabbedPane.getSelectedIndex());
 	}
-
 }

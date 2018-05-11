@@ -1304,8 +1304,9 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public void setScanStatus(String str) {
-		scanStatusLabel.setText("Scan " + str);
+		scanStatusLabel.setText(str);
 	}
+	
 /*
 	public void setFileName(String str) {
 		fileNameLabel.setText(str);
@@ -1317,8 +1318,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		data1D.setAutoScale(b);
 		if (b) {
 			updateUserAuto();
-		}
-		
+		}		
 	}
 
 	public boolean getAutoScale() {
