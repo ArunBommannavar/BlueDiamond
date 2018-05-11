@@ -6,4 +6,5 @@ public interface PositionerDisplayI {
 	   public int getSelectedPositioner();
 	   public void setNumPositioners(int n);
 	   public void calculatePosDetMinMax();
+
 }

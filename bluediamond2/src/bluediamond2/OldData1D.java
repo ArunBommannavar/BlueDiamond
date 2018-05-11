@@ -10,7 +10,7 @@ import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.data.JCDefaultDataSource;
 
-public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, PositionerDisplayI,DataViewParmsI,UpdateDisplayI,XRangeI {
+public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, PositionerDisplayI,DataViewParmsI,UpdateDisplayI,XRangeI,FileNameI {
 
 	/**
 	 * 
@@ -67,6 +67,9 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		fileName = str;
 	}
 
+	public String getFileName () {
+		return fileName;
+	}
 	public void setDataViewNumber(int n) {
 		dataViewNumber = n;
 		hpDataView = oldChart.getDataView(dataViewNumber);
@@ -77,7 +80,6 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		xaxis.setMaxIsDefault(true);
 		yaxis.setMinIsDefault(true);
 		yaxis.setMaxIsDefault(true);
-
 	}
 
 	public int getDataViewNum() {
@@ -85,11 +87,7 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	}
 
 	public ChartDataView getHpDataView() {		
-
 		return hpDataView;	
-		
-
-		
 	}
 	
 	public void setNumPoints(int n) {
@@ -478,21 +476,21 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 	@Override
 	public int getSeriesSymbol(int n) {
 	       int m;
-	        m = oldChart.getDataView(0).getSeries(n).getStyle().getSymbolShape();
+	        m = oldChart.getDataView(dataViewNumber).getSeries(n).getStyle().getSymbolShape();
 	        return m;
 	  	}
 
 	@Override
 	public int getSeriesSymbolSize(int n) {
 	       int m;
-	        m = oldChart.getDataView(0).getSeries(n).getStyle().getSymbolSize();
+	        m = oldChart.getDataView(dataViewNumber).getSeries(n).getStyle().getSymbolSize();
 	        return m;
 	}
 
 	@Override
 	public int getSeriesThickness(int n) {
         int m;
-        m = oldChart.getDataView(0).getSeries(n).getStyle().getLineWidth();
+        m = oldChart.getDataView(dataViewNumber).getSeries(n).getStyle().getLineWidth();
         return m;
 	}
 

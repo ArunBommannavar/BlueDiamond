@@ -96,8 +96,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 	double pickedPoint;
 	double minMarker;
 	double maxMarker;
-
-
 	
 	JCMarker vMarker1;
 	JCMarker vMarker2;
@@ -525,32 +523,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 				tempDataView.getXAxis().setMin(xMin);
 				tempDataView.getXAxis().setMax(xMax);
 				
-			}			
+			}				
+		}		
 
-			
-		}
-		
-		/*		
-		for (Map.Entry<String,ChartDataView> entry :dataViewMap.entrySet()) {
-			tempDataView = entry.getValue();
-			tempFileNameString = entry.getKey();
-			if(tempDataView.isVisible()) {
-				
-				tempOldData1D = oldDataMap.get(tempFileNameString);
-				selectedPositioner = tempOldData1D.getSelectedPositioner();
-				tempXMin = tempOldData1D.getSelectedPositionerXMin();
-				if (tempXMin <xMin)xMin = tempXMin;
-				
-				tempXMax = tempOldData1D.getSelectedPositionerXMax();
-				if (tempXMax >xMax)xMax = tempXMax;
-				
-				tempDataView.getXAxis().setMin(xMin);
-				tempDataView.getXAxis().setMax(xMax);
-				
-			}			
-		}
-		
-		*/
 		showVMarkers();
 		chart.update();	
 	}
@@ -603,6 +578,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 //		dataViewMap.put(inFileName, oldData1D.getHpDataView());
 		
 		old_1D_Panel = new Old_1D_Panel();
+		old_1D_Panel.setSaved_1D_ScanPanel(this);
 		old_1D_Panel.setChart(chart);
 		old_1D_Panel.setDataViewNumber(scanDataViewNum);
 		oldList.add(inFileName);
@@ -683,11 +659,40 @@ public class Saved_1D_ScanPanel extends JPanel {
 	}
 	
 	
-	public void printOldDataMinMax() {		
+    public void dropAllTabs() {
+    
+    	tabbedPane_left.getTabCount();
+    	tabbedPane_left.removeAll();
+    }
+
+	public void addVisibleTabs() {
 		
+		int selectedPositioner;
+		double tempXMin;
+		double tempXMax;
+		ChartDataView tempDataView;
+		OldData1D tempOldData1D;
+		String tempFileNameString;
+		OldFileList tempOldFileList;
+		boolean tabVisible;
+		Old_1D_Panel temp_Old_1D_Panel;
+
+		
+		for (Map.Entry<String, OldFileList> entry :oldFileListMap.entrySet()){
+			tempFileNameString = entry.getKey();
+			tempOldFileList = entry.getValue();
+			tabVisible= tempOldFileList.getTabVisible();
+			
+			if(tabVisible) {
+				tempFileNameString = tempOldFileList.getFileName();
+				temp_Old_1D_Panel = tempOldFileList.getOld_1D_Panel();
+				tabbedPane_left.add(tempFileNameString, temp_Old_1D_Panel);
+				
+			}				
+		}		
+
 	}
-	
-	
+    
 	public void populateFileTable(String str) {
 		HpFileTableModel mp = (HpFileTableModel) table.getModel();
 		JRadioButton rb1 = new JRadioButton();
@@ -784,15 +789,19 @@ public class Saved_1D_ScanPanel extends JPanel {
 								ChartDataView chartDataView1 = oldFileList1.getChartDataView();
           
 								if(rb.isSelected()) {
-									
+									oldFileList1.setTabVisible(true);
 									chartDataView1.setVisible(true);
 									chart.update();
 
 								}else {
+									oldFileList1.setTabVisible(false);
 									chartDataView1.setVisible(false);
 									chart.update();
 								}
-									
+								
+								dropAllTabs();
+								addVisibleTabs();
+								setXScaleAuto(true);
 								// Object dObj = chart.getDataView(dataViewNumber).getDataSource();
 								if (table.getName() == "Saved File") {								
 									
@@ -1133,6 +1142,9 @@ class TabManager {
     	 this.tabbedPane = tabbedPane;
     }
     
+    public void dropAllTabs() {
+    	
+    }
     public void setTabs(String[] titles) {
         removeTabs(titles);
         addTabs(titles);

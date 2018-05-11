@@ -34,6 +34,7 @@ import javax.swing.border.BevelBorder;
 
 public class Old_1D_Panel extends JPanel {
 
+	Saved_1D_ScanPanel saved_1D_ScanPanel;
 	private JTabbedPane posDetTabbedPane;
 	private JScrollPane posScrollPane;
 	private JScrollPane detScrollPane;
@@ -199,6 +200,11 @@ public class Old_1D_Panel extends JPanel {
 		TableColumn col5 = colModel.getColumn(5);
 		col5.setPreferredWidth((wo * 10) / 100);
 
+	}
+	
+	public void setSaved_1D_ScanPanel(Saved_1D_ScanPanel saved_1D_ScanPanel) {
+		
+		this.saved_1D_ScanPanel = saved_1D_ScanPanel;
 	}
 
 	public boolean isSelected() {
@@ -430,12 +436,19 @@ public class Old_1D_Panel extends JPanel {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								JRadioButton rb = (JRadioButton) obj;
 								Object dObj = chart.getDataView(dataViewNumber).getDataSource();
+								chart.getDataView(dataViewNumber).getXAxis().setMaxIsDefault(true);
+								chart.getDataView(dataViewNumber).getXAxis().setMinIsDefault(true);
+
+//								System.out.println(" File name picked = "+((FileNameI)dObj).getFileName());
 								if (table.getName() == "Dets") {
 									((DetectorDisplayI) dObj).setDetectorForDisplay(firstRow, rb.isSelected());
 								} else if (table.getName() == "Pos") {
 									((PositionerDisplayI) dObj).setSelectedPositioner(firstRow);
 									((PositionerDisplayI) dObj).calculatePosDetMinMax();
-									 ((UpdateDisplayI)dObj).updateDisplay();
+									((UpdateDisplayI)dObj).updateDisplay();
+									
+									saved_1D_ScanPanel.setXScaleAuto(true);
+
 								}
 							} else if (mColIndex == 5) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);

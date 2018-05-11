@@ -633,6 +633,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		}		
 		
 		else if (propertyName.equals("FileName")) {
+			
 //			active_1D_ScanPanel.setFileName(srcString);
 			active_1D_ScanPanel.setChartHeader(srcString);
 		}
