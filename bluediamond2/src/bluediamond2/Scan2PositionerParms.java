@@ -61,7 +61,6 @@ public class Scan2PositionerParms {
 			posPnRA[i] = new PositionerPnRA(scanPv, j);
 			posPnRA[i].createPV();
 		}
-
 	}
 	
 	   public void disconnectChannel() {

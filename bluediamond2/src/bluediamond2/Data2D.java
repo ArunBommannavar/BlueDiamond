@@ -5,6 +5,7 @@ import com.klg.jclass.chart3d.JCData3dGridIndex;
 import com.klg.jclass.chart3d.data.JCDefault3dGridDataSource;
 import com.klg.jclass.chart3d.event.Chart3dGridDataEvent;
 import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
+import java.util.*;
 
 public class Data2D extends JCDefault3dGridDataSource {
 
@@ -52,6 +53,8 @@ public class Data2D extends JCDefault3dGridDataSource {
     double topCutoff;
     double botCutoff;
     boolean intCutoff = false;
+    
+    Map<Integer, Integer> selectedDetectorMapper = new HashMap<Integer,Integer>();
 
 
 	public Data2D(JCChart3dJava2d chart3d) {
@@ -148,7 +151,6 @@ public class Data2D extends JCDefault3dGridDataSource {
 	}
 	
 	public void setSelectedDetector(int det){
-//		System.out.println(" Selected detector = "+selectedDetector);
 		selectedDetector = det;
 		plotData();
 	}
@@ -278,10 +280,8 @@ public class Data2D extends JCDefault3dGridDataSource {
 	}
 
 	public void setDetectorDataArray(int y, int det, double[] zv){	
-//		System.out.println(" XPoints = "+xNumPoints);
 			for (int j = 0; j < xNumPoints; j++) {				
 					z2D[det][j][y-1] = zv[j];
-//					System.out.println(" 2D Z Value = "+zv[j]);
 			}
 	}
 	
@@ -309,6 +309,7 @@ public class Data2D extends JCDefault3dGridDataSource {
     public double getZValue(int n, int m){
     	return zValues[n][m];
     }
+    
     public void plotData() {
         chart3d.setBatched(true);
         for (int i=0; i<xNumPoints; i++){

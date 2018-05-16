@@ -72,11 +72,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 	
 	java.util.List<String> oldList = new ArrayList<String>();
 	private Map<String, OldFileList> oldFileListMap = new HashMap<String,OldFileList >();
-	
-//	private Map<String, OldData1D> oldDataMap = new HashMap<String, OldData1D>();
-//	private Map<String, ChartDataView> dataViewMap = new HashMap<String, ChartDataView>();
-	
-	
+		
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
 	private JTextField yRangeMinTextBox;
@@ -567,15 +563,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 		oldFileList.addOldData1D(oldData1D);
 
 		oldData1D.setDataViewNumber(scanDataViewNum);
-//		chart.setd
-		
 		
 		chart.getDataView(scanDataViewNum).setDataSource(oldData1D);
 		oldFileList.addChartDataView(chart.getDataView(scanDataViewNum));
-		
-//		oldFileList.addChartDataView(oldData1D.getHpDataView());
-//		oldDataMap.put(inFileName, oldData1D);
-//		dataViewMap.put(inFileName, oldData1D.getHpDataView());
 		
 		old_1D_Panel = new Old_1D_Panel();
 		old_1D_Panel.setSaved_1D_ScanPanel(this);

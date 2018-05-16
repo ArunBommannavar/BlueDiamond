@@ -41,6 +41,10 @@ public class PositionerPnPV implements PropertyChangeListener {
 		posValObject.putVal(str);
 
 	}
+	
+	public void movePositioner(String str) {
+		posValObject.putVal(str);
+	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

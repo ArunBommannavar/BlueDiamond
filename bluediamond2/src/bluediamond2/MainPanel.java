@@ -13,6 +13,7 @@ public class MainPanel extends JPanel {
 	private Active_1D_ScanPanel active_1D_ScanPanel;
 	private Active_2D_ScanPanel active_2D_ScanPanel;
 	private Saved_1D_ScanPanel saved_1D_ScanPanel;
+	private Saved_2D_ScanPanel saved_2D_ScanPanel;
 	
 	/**
 	 * Create the panel.
@@ -34,6 +35,10 @@ public class MainPanel extends JPanel {
 		saved_1D_ScanPanel = new Saved_1D_ScanPanel();
 		mainTabbedPane.addTab("Saved 1-D Scan", null, saved_1D_ScanPanel, null);
 		mainTabbedPane.setEnabledAt(2, true);
+		
+		saved_2D_ScanPanel = new Saved_2D_ScanPanel();
+		mainTabbedPane.addTab("Saved 2-D Scan", null, saved_2D_ScanPanel, null);
+		mainTabbedPane.setEnabledAt(3, true);
 	}
 	
 	public JCChart getChart() {
@@ -46,6 +51,10 @@ public class MainPanel extends JPanel {
 	
 	public JCChart getOldChart(){
 		return saved_1D_ScanPanel.getSaved_1D_Chart();
+	}
+
+	public JCChart3dJava2d getOld3DChart(){
+		return saved_2D_ScanPanel.get3DChart();
 	}
 
 	public void set1DDataSource(Data1D d1) {
@@ -66,6 +75,10 @@ public class MainPanel extends JPanel {
 	
 	public Saved_1D_ScanPanel getSaved_1D_ScanPanel() {
 		return saved_1D_ScanPanel;
+	}
+	
+	public Saved_2D_ScanPanel getSaved_2D_ScanPanel() {
+		return saved_2D_ScanPanel;
 	}
 	
 	public void getSelectedPanelIndex() {

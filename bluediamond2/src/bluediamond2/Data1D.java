@@ -249,6 +249,8 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setXAxisScale() {
+		
+//		System.out.println(" Autoscale = "+autoScale+"  selected positioner = "+selectedPositioner);
 		chart.setBatched(true);
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
@@ -271,7 +273,7 @@ public class Data1D extends JCDefaultDataSource {
 		}
 
 		delta = 0.1 * (tempXmax - tempXmin);
-//		xaxis = dataView.getXAxis();
+		xaxis = dataView.getXAxis();
 		xaxis.setMin(tempXmin - delta);
 		xaxis.setMax(tempXmax + delta);
 		}else{

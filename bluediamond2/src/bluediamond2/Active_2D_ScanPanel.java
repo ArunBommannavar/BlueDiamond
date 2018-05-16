@@ -40,11 +40,17 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.BevelBorder;
+import java.awt.Font;
 
 public class Active_2D_ScanPanel extends JPanel {
 
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
+	Scan1PositionerParms scan1PositionerParms;
+	Scan2PositionerParms scan2PositionerParms;
+	
     Chart3dJava2d chart3dJava2d;
     Chart3dDataView dataView3D = null;
 
@@ -75,7 +81,11 @@ public class Active_2D_ScanPanel extends JPanel {
 	JLabel x_Pos_2D_value;
 	JLabel y_Pos_2D_value;
 	JLabel int_2D_value;
+	JButton btnMoveButton2D;
 	
+	ButtonGroup surfaceContourSelectionGroup = new ButtonGroup();
+	
+	private PositionerPnPV[] scan1PosPnPV = new PositionerPnPV[4];
 	private PositionerPnPV[] scan2PosPnPV = new PositionerPnPV[4];
 
 
@@ -104,7 +114,7 @@ public class Active_2D_ScanPanel extends JPanel {
 		JPanel surfaceCountourPanel = new JPanel();
 		sl_leftPanel_2D.putConstraint(SpringLayout.NORTH, surfaceCountourPanel, 10, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.WEST, surfaceCountourPanel, 10, SpringLayout.WEST, leftPanel_2D);
-		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, surfaceCountourPanel, 59, SpringLayout.NORTH, leftPanel_2D);
+		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, surfaceCountourPanel, 60, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.EAST, surfaceCountourPanel, 160, SpringLayout.WEST, leftPanel_2D);
 		leftPanel_2D.add(surfaceCountourPanel);
 		
@@ -123,7 +133,7 @@ public class Active_2D_ScanPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		xyzPanel.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new MigLayout("", "[][]", "[][][][]"));
+		panel.setLayout(new MigLayout("", "[][]", "[][][]"));
 		
 		JLabel x_AxisPosLabel2D = new JLabel("X=");
 		panel.add(x_AxisPosLabel2D, "cell 0 0");
@@ -147,8 +157,15 @@ public class Active_2D_ScanPanel extends JPanel {
 		xyzPanel.add(panel_1, BorderLayout.SOUTH);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton btnNewButton2D = new JButton("Move");
-		panel_1.add(btnNewButton2D);
+		btnMoveButton2D = new JButton("Move");
+		btnMoveButton2D.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scan1PosPnPV[selectedPositioner_X].movePositioner(x_Pos_2D_value.getText());
+				scan2PosPnPV[selectedPositioner_Y].movePositioner(y_Pos_2D_value.getText());
+			}
+		});
+		panel_1.add(btnMoveButton2D);
+		
 		sl_leftPanel_2D.putConstraint(SpringLayout.EAST, positioner_2D_Panel, 0, SpringLayout.EAST, surfaceCountourPanel);
 		leftPanel_2D.add(positioner_2D_Panel);
 		
@@ -165,7 +182,8 @@ public class Active_2D_ScanPanel extends JPanel {
 		tabbedPane.addTab("X-Axis", null, xAxisPositionersPanel_2D, null);
 		xAxisPositionersPanel_2D.setLayout(new GridLayout(4, 0, 0, 0));
 		
-		chckbx_2D_Xpositioner1 = new JCheckBox("New check box");
+		chckbx_2D_Xpositioner1 = new JCheckBox("X-Positioner 1");
+		chckbx_2D_Xpositioner1.setSelected(true);
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner1);
 		chckbx_2D_Xpositioner1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,7 +193,7 @@ public class Active_2D_ScanPanel extends JPanel {
 		});
 
 
-		chckbx_2D_Xpositioner2 = new JCheckBox("New check box");
+		chckbx_2D_Xpositioner2 = new JCheckBox("X-Positioner 2");
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner2);
 		chckbx_2D_Xpositioner2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -184,7 +202,7 @@ public class Active_2D_ScanPanel extends JPanel {
 			}
 		});
 
-		chckbx_2D_Xpositioner3 = new JCheckBox("New check box");
+		chckbx_2D_Xpositioner3 = new JCheckBox("X-Positioner 3");
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner3);		chckbx_2D_Xpositioner3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectedPositioner_X = 2;
@@ -193,7 +211,7 @@ public class Active_2D_ScanPanel extends JPanel {
 		});
 
 		
-		chckbx_2D_Xpositioner4 = new JCheckBox("New check box");
+		chckbx_2D_Xpositioner4 = new JCheckBox("X-Positioner 4");
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner4);
 		chckbx_2D_Xpositioner4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -218,7 +236,8 @@ public class Active_2D_ScanPanel extends JPanel {
 		tabbedPane.addTab("Y-Axis", null, yAxisPositionersPanel_2D, null);
 		yAxisPositionersPanel_2D.setLayout(new GridLayout(4, 0, 0, 0));
 		
-		chckbx_2D_Ypositioner1 = new JCheckBox("New check box");
+		chckbx_2D_Ypositioner1 = new JCheckBox("Y-Positioner 1");
+		chckbx_2D_Ypositioner1.setSelected(true);
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner1);
 		chckbx_2D_Ypositioner1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -227,7 +246,7 @@ public class Active_2D_ScanPanel extends JPanel {
 			}
 		});
 
-		chckbx_2D_Ypositioner2 = new JCheckBox("New check box");
+		chckbx_2D_Ypositioner2 = new JCheckBox("Y-Positioner 2");
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner2);
 		chckbx_2D_Ypositioner2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -236,7 +255,7 @@ public class Active_2D_ScanPanel extends JPanel {
 			}
 		});
 
-		chckbx_2D_Ypositioner3 = new JCheckBox("New check box");
+		chckbx_2D_Ypositioner3 = new JCheckBox("Y-Positioner 3");
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner3);
 		chckbx_2D_Ypositioner3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -245,7 +264,7 @@ public class Active_2D_ScanPanel extends JPanel {
 			}
 		});
 		
-		JCheckBox chckbx_2D_Ypositioner4 = new JCheckBox("New check box");
+		JCheckBox chckbx_2D_Ypositioner4 = new JCheckBox("Y-Positioner 4");
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner4);
 		chckbx_2D_Ypositioner4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -280,10 +299,25 @@ public class Active_2D_ScanPanel extends JPanel {
 		surfaceCountourPanel.setLayout(new GridLayout(2, 0, 0, 0));
 		
 		JRadioButton rdbtnSurfaceRadioButton = new JRadioButton("Surface Plot");
+		rdbtnSurfaceRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setSurfaceDisplay();
+			}
+		});
 		surfaceCountourPanel.add(rdbtnSurfaceRadioButton);
 		
 		JRadioButton rdbtnContourRadioButton = new JRadioButton("Contour Plot");
+		rdbtnContourRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setContourDisplay();
+			}
+		});
+		rdbtnContourRadioButton.setSelected(true);
 		surfaceCountourPanel.add(rdbtnContourRadioButton);
+		
+		surfaceContourSelectionGroup.add(rdbtnContourRadioButton);
+		surfaceContourSelectionGroup.add(rdbtnSurfaceRadioButton);
+		
 		leftPanel_2D.add(detectorSelectionPanel);
 		detectorSelectionPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -292,7 +326,6 @@ public class Active_2D_ScanPanel extends JPanel {
 		
 		detComboBox_2D.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				System.out.println(" Selected Combo Item # = "+detComboBox_2D.getItemCount());
 				if (detComboBox_2D.getItemCount()>0)
 				data2D.setSelectedDetector(detComboBox_2D.getSelectedIndex());
 			}
@@ -305,6 +338,8 @@ public class Active_2D_ScanPanel extends JPanel {
 		panel_2D_plot.setLayout(new BorderLayout(0, 0));
 		
 		chart3dJava2d = new Chart3dJava2d();
+		chart3dJava2d.getHeader().setFont(new Font("Tahoma", Font.PLAIN, 13));
+		chart3dJava2d.getHeader().setBorder(new CompoundBorder(new EtchedBorder(EtchedBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0)), new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255))));
 		panel_2D_plot.add(chart3dJava2d, BorderLayout.CENTER);
 		dataView3D = chart3dJava2d.getDataView(0);
 		chart3dJava2d.getActionTable().addAllDefaultActions();
@@ -331,19 +366,31 @@ public class Active_2D_ScanPanel extends JPanel {
 	public JCChart3dJava2d get3DChart(){
 		return chart3dJava2d;
 	}
+	
 	public void set2DDataSource(Data2D d2) {
 		data2D = d2;
 	}
+	
+	public void setScan1PositionerParms(Scan1PositionerParms scan1PositionerParms) {
+		this.scan1PositionerParms = scan1PositionerParms;
+	}
+	
+	public void setScan2PositionerParms(Scan2PositionerParms scan2PositionerParms) {
+		this.scan2PositionerParms = scan2PositionerParms;
+	}
+
 	public void setXPositionerVisible_2D(int pos, boolean b) {
 		JCheckBox jb = posX2DMap.get(pos);
 		jb.setEnabled(b);
 		jb.setVisible(b);
 	}
+	
 	public void setYPositionerVisible_2D(int pos, boolean b) {
 		JCheckBox jb = posYMap.get(pos);
 		jb.setEnabled(b);
 		jb.setVisible(b);
 	}
+	
 	public void add2DDetector(String str){
 		detComboBox_2D.addItem(str);
 	}
@@ -393,6 +440,7 @@ public class Active_2D_ScanPanel extends JPanel {
 		jb2D.setText(str);
 		
 	}
+	
     public void setContourDisplay() {
         dataView3D.getContour().setZoned(true);
         dataView3D.getContour().setContoured(true);
@@ -444,6 +492,8 @@ public class Active_2D_ScanPanel extends JPanel {
                 int_2D_value.setText(String.valueOf(zz));
  //               System.out.println(" Mouse Clicked in Chart area ");
            }
+            setBtnMoveButton2DEnable(true);
+
         }
     }
     
@@ -468,9 +518,29 @@ public class Active_2D_ScanPanel extends JPanel {
     	chart3dJava2d.getChart3dArea().getYAxis().setAnnoFontCubeSize(n);
     	chart3dJava2d.getChart3dArea().getYAxis().setTitleFontCubeSize(n);
     }
+    
+    
+	public void setScan1PosPv(PositionerPnPV[] pp) {
+		for (int i = 0; i < 4; i++) {
+			scan1PosPnPV[i] = pp[i];
+		}
+	}
 	public void setScan2PosPv(PositionerPnPV[] pp) {
 		for (int i = 0; i < 4; i++) {
 			scan2PosPnPV[i] = pp[i];
+		}
+	}
+	
+	public void setBtnMoveButton2DEnable(boolean b) {
+		btnMoveButton2D.setEnabled(b);
+	}
+	
+	public void setChartHeader(String str) {
+		chart3dJava2d.setHeaderText(str);
+	}
+	public void moveToPickedPoint() {
+		if (pickedPoint3D) {
+			
 		}
 	}
 

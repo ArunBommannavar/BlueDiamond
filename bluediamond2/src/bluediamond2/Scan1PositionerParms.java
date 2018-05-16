@@ -71,10 +71,6 @@ public class Scan1PositionerParms {
 	}
 	
 	   public void disconnectChannel() {
-		   /*
-			scanNPTSObj.disconnectChannel();
-			scanCPTObj.disconnectChannel();
-*/
 	    	if (initPos){		
 			for (int i = 0; i < numberOfPositioners; i++) {
 						

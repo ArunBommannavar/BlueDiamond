@@ -57,17 +57,20 @@ public class BlueDiamond {
 
 	Data1D data1D;
 	Data2D data2D;
-
-	// MainPanel_1 mainPanel;
+	OldData2D oldData2D;
+	
 	MainPanel mainPanel;
 	Active_1D_ScanPanel active_1D_ScanPanel;
 	Active_2D_ScanPanel active_2D_ScanPanel;
 	Saved_1D_ScanPanel saved_1D_ScanPanel;
+	Saved_2D_ScanPanel saved_2D_ScanPanel;
 
 	protected JCChart chart;
 	protected JCChart oldChart;
-	JCChart3dJava2d chart3d = null;
+	protected JCChart3dJava2d chart3d = null;
+	protected JCChart3dJava2d oldChart3d = null;
 
+	
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	/**
@@ -295,7 +298,10 @@ public class BlueDiamond {
 							saved_1D_ScanPanel.setFile(inFile);
 					}
 				} else if(dataRank==2) {
-					// for reading and plotting 2D scans
+					inData.close();
+					saved_2D_ScanPanel.setFile(inFile);
+
+					
 				}
 
 			} catch (IOException e1) {
@@ -407,10 +413,14 @@ public class BlueDiamond {
 			chart = mainPanel.getChart();
 			oldChart = mainPanel.getOldChart();
 			chart3d = mainPanel.get3DChart();
+			oldChart3d = mainPanel.getOld3DChart();
 
 			data1D = new Data1D(chart);
 			data2D = new Data2D(chart3d);
+			oldData2D = new OldData2D(oldChart3d);
+			
 			chart3d.getDataView(0).setElevationDataSource(data2D);
+			oldChart3d.getDataView(0).setElevationDataSource(oldData2D);
 
 			mainPanel.set1DDataSource(data1D);
 			mainPanel.set2DDataSource(data2D);
@@ -426,12 +436,13 @@ public class BlueDiamond {
 
 			active_1D_ScanPanel = mainPanel.getActive_1D_ScanPanel();
 			scanMonitor.setActive_1D_ScanPanel(active_1D_ScanPanel);
+			active_1D_ScanPanel.resetPositioners_1D();
 
 			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
 
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
-			active_1D_ScanPanel.resetPositioners_1D();
+			saved_2D_ScanPanel = mainPanel.getSaved_2D_ScanPanel();
 
 			scan1PositionerParms.createPosPVs();
 			countDownConnection.pendIO();
@@ -458,6 +469,7 @@ public class BlueDiamond {
 			scanMonitor.setMainPanel_1D_DetectorNames();
 
 			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
+			active_2D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
 			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());
 
 			scanMonitor.createDSTATE();

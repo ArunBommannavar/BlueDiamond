@@ -232,21 +232,23 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	private void doScan1EXSC() {
 		setScan1EXSCStatus(false);
 		initPosDet1D();
-/*		
+		
 		if(!hasScan1Parms) {
 			initPosDet1D();
 		}else {
 			init1DPlot();
 		}
-		*/
+		
 	}
 
 	private void doScan2EXSC() {
 		setScan2EXSCStatus(false);
 		active_2D_ScanPanel.clear2dDetector();
+		
 		if(!hasScan2Parms) {
 			initPosDet2D();
 		}
+		
 	}
 
 	public void validate1DPositioners() {
@@ -260,7 +262,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	public void validateDets() {
 		scan1DetectorParms.validateDetectors();
 	}
-
+	
 	private void setHasScan1Parms(boolean b) {
 		hasScan1Parms = b;
 	}
@@ -279,6 +281,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		data1D.updateChartDisplay(scan1CPT, scan1NumberOfPoints);
+		active_1D_ScanPanel.setHMarkers();
 
 	}
 
@@ -415,6 +418,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		setMainPanel_1D_DetectorNames();
 
 		// Linear/Table/Fly mode
+//		System.out.println(" Liner/table/Fly");
+
 		validPos1.forEach((n) -> {
 			final String str = scan1PositionerParms.getPosScanMode(n);
 			data1D.setScanMode(n, str);
@@ -425,6 +430,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Relative/Absolute scan
+//		System.out.println(" Rel/Abs");
 
 		validPos1.forEach((n) -> {
 			final String str = scan1PositionerParms.getPosRelAbs(n);
@@ -432,6 +438,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Positioner Min Value
+//		System.out.println(" Positioner Min");
 
 		validPos1.forEach((n) -> {
 			final double d = scan1PositionerParms.getPosMin(n);
@@ -439,17 +446,21 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Positioner Scan Width
+//		System.out.println(" Positioner Width");
+
 		validPos1.forEach((n) -> {
 			final double d = scan1PositionerParms.getPosWidth(n);
 			data1D.setPosWidth(n, d);
 		});
 
 		// Positioner current position (Before Scan)
+//		System.out.println(" Positioner Current positoner before scan");
 
 		validPos1.forEach((n) -> {
 			final double d = scan1PositionerParms.getPosPP(n);
 			data1D.setPosPP(n, d);
 		});
+//		System.out.println(" Positioner setXAxisRange");
 
 		validPos1.forEach((n) -> {
 			data1D.setXAxisRange(n);
@@ -577,6 +588,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		} else if (propertyName.equals("SCAN1EXSC")) {
 			if (srcString.equals("1")) {
 				// setScan1EXSCStatus(true & !scan2InProgress);
+				active_1D_ScanPanel.setMoveButtonsEnable(false);
 				setScan1EXSCStatus(true);
 //				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
@@ -586,6 +598,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 					setScan1EXSCStatus(false);
 //					setHasScan1Parms(false);
 				}
+				active_1D_ScanPanel.setMoveButtonsEnable(true);
+
 			}
 		} else if (propertyName.equals("DSTATE")) {
 			if (srcString.equals("POSTED")) {
@@ -603,9 +617,12 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		} else if (propertyName.equals("SCAN2EXSC")) {
 			if (srcString.equals("1")) {
+				active_2D_ScanPanel.setBtnMoveButton2DEnable(false);
 				setScan2EXSCStatus(true);
 //				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
+//				active_2D_ScanPanel.setBtnMoveButton2DEnable(true);
+
 				setScan2EXSCStatus(false);
 				setHasScan2Parms(false);
 			}
@@ -636,10 +653,14 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			
 //			active_1D_ScanPanel.setFileName(srcString);
 			active_1D_ScanPanel.setChartHeader(srcString);
+			active_2D_ScanPanel.setChartHeader(srcString);
 		}
 		
 		else if(propertyName.equals("ScanMessage")) {
 			active_1D_ScanPanel.setScanStatus(srcString);
+			if(!scan2InProgress) {
+				
+			}
 		}
 	}
 

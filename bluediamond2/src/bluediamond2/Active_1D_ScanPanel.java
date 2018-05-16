@@ -161,6 +161,11 @@ public class Active_1D_ScanPanel extends JPanel {
 	double yAxisMin;
 	double yAxisMax;
     */
+	
+	JButton btnLeftMarkerButton;
+	JButton btnRightMarkerButton;
+	JButton btnCenterMarkerButton;
+	
 	private PositionerPnPV[] scan1PosPnPV = new PositionerPnPV[4];
 
 	JPanel detectorPanel_1D_1_30;
@@ -333,7 +338,12 @@ public class Active_1D_ScanPanel extends JPanel {
 		leftMarkerPanel_1D_valueButton.add(panel_12, BorderLayout.SOUTH);
 		panel_12.setLayout(new BorderLayout(0, 0));
 
-		JButton btnLeftMarkerButton = new JButton("Move");
+		btnLeftMarkerButton = new JButton("Move");
+		btnLeftMarkerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scan1PosPnPV[selectedPositioner].movePositioner(lblLeftMarkerValue.getText());
+			}
+		});
 		panel_12.add(btnLeftMarkerButton);
 
 		JPanel leftMarkerPanel_1D_LeftLabelPanel = new JPanel();
@@ -368,7 +378,13 @@ public class Active_1D_ScanPanel extends JPanel {
 		rightMarkerPanel_1D_valueButton.add(panel_14, BorderLayout.SOUTH);
 		panel_14.setLayout(new BorderLayout(0, 0));
 
-		JButton btnRightMarkerButton = new JButton("Move");
+		btnRightMarkerButton = new JButton("Move");
+		btnRightMarkerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scan1PosPnPV[selectedPositioner].movePositioner(lblRightMarkerValue.getText());
+
+			}
+		});
 		panel_14.add(btnRightMarkerButton);
 
 		JPanel rightMarkerPanel_1D_RightLabelPanel = new JPanel();
@@ -403,7 +419,13 @@ public class Active_1D_ScanPanel extends JPanel {
 		centerMarkerPanel_1D_valueButton.add(panel_16, BorderLayout.SOUTH);
 		panel_16.setLayout(new BorderLayout(0, 0));
 
-		JButton btnCenterMarkerButton = new JButton("Move");
+		btnCenterMarkerButton = new JButton("Move");
+		btnCenterMarkerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scan1PosPnPV[selectedPositioner].movePositioner(lblCenterMarkerValue.getText());
+
+			}
+		});
 		panel_16.add(btnCenterMarkerButton);
 
 		JPanel centerMarkerPanel_1D_CenterLabelPanel = new JPanel();
@@ -822,6 +844,37 @@ public class Active_1D_ScanPanel extends JPanel {
 		return checkRange;
 	}
 
+	public void setHMarkers() {
+		yaxis = chart.getDataView(0).getYAxis();
+		runSafe(new Runnable() {
+			public void run() {
+
+
+
+				double d1 = yaxis.getMin();
+				double d2 = yaxis.getMax();
+				double d3 = d1 + (0.25 * (d2 - d1));
+				double d4 = d1 + (0.75 * (d2 - d1));
+				double d5 = (d3 + d4) / 2.0;
+
+				hMarker1.setValue(d3);
+				hMarker2.setValue(d4);
+				hMarkerCenter.setValue(d5);
+
+				hMarker1Pos = hMarker1.getValue();
+				hMarker2Pos = hMarker2.getValue();
+				hMarkerCenterPos = hMarkerCenter.getValue();
+
+				setHorzTopValue(hMarker2Pos);
+				setHorzBotValue(hMarker1Pos);
+				setHorzCenterValue(hMarkerCenterPos);
+				setHorzWidthValue(getWidth(d3, d4));
+
+//				data1D.updateChartDisplay();
+			}
+		});
+	}
+	
 	public void setMarkers() {
 
 		xaxis = chart.getDataView(0).getXAxis();
@@ -1475,8 +1528,6 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public void setDetectorName(int det, String str) {
-		// System.out.println(" In MainPanel setDetectorName "+" det = "+det+" str =
-		// "+str);
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		JCheckBox jb = detPanel.getDetPanelCheckBox();
 		String firstPart;
@@ -1499,8 +1550,6 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb);
 		pvDescription.makeEpicsDataObject();
-		// new Thread (pvDescription).start();
-		// countDownConnection.pendIO();
 		detName = pvDescription.getDescription();
 		jb.setText(detName);
 		pvDescription.disconnectChannel();
@@ -1558,6 +1607,12 @@ public class Active_1D_ScanPanel extends JPanel {
 		}
 	}
 
+	public void setMoveButtonsEnable(boolean b) {
+		btnLeftMarkerButton.setEnabled(b);
+		btnRightMarkerButton.setEnabled(b);
+		btnCenterMarkerButton.setEnabled(b);
+
+	}
 	public void setScan1PosPv(PositionerPnPV[] pp) {
 		for (int i = 0; i < 4; i++) {
 			scan1PosPnPV[i] = pp[i];
