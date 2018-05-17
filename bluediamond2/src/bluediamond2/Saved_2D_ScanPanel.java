@@ -36,6 +36,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
 
 public class Saved_2D_ScanPanel extends JPanel {
 
@@ -45,6 +46,9 @@ public class Saved_2D_ScanPanel extends JPanel {
     double pickedX;
     double pickedY;
     private final double HOLE_VALUE = Double.MAX_VALUE;
+
+	int selectedPositioner_X = 0;
+	int selectedPositioner_Y = 0;
 
     ButtonGroup xPos_2DGroup = new ButtonGroup();
     ButtonGroup yPos_2DGroup = new ButtonGroup();
@@ -100,7 +104,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 		setLayout(springLayout);
 
 		JPanel leftPanel_2D = new JPanel();
-		leftPanel_2D.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(192, 192, 192), new Color(192, 192, 192)));
+		leftPanel_2D.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), Color.GREEN, Color.GREEN));
 		springLayout.putConstraint(SpringLayout.NORTH, leftPanel_2D, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, leftPanel_2D, 10, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, leftPanel_2D, 189, SpringLayout.WEST, this);
@@ -116,7 +120,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 		leftPanel_2D.setLayout(sl_leftPanel_2D);
 
 		JPanel surfaceCountourPanel = new JPanel();
-		surfaceCountourPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 255, 255)), UIManager.getBorder("Button.border")));
+		surfaceCountourPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 0)), new EtchedBorder(EtchedBorder.RAISED, new Color(0, 255, 255), new Color(0, 255, 255))));
 		sl_leftPanel_2D.putConstraint(SpringLayout.NORTH, surfaceCountourPanel, 10, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.WEST, surfaceCountourPanel, 10, SpringLayout.WEST, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, surfaceCountourPanel, 62, SpringLayout.NORTH, leftPanel_2D);
@@ -124,6 +128,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 		leftPanel_2D.add(surfaceCountourPanel);
 
 		JPanel xyzPanel = new JPanel();
+		xyzPanel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE));
 		sl_leftPanel_2D.putConstraint(SpringLayout.NORTH, xyzPanel, 6, SpringLayout.SOUTH, surfaceCountourPanel);
 		sl_leftPanel_2D.putConstraint(SpringLayout.WEST, xyzPanel, 10, SpringLayout.WEST, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.EAST, xyzPanel, 169, SpringLayout.WEST, leftPanel_2D);
@@ -161,19 +166,19 @@ public class Saved_2D_ScanPanel extends JPanel {
 		JLabel x_AxisPosLabel2D = new JLabel("X = ");
 		xyzPanel.add(x_AxisPosLabel2D, "cell 0 0");
 
-		x_Pos_2D_value = new JLabel("New label");
+		x_Pos_2D_value = new JLabel("");
 		xyzPanel.add(x_Pos_2D_value, "cell 1 0");
 
 		JLabel y_AxisPosLabel2D = new JLabel("Y =");
 		xyzPanel.add(y_AxisPosLabel2D, "cell 0 1");
 
-		y_Pos_2D_value = new JLabel("New label");
+		y_Pos_2D_value = new JLabel("");
 		xyzPanel.add(y_Pos_2D_value, "cell 1 1");
 
 		JLabel intensityLabel_2D = new JLabel("Int=");
 		xyzPanel.add(intensityLabel_2D, "cell 0 2");
 
-		int_2D_value = new JLabel("New label");
+		int_2D_value = new JLabel("");
 		xyzPanel.add(int_2D_value, "cell 1 2");
 		leftPanel_2D.add(positioner_2D_Panel);
 
@@ -193,16 +198,48 @@ public class Saved_2D_ScanPanel extends JPanel {
 		xAxisPositionersPanel_2D.setLayout(new GridLayout(4, 0, 0, 0));
 		
 		JCheckBox chckbx_2D_Xpositioner1 = new JCheckBox("X-Positioner 1");
+		chckbx_2D_Xpositioner1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPositioner_X = 0;
+				setX_AxisTitle(posXDesc[0]);
+				oldData2D.setSelectedPositioner_X(0);
+
+			}
+		});
 		chckbx_2D_Xpositioner1.setSelected(true);
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner1);
 		
 		JCheckBox chckbx_2D_Xpositioner2 = new JCheckBox("X-Positioner 2");
+		chckbx_2D_Xpositioner2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_X = 1;
+				setX_AxisTitle(posXDesc[1]);
+
+				oldData2D.setSelectedPositioner_X(1);
+			}
+		});
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner2);
 		
 		JCheckBox chckbx_2D_Xpositioner3 = new JCheckBox("X-Positioner 3");
+		chckbx_2D_Xpositioner3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_X = 2;
+				setX_AxisTitle(posXDesc[2]);
+
+				oldData2D.setSelectedPositioner_X(2);
+			}
+		});
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner3);
 		
 		JCheckBox chckbx_2D_Xpositioner4 = new JCheckBox("X-Positioner 4");
+		chckbx_2D_Xpositioner4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_X = 3;
+				setX_AxisTitle(posXDesc[3]);
+
+				oldData2D.setSelectedPositioner_X(3);
+			}
+		});
 		xAxisPositionersPanel_2D.add(chckbx_2D_Xpositioner4);
 
 		xPos_2DGroup.add(chckbx_2D_Xpositioner1);
@@ -220,16 +257,44 @@ public class Saved_2D_ScanPanel extends JPanel {
 		yAxisPositionersPanel_2D.setLayout(new GridLayout(4, 0, 0, 0));
 		
 		JCheckBox chckbx_2D_Ypositioner1 = new JCheckBox("Y-Positioner 1");
+		chckbx_2D_Ypositioner1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_Y = 0;
+				setY_AxisTitle(posYDesc[0]);
+				oldData2D.setSelectedPositioner_Y(0);
+			}
+		});
 		chckbx_2D_Ypositioner1.setSelected(true);
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner1);
 		
 		JCheckBox chckbx_2D_Ypositioner2 = new JCheckBox("Y-Positioner 2");
+		chckbx_2D_Ypositioner2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_Y = 1;
+				setY_AxisTitle(posYDesc[1]);
+				oldData2D.setSelectedPositioner_Y(1);
+			}
+		});
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner2);
 		
 		JCheckBox chckbx_2D_Ypositioner3 = new JCheckBox("Y-Positioner 3");
+		chckbx_2D_Ypositioner3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_Y = 2;
+				setY_AxisTitle(posYDesc[2]);
+				oldData2D.setSelectedPositioner_Y(2);
+			}
+		});
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner3);
 		
 		JCheckBox chckbx_2D_Ypositioner4 = new JCheckBox("Y-Positioner 4");
+		chckbx_2D_Ypositioner4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedPositioner_Y = 3;
+				setY_AxisTitle(posYDesc[3]);
+				oldData2D.setSelectedPositioner_Y(3);
+			}
+		});
 		yAxisPositionersPanel_2D.add(chckbx_2D_Ypositioner4);
 		leftPanel_2D.add(detectorLabelPanel);
 		
@@ -270,6 +335,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 		panel_2D_plot.setLayout(new BorderLayout(0, 0));
 
 		chart3dJava2d = new Chart3dJava2d();
+		chart3dJava2d.getComponentArea().setBorder(new LineBorder(Color.CYAN));
 		panel_2D_plot.add(chart3dJava2d, BorderLayout.CENTER);
 		dataView3D = chart3dJava2d.getDataView(0);
 		chart3dJava2d.getActionTable().addAllDefaultActions();
@@ -367,7 +433,6 @@ public class Saved_2D_ScanPanel extends JPanel {
 				x_Pos_2D_value.setText(String.valueOf(pickedX));
 				y_Pos_2D_value.setText(String.valueOf(pickedY));
 				int_2D_value.setText(String.valueOf(zz));
-				// System.out.println(" Mouse Clicked in Chart area ");
 			}
 
 		}
@@ -378,6 +443,14 @@ public class Saved_2D_ScanPanel extends JPanel {
 		chart3dJava2d.setHeaderText(str);
 	}
 
+	public void setX_AxisTitle(String str) {
+		chart3dJava2d.setXAxisTitleText(str);		
+	}	
+	
+	public void setY_AxisTitle(String str) {
+		chart3dJava2d.setYAxisTitleText(str);
+	}
+	
 	public void setXPositionerVisible_2D(int pos, boolean b) {
 		JCheckBox jb = posX2DMap.get(pos);
 		jb.setEnabled(b);
@@ -405,7 +478,6 @@ public class Saved_2D_ScanPanel extends JPanel {
 			setYPositionerVisible_2D(i,false);
 		}
 	}
-
 
 	public void setFile(File inFile) {
         String tempString;
@@ -463,7 +535,7 @@ public class Saved_2D_ScanPanel extends JPanel {
             
             for (int i = 0; i < 4; i++) {
                 if (i < numXPos) {
-                    tempString = posXDesc[i].trim();
+                     tempString = posXDesc[i].trim();
                     if (tempString.equals("")) {
                         tempString = posXName[i].trim();
                     }
@@ -488,12 +560,21 @@ public class Saved_2D_ScanPanel extends JPanel {
             for (int i = 0; i < 60; i++) {
             	tempString = " ";
                 if (i < numDets) {
- 
+ /*
                     tempString = detDesc[i].trim();
+                    System.out.println(" Detector Description "+ i+" = "+tempString+"  Name = "+detName[i]);
+
                     if (tempString.equals("")) {
                         tempString = detName[i].trim();
+                        System.out.println(" Detector Description because description was blank "+ i+" = "+tempString);
+
                     }
-                    add2DDetector(tempString);
+                    
+                    */
+                	
+                	tempString = detName[i].trim();
+                     add2DDetector(tempString);
+
                 } 
             }
 
@@ -531,7 +612,11 @@ public class Saved_2D_ScanPanel extends JPanel {
             oldData2D.setXPosdata(xVal);
             oldData2D.setYPosdata(yVal);
             oldData2D.setZData(zVal, numDets, numXPoints, numCurrentYPoint);
+            oldData2D.reScale();
             oldData2D.plotData();
+			setY_AxisTitle(posYDesc[0]);
+			setX_AxisTitle(posXDesc[0]);
+
         }		
 	}
 	

@@ -147,11 +147,23 @@ public class OldData2D extends JCDefault3dGridDataSource {
 			for (int j = 0; j < b; j++) {
 				for (int k = 0; k < c; k++) {
 					z2D[i][j][k] = v[i][j][k];
+//					System.out.println(" Z-Value = "+z2D[i][j][k]);
 				}
 			}
 		}
 		// findMinMaxZvalue(yNumPoints);
 	}
+
+    public void reScale() {
+        xGrid = new double[xNumPoints];
+        for (int i = 0; i < xNumPoints; i++) {
+            xGrid[i] = x2D[selectedPositioner_X][i];
+        }
+        yGrid = new double[yNumPoints];
+        for (int i = 0; i < yNumPoints; i++) {
+            yGrid[i] = y2D[selectedPositioner_Y][i];
+        }
+    }
 
     public void setDefault1DPositioner(int n) {
         setSelectedPositionerX(n);
@@ -209,13 +221,26 @@ public class OldData2D extends JCDefault3dGridDataSource {
 
     public void setDefaultDetector(int n) {
         selectedDetector = n;
+//		plotData();
+
     }
+    
+	public void setSelectedPositioner_X(int pos){
+		selectedPositioner_X = pos;
+		plotData();
+	}
+	public void setSelectedPositioner_Y(int pos){
+		selectedPositioner_Y = pos;
+		plotData();
+	}
+
 	public void setSelectedDetector(int det){
 		selectedDetector = det;
 		plotData();
 	}
 
 	public void plotData() {
+		
 		chart3d.setBatched(true);
 		for (int i = 0; i < xNumPoints; i++) {
 			xGrid[i] = x2D[selectedPositioner_X][i];
