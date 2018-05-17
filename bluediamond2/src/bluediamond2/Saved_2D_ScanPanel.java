@@ -34,6 +34,8 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.UIManager;
 
 public class Saved_2D_ScanPanel extends JPanel {
 
@@ -98,7 +100,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 		setLayout(springLayout);
 
 		JPanel leftPanel_2D = new JPanel();
-		leftPanel_2D.setBorder(new BevelBorder(BevelBorder.RAISED, Color.GREEN, Color.GREEN, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
+		leftPanel_2D.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(192, 192, 192), new Color(192, 192, 192)));
 		springLayout.putConstraint(SpringLayout.NORTH, leftPanel_2D, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, leftPanel_2D, 10, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, leftPanel_2D, 189, SpringLayout.WEST, this);
@@ -106,14 +108,15 @@ public class Saved_2D_ScanPanel extends JPanel {
 
 		JPanel panel_2D_plot = new JPanel();
 		springLayout.putConstraint(SpringLayout.WEST, panel_2D_plot, 1, SpringLayout.EAST, leftPanel_2D);
+		springLayout.putConstraint(SpringLayout.SOUTH, panel_2D_plot, -10, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, panel_2D_plot, -8, SpringLayout.EAST, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, leftPanel_2D, 0, SpringLayout.SOUTH, panel_2D_plot);
 		springLayout.putConstraint(SpringLayout.NORTH, panel_2D_plot, 10, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, panel_2D_plot, 514, SpringLayout.NORTH, this);
 		SpringLayout sl_leftPanel_2D = new SpringLayout();
 		leftPanel_2D.setLayout(sl_leftPanel_2D);
 
 		JPanel surfaceCountourPanel = new JPanel();
+		surfaceCountourPanel.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 255, 0), new Color(0, 255, 0), new Color(0, 255, 255), new Color(0, 255, 255)), UIManager.getBorder("Button.border")));
 		sl_leftPanel_2D.putConstraint(SpringLayout.NORTH, surfaceCountourPanel, 10, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.WEST, surfaceCountourPanel, 10, SpringLayout.WEST, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, surfaceCountourPanel, 62, SpringLayout.NORTH, leftPanel_2D);
@@ -176,6 +179,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 
 		JPanel detectorLabelPanel = new JPanel();
 		sl_leftPanel_2D.putConstraint(SpringLayout.NORTH, detectorLabelPanel, 300, SpringLayout.NORTH, leftPanel_2D);
+		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, detectorLabelPanel, 320, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, positioner_2D_Panel, -6, SpringLayout.NORTH, detectorLabelPanel);
 		sl_leftPanel_2D.putConstraint(SpringLayout.WEST, detectorLabelPanel, 0, SpringLayout.WEST, surfaceCountourPanel);
 		sl_leftPanel_2D.putConstraint(SpringLayout.EAST, detectorLabelPanel, 169, SpringLayout.WEST, leftPanel_2D);
@@ -241,8 +245,7 @@ public class Saved_2D_ScanPanel extends JPanel {
 
 		
 		JPanel detectorSelectionPanel = new JPanel();
-		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, detectorLabelPanel, -6, SpringLayout.NORTH, detectorSelectionPanel);
-		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, detectorSelectionPanel, -158, SpringLayout.SOUTH, leftPanel_2D);
+		sl_leftPanel_2D.putConstraint(SpringLayout.SOUTH, detectorSelectionPanel, 346, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.NORTH, detectorSelectionPanel, 326, SpringLayout.NORTH, leftPanel_2D);
 		sl_leftPanel_2D.putConstraint(SpringLayout.WEST, detectorSelectionPanel, 0, SpringLayout.WEST, surfaceCountourPanel);
 		sl_leftPanel_2D.putConstraint(SpringLayout.EAST, detectorSelectionPanel, 0, SpringLayout.EAST,
@@ -389,8 +392,6 @@ public class Saved_2D_ScanPanel extends JPanel {
 	
 	public void add2DDetector(String str){
 		detComboBox_2D.addItem(str);
-		System.out.println(" Adding Detector "+str+"  total = "+detComboBox_2D.getItemCount());
-
 	}
 	
 	public void clear2dDetector(){
