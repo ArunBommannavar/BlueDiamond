@@ -17,6 +17,7 @@ import com.klg.jclass.chart3d.j2d.beans.Chart3dJava2d;
 
 import edu.ciw.hpcat.epics.data.CountDownConnection;
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
+import gov.aps.jca.Context;
 
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
@@ -45,6 +46,8 @@ import javax.swing.border.BevelBorder;
 import java.awt.Font;
 
 public class Active_2D_ScanPanel extends JPanel {
+
+	Context context;
 
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
@@ -371,6 +374,10 @@ public class Active_2D_ScanPanel extends JPanel {
 		data2D = d2;
 	}
 	
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
 	public void setScan1PositionerParms(Scan1PositionerParms scan1PositionerParms) {
 		this.scan1PositionerParms = scan1PositionerParms;
 	}
@@ -428,9 +435,8 @@ public class Active_2D_ScanPanel extends JPanel {
 		rtyp = pvObject.getVal();
 		pvObject.setDropPv(true);
 
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb);
+		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
-//		countDownConnection.pendIO();
 		jb.setText(pvDescription.getDescription());
 		pvDescription.disconnectChannel();
 	}

@@ -29,6 +29,10 @@ import javax.swing.UIManager;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
 import edu.ciw.hpcat.epics.data.*;
+import gov.aps.jca.CAException;
+import gov.aps.jca.Context;
+import gov.aps.jca.JCALibrary;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -39,6 +43,9 @@ public class BlueDiamond {
 	LogoPanel logoPanel = new LogoPanel();
 
 	private JFrame frame;
+	
+	private Context context = null;
+
 	Config config = null;
 	String scan1Str = "mnbmnb ";
 	String scan2Str = "gfdfgdfgd ";
@@ -123,6 +130,8 @@ public class BlueDiamond {
 		// frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(logoPanel, java.awt.BorderLayout.CENTER);
 		// frame.getContentPane().getComponent(0).setName("BlueDiamond");
+		
+		initializeJCA();
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -243,6 +252,18 @@ public class BlueDiamond {
 
 	}
 
+	
+	private void initializeJCA() {
+		JCALibrary jca = JCALibrary.getInstance();
+		// Create a context with default configuration values.
+		try {
+			context = jca.createContext(JCALibrary.CHANNEL_ACCESS_JAVA);
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void closeApplication() {
 		if (scanMonitor != null)
 			scanMonitor.disconnectChannel();
@@ -253,6 +274,19 @@ public class BlueDiamond {
 		if (scan2PositionerParms != null)
 			scan2PositionerParms.disconnectChannel();
 		System.exit(0);
+	}
+	
+	
+	private void closeJCAChannels() {
+		try {
+
+			// Destroy the context, check if never initialized.
+			if (context != null)
+				context.destroy();
+
+		} catch (Throwable th) {
+			th.printStackTrace();
+		}
 
 	}
 
@@ -287,8 +321,6 @@ public class BlueDiamond {
 				int scanNumber = inData.readInt();
 				int dataRank = inData.readInt();
 				
-//				System.out.println(" Version = "+version+"  scan number = "+scanNumber+" data rank = "+dataRank);
-				
 				inData.close();
 				if (dataRank==1) {
 					
@@ -305,7 +337,6 @@ public class BlueDiamond {
 				}
 
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
@@ -402,12 +433,10 @@ public class BlueDiamond {
 			scan1Str = parms[0].trim();
 			scan2Str = parms[1].trim();
 
-			scan1PositionerParms = new Scan1PositionerParms(scan1Str);
-			scan1DetectorParms = new Scan1DetectorParms(scan1Str);
-			scan2PositionerParms = new Scan2PositionerParms(scan2Str);
+			scan1PositionerParms = new Scan1PositionerParms(scan1Str,context);
+			scan1DetectorParms = new Scan1DetectorParms(scan1Str,context);
+			scan2PositionerParms = new Scan2PositionerParms(scan2Str,context);
 
-			scan1PositionerParms.initPnPV_values();
-			// mainPanel = new MainPanel_1();
 			mainPanel = new MainPanel();
 
 			chart = mainPanel.getChart();
@@ -426,7 +455,7 @@ public class BlueDiamond {
 			mainPanel.set2DDataSource(data2D);
 			chart.getDataView(0).setDataSource(data1D);
 
-			scanMonitor = new ScanMonitor(scan1Str, scan2Str);
+			scanMonitor = new ScanMonitor(scan1Str, scan2Str, context);
 			scanMonitor.setData1D(data1D);
 			scanMonitor.setData2D(data2D);
 

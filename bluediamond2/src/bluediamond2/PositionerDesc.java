@@ -17,7 +17,8 @@ public class PositionerDesc implements PropertyChangeListener{
 	PropertyChangeSupport changes = new PropertyChangeSupport(this);
 	String changePropertyName ;
 
-    public PositionerDesc(String str) {       
+    public PositionerDesc(String str) {  
+    	System.out.println(" PositionerDesc Constructor ");
     	descStr = str; 
      }
     

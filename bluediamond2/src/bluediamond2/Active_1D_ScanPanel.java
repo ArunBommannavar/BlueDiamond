@@ -15,6 +15,12 @@ import javax.swing.JPanel;
 
 import edu.ciw.hpcat.epics.data.CountDownConnection;
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
+import gov.aps.jca.CAException;
+import gov.aps.jca.Channel;
+import gov.aps.jca.Context;
+import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBRType;
 
 import javax.swing.SpringLayout;
 import java.awt.BorderLayout;
@@ -57,8 +63,10 @@ import java.awt.Font;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
-
+import gov.aps.jca.dbr.STRING;
 public class Active_1D_ScanPanel extends JPanel {
+	
+	Context context;
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 	private JTextField xRangeMinTextField;
 	private JTextField xRangeMaxTextField;
@@ -810,6 +818,10 @@ public class Active_1D_ScanPanel extends JPanel {
 
 	}
 
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
 	public static void runSafe(Runnable task) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			task.run();
@@ -1451,22 +1463,48 @@ public class Active_1D_ScanPanel extends JPanel {
 		JCheckBox jb = posXMap.get(pos);
 		String firstPart;
 		String secondPart;
-		String rtyp;
+		String rtyp = str;
 		int lastIndexOfDot;
 		String pvName;
 		EpicsDataObject pvObject;
+		Channel channel;
 
 		lastIndexOfDot = str.lastIndexOf(".");
 		firstPart = str.substring(0, lastIndexOfDot);
 		secondPart = str.substring(lastIndexOfDot + 1);
 		pvName = firstPart + ".RTYP";
-		pvObject = new EpicsDataObject(pvName, true);
-		countDownConnection.pendIO();
+		
+		try {
+			channel = context.createChannel(pvName);
+			context.pendIO(1.0);
+			DBR dbr = channel.get(DBRType.STRING, 1);
+			context.pendIO(1.0);
+			rtyp = ((STRING) dbr).getStringValue()[0];
+			channel.destroy();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+//		pvObject = new EpicsDataObject(pvName, true);
+//		countDownConnection.pendIO();
+//		rtyp = pvObject.getVal();
+//		pvObject.setDropPv(true);
 
-		rtyp = pvObject.getVal();
-		pvObject.setDropPv(true);
-
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb);
+		
+		
+		
+		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
 
 		jb.setText(pvDescription.getDescription());
@@ -1483,7 +1521,6 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setDetVisible(int det, boolean b) {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		detPanel.setVisible(b);
-
 	}
 
 	public void setDetEnable(int det, boolean b) {
@@ -1548,7 +1585,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		rtyp = pvObject.getVal();
 		pvObject.setDropPv(true);
 
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb);
+		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
 		detName = pvDescription.getDescription();
 		jb.setText(detName);

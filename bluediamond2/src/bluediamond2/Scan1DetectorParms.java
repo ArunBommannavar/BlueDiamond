@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ciw.hpcat.epics.data.CountDownConnection;
+import gov.aps.jca.Context;
 
 public class Scan1DetectorParms {
 	
+	Context context;
+
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 	private int numberOfDetectors = 60;
 	DetectorPV[] detPV = new DetectorPV[numberOfDetectors];
@@ -20,7 +23,8 @@ public class Scan1DetectorParms {
 
 	boolean initDet = false;
 
-	public Scan1DetectorParms(String str) {
+	public Scan1DetectorParms(String str,Context context) {
+		this.context = context;
 		scanPv = str;
 	}
 
@@ -28,17 +32,17 @@ public class Scan1DetectorParms {
 		int j;
 		for (int i = 0; i < numberOfDetectors; i++) {
 			j = i + 1;
-			detNV[i] = new DetectorNV(scanPv, j);
+			detNV[i] = new DetectorNV(scanPv, j,context);
 			detNV[i].createPV();
-			detPV[i] = new DetectorPV(scanPv, j);
+			detPV[i] = new DetectorPV(scanPv, j,context);
 			detPV[i].createPV();
 		}
 		countDownConnection.pendIO();
 		for (int i = 0; i < numberOfDetectors; i++) {
 			j = i + 1;
-			detCV[i] = new DetectorCV(scanPv, j);
+			detCV[i] = new DetectorCV(scanPv, j,context);
 			detCV[i].createPV();
-			detDnnRA[i] = new DetectorDnnRA(scanPv, j);
+			detDnnRA[i] = new DetectorDnnRA(scanPv, j,context);
 			detDnnRA[i].createPV();
 		}
 		countDownConnection.pendIO();

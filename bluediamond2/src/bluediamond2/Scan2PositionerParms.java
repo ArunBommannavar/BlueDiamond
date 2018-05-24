@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ciw.hpcat.epics.data.CountDownConnection;
+import gov.aps.jca.Context;
 
 public class Scan2PositionerParms {
+	
+	Context context;
 	
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
@@ -25,7 +28,8 @@ public class Scan2PositionerParms {
 	List<Integer> validPos = new ArrayList<Integer>();
 	boolean initPos = false;
 	
-	public Scan2PositionerParms(String str) {
+	public Scan2PositionerParms(String str,Context context) {
+		this.context = context;
 		this.scanPv = str;
 	}
 	public void createPosPVs() {
@@ -34,31 +38,31 @@ public class Scan2PositionerParms {
 
 		for (int i = 0; i < numberOfPositioners; i++) {
 			j= i + 1;
-			posNV[i] = new PositionerNV(scanPv, j);					
+			posNV[i] = new PositionerNV(scanPv, j,context);					
 			posNV[i].createPV();
 			
-			posMin[i] = new PositionerMin(scanPv, j);	
+			posMin[i] = new PositionerMin(scanPv, j,context);	
 			posMin[i].createPV();
 			
-			posWidth[i] = new PositionerWidth(scanPv,j);
+			posWidth[i] = new PositionerWidth(scanPv,j,context);
 			posWidth[i].createPV();
 			
-			posRelAbs[i] = new PositionerRelAbs(scanPv, j);	
+			posRelAbs[i] = new PositionerRelAbs(scanPv, j,context);	
 			posRelAbs[i].createPV();
 			
-			posPnPV[i] = new PositionerPnPV(scanPv, j);	
+			posPnPV[i] = new PositionerPnPV(scanPv, j,context);	
 			posPnPV[i].createPV();
 			
-			posPnPA[i] = new PositionerPnPA(scanPv,j);
+			posPnPA[i] = new PositionerPnPA(scanPv,j,context);
 			posPnPA[i].createPV();				
 
-			posPnPP[i] = new PositionerPnPP(scanPv, j);
+			posPnPP[i] = new PositionerPnPP(scanPv, j,context);
 			posPnPP[i].createPV();
 			
-			posScanMode[i] = new PositionerScanMode(scanPv, j);	
+			posScanMode[i] = new PositionerScanMode(scanPv, j,context);	
 			posScanMode[i].createPV();
 			
-			posPnRA[i] = new PositionerPnRA(scanPv, j);
+			posPnRA[i] = new PositionerPnRA(scanPv, j,context);
 			posPnRA[i].createPV();
 		}
 	}

@@ -10,9 +10,11 @@ import java.util.List;
 import javax.swing.JCheckBox;
 
 import edu.ciw.hpcat.epics.data.CountDownConnection;
+import gov.aps.jca.Context;
 
 public class ScanMonitor implements PropertyChangeListener, Runnable {
 
+	Context context;
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	String scan1Prefix = "";
@@ -75,28 +77,29 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	
 //	MainPanel_1 mainPanel;
 
-	public ScanMonitor(String s1, String s2) {
+	public ScanMonitor(String s1, String s2,Context context) {
+		this.context = context;
 		this.scan1Prefix = s1;
 		this.scan2Prefix = s2;
 	}
 
 	public void createScanPVS() {
-		scan1CPTObj = new CPT(scan1Prefix + ".CPT");
-		scan2CPTObj = new CPT(scan2Prefix + ".CPT");
+		scan1CPTObj = new CPT(scan1Prefix + ".CPT",context);
+		scan2CPTObj = new CPT(scan2Prefix + ".CPT",context);
 
-		scan1NPTSObj = new NPTS(scan1Prefix + ".NPTS");
-		scan2NPTSObj = new NPTS(scan2Prefix + ".NPTS");
-		saveFileNameObj = new SaveFileName(scan1Prefix);
-		scanStatusMessageObj = new ScanStatusMessage(scan1Prefix+".SMSG");
+		scan1NPTSObj = new NPTS(scan1Prefix + ".NPTS",context);
+		scan2NPTSObj = new NPTS(scan2Prefix + ".NPTS",context);
+		saveFileNameObj = new SaveFileName(scan1Prefix,context);
+		scanStatusMessageObj = new ScanStatusMessage(scan1Prefix+".SMSG",context);
 
-		scan1VALObj = new ScanVAL(scan1Prefix + ".VAL");
-		scan1EXSCObj = new ScanEXSC(scan1Prefix + ".EXSC");
-		scan1DSTATEObj = new ScanDSTATE(scan1Prefix + ".DSTATE");
-		scan1DATAObj = new ScanDATA(scan1Prefix + ".DATA");
-		scan1BUSYObj = new ScanBUSY(scan1Prefix + ".BUSY");
+		scan1VALObj = new ScanVAL(scan1Prefix + ".VAL",context);
+		scan1EXSCObj = new ScanEXSC(scan1Prefix + ".EXSC",context);
+		scan1DSTATEObj = new ScanDSTATE(scan1Prefix + ".DSTATE",context);
+		scan1DATAObj = new ScanDATA(scan1Prefix + ".DATA",context);
+		scan1BUSYObj = new ScanBUSY(scan1Prefix + ".BUSY",context);
 
-		scan2EXSCObj = new ScanEXSC(scan2Prefix + ".EXSC");
-		scan2BUSYObj = new ScanBUSY(scan2Prefix + ".BUSY");
+		scan2EXSCObj = new ScanEXSC(scan2Prefix + ".EXSC",context);
+		scan2BUSYObj = new ScanBUSY(scan2Prefix + ".BUSY",context);
 
 		scan1CPTObj.createPV();
 		scan2CPTObj.createPV();
@@ -357,7 +360,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void setMainPanel_1D_PositionerNames() {
 
-		//System.out.println(" In setMainPanel_1D_PositionerNames ");
 		validPos1.forEach((n) -> {
 			active_1D_ScanPanel.setXPositionerVisible_1D(n, true);
 			final String str = scan1PositionerParms.getPosPnPV(n);

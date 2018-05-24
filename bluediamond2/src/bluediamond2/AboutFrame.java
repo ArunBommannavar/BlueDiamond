@@ -21,9 +21,9 @@ public class AboutFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	LogoPanel logoPanel = new LogoPanel();
-	JPanel infoPanel;
-	JLabel lblNewLabel;
+	private LogoPanel logoPanel = new LogoPanel();
+	private JPanel infoPanel;
+	private JLabel lblNewLabel;
 	private JButton btnNewButton;
 	
 	
@@ -60,7 +60,7 @@ public class AboutFrame extends JFrame {
 		contentPane.add(infoPanel, BorderLayout.NORTH);
 		infoPanel.setLayout(new BorderLayout(0, 0));
 		
-		lblNewLabel = new JLabel("<html>Bluediamond<br>Author: Arun Bommannavar<br>(Build Date: April 16,2018)</htlm>");
+		lblNewLabel = new JLabel("<html>Bluediamond<br>Author: Arun Bommannavar<br>(Build Date: May 22,2018)</htlm>");
 		lblNewLabel.setBackground(new Color(253, 245, 230));
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);

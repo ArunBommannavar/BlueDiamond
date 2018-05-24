@@ -5,8 +5,15 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import edu.ciw.hpcat.epics.data.EpicsDataObject;
+import gov.aps.jca.CAException;
+import gov.aps.jca.Channel;
+import gov.aps.jca.Context;
+import gov.aps.jca.TimeoutException;
 
 public class ScanBUSY implements PropertyChangeListener{
+	
+	Context context;
+	Channel channel = null;
 	
 	EpicsDataObject pvObject;
 	String pvName;
@@ -15,7 +22,8 @@ public class ScanBUSY implements PropertyChangeListener{
 	String changePropertyName = " " ;
 	String valString = "";
 
-	public ScanBUSY(String str){
+	public ScanBUSY(String str,Context context){
+		this.context = context;
 		pvName = str;
 		
 	}
@@ -25,11 +33,42 @@ public class ScanBUSY implements PropertyChangeListener{
 		pvObject.addPropertyChangeListener("val", this);
 	
 	}
-    public void disconnectChannel() {
-        if (pvObject != null) {
-        	pvObject.setDropPv(true);
-        }
-    }
+	
+	public void createChannel() {
+		try {
+			channel = context.createChannel(pvName);
+            context.pendIO(3.0);
+ 
+		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
+			
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			
+			e.printStackTrace();
+		}
+	}
+
+	public void disconnectChannel() {
+		
+		
+		try {
+			if (channel!=null)
+			channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	/*
+	if (pvObject != null) {
+		pvObject.setDropPv(true);
+	}
+	*/
+}
+
 	public void addPropertyChangeListener(String str, PropertyChangeListener l) {
 		changePropertyName = str;
 		changes.addPropertyChangeListener(str, l);

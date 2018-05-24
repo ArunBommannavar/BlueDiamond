@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ciw.hpcat.epics.data.CountDownConnection;
+import gov.aps.jca.Context;
 
 public class Scan1PositionerParms {
 	
+	
+	Context context;
 	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	private String scanPv;
@@ -22,15 +25,13 @@ public class Scan1PositionerParms {
 	private PositionerRelAbs[] posRelAbs = new PositionerRelAbs[numberOfPositioners];
 	private PositionerScanMode[] posScanMode = new PositionerScanMode[numberOfPositioners];	
 	private PositionerPnRA[] posPnRA = new PositionerPnRA[numberOfPositioners];	
-	private PositionerDesc[] posDesc = new PositionerDesc[numberOfPositioners];
-	
-	private String[] pnpv_values = new String[numberOfPositioners];
-	
+		
 	List<Integer> validPos = new ArrayList<Integer>();
 	boolean initPos = false;
 	Data1D data1D;
 
-	public Scan1PositionerParms(String str) {
+	public Scan1PositionerParms(String str, Context context) {
+		this.context = context;
 		this.scanPv = str;
 	}
 	public void createPosPVs() {
@@ -38,34 +39,34 @@ public class Scan1PositionerParms {
 		int j;		
 		for (int i = 0; i < numberOfPositioners; i++) {
 			j= i + 1;
-			posNV[i] = new PositionerNV(scanPv, j);					
+			posNV[i] = new PositionerNV(scanPv, j, context);					
 			posNV[i].createPV();
 			
-			posMin[i] = new PositionerMin(scanPv, j);	
+			posMin[i] = new PositionerMin(scanPv, j, context);	
 			posMin[i].createPV();
 			
-			posWidth[i] = new PositionerWidth(scanPv,j);
+			posWidth[i] = new PositionerWidth(scanPv,j, context);
 			posWidth[i].createPV();
 			
-			posRelAbs[i] = new PositionerRelAbs(scanPv, j);	
+			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
 			posRelAbs[i].createPV();
 			
-			posPnPV[i] = new PositionerPnPV(scanPv, j);	
+			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
 			posPnPV[i].createPV();
 
-			posPnPP[i] = new PositionerPnPP(scanPv, j);
+			posPnPP[i] = new PositionerPnPP(scanPv, j, context);
 			posPnPP[i].createPV();
 			
-			posPnPA[i] = new PositionerPnPA(scanPv,j);
+			posPnPA[i] = new PositionerPnPA(scanPv,j, context);
 			posPnPA[i].createPV();	
 			
-			posCV[i] = new PositionerCV(scanPv, j);
+			posCV[i] = new PositionerCV(scanPv, j, context);
 			posCV[i].createPV();
 			
-			posScanMode[i] = new PositionerScanMode(scanPv, j);	
+			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
 			posScanMode[i].createPV();
 			
-			posPnRA[i] = new PositionerPnRA(scanPv, j);
+			posPnRA[i] = new PositionerPnRA(scanPv, j, context);
 			posPnRA[i].createPV();
 		}
 	}
@@ -88,13 +89,6 @@ public class Scan1PositionerParms {
 	    	}
 	   }
 	   
-	   public void initPnPV_values(){
-		   for (int i=0; i< numberOfPositioners;i++){
-			   pnpv_values[i]="NA";
-			   posDesc[i] = null;
-			   
-		   }
-	   }
 	   
 	public void validatePositioners() {
 		boolean b = false;
@@ -127,11 +121,7 @@ public class Scan1PositionerParms {
 	}	
 	public String getPosPnPV(int n){ 
 		return posPnPV[n].getVal();
-	}
-	
-	public String getPosPnPVDesc(int n){
-		return posDesc[n].getValue();
-	}
+	}	
 	public String getPosRelAbs(int n){
 		return posRelAbs[n].getVal();
 	}
