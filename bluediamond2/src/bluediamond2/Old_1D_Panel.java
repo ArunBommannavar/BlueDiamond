@@ -231,7 +231,7 @@ public class Old_1D_Panel extends JPanel {
 		posTable.getColumn("Select").setCellRenderer(new RadioButtonRenderer());
 		posTable.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
 
-		mp.addRow(new Object[] { str1, str2, new Double(d1), new Double(d2), rb1 });
+		mp.addRow(new Object[] { str1, str2,  d1, d2, rb1 });
 		int hrow = mp.getRowCount() - 1;
 		buttonGroup1.add((JRadioButton) mp.getValueAt(hrow, 4));
 		setDefaultPositioner();
@@ -246,9 +246,10 @@ public class Old_1D_Panel extends JPanel {
 		detTable.getColumn("Color").setCellRenderer(new JButtonRenderer());
 		detTable.getColumn("Color").setCellEditor(new JButtonEditor(new JCheckBox()));
 		rb1.doClick();
-		mp.addRow(new Object[] { str1, str2, new Double(d1), new Double(d2), rb1, jb1 });
-		int hrow = mp.getRowCount() - 1;
+		mp.addRow(new Object[] { str1, str2, d1, d2, rb1, jb1 });
 		/*
+		int hrow = mp.getRowCount() - 1;
+		
 		if (selectedDetectorsForDisplay.contains(hrow)) {
 			rb1.doClick();
 		}

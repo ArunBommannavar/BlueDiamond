@@ -38,32 +38,43 @@ public class Scan2PositionerParms {
 
 		for (int i = 0; i < numberOfPositioners; i++) {
 			j= i + 1;
-			posNV[i] = new PositionerNV(scanPv, j,context);					
-			posNV[i].createPV();
+			posNV[i] = new PositionerNV(scanPv, j, context);					
+			posNV[i].createChannel();
+			posNV[i].channelLabels();
+			posNV[i].setMonitor();
 			
-			posMin[i] = new PositionerMin(scanPv, j,context);	
-			posMin[i].createPV();
+			posMin[i] = new PositionerMin(scanPv, j, context);	
+			posMin[i].createChannel();
+			posMin[i].setMonitor();
 			
-			posWidth[i] = new PositionerWidth(scanPv,j,context);
-			posWidth[i].createPV();
+			posWidth[i] = new PositionerWidth(scanPv,j, context);
+			posWidth[i].createChannel();
+			posWidth[i].setMonitor();
 			
-			posRelAbs[i] = new PositionerRelAbs(scanPv, j,context);	
-			posRelAbs[i].createPV();
+			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
+			posRelAbs[i].createChannel();
+			posRelAbs[i].setMonitor();
 			
-			posPnPV[i] = new PositionerPnPV(scanPv, j,context);	
-			posPnPV[i].createPV();
+			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
+			posPnPV[i].createChannel();
+			posPnPV[i].setMonitor();
 			
-			posPnPA[i] = new PositionerPnPA(scanPv,j,context);
-			posPnPA[i].createPV();				
+			posPnPP[i] = new PositionerPnPP(scanPv, j, context);
+			posPnPP[i].createChannel();
+			posPnPP[i].setMonitor();
 
-			posPnPP[i] = new PositionerPnPP(scanPv, j,context);
-			posPnPP[i].createPV();
 			
-			posScanMode[i] = new PositionerScanMode(scanPv, j,context);	
-			posScanMode[i].createPV();
+			posPnPA[i] = new PositionerPnPA(scanPv,j, context);
+			posPnPA[i].createChannel();	
+			posPnPA[i].setMonitor();
 			
-			posPnRA[i] = new PositionerPnRA(scanPv, j,context);
-			posPnRA[i].createPV();
+			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
+			posScanMode[i].createChannel();
+			posScanMode[i].setMonitor();
+					
+			posPnRA[i] = new PositionerPnRA(scanPv, j, context);
+			posPnRA[i].createChannel();
+			posPnRA[i].setMonitor();
 		}
 	}
 	

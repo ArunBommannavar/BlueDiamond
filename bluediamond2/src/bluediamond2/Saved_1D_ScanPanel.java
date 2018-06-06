@@ -16,8 +16,6 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -27,7 +25,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.awt.BorderLayout;
 
@@ -53,7 +50,7 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
-import javax.swing.border.EtchedBorder;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import java.awt.event.ActionListener;
@@ -638,8 +635,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		autoCheckBox.setEnabled(true);
 		userCheckBox.setEnabled(true);
 		setXScaleAuto(true);
-//		showVMarkers();
-//		setMarkers();
 		
 		scanDataViewNum++;
 	}
@@ -657,11 +652,11 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	public void addVisibleTabs() {
 		
-		int selectedPositioner;
-		double tempXMin;
-		double tempXMax;
-		ChartDataView tempDataView;
-		OldData1D tempOldData1D;
+//		int selectedPositioner;
+//		double tempXMin;
+//		double tempXMax;
+//		ChartDataView tempDataView;
+//		OldData1D tempOldData1D;
 		String tempFileNameString;
 		OldFileList tempOldFileList;
 		boolean tabVisible;

@@ -6,10 +6,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.LineBorder;
 
 public class DetectorColorPanel extends JPanel {
 

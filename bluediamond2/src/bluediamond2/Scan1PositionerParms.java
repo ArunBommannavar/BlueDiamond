@@ -2,15 +2,12 @@ package bluediamond2;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.ciw.hpcat.epics.data.CountDownConnection;
 import gov.aps.jca.Context;
 
 public class Scan1PositionerParms {
 	
 	
 	Context context;
-	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	private String scanPv;
 	private int numberOfPositioners = 4;
@@ -40,34 +37,45 @@ public class Scan1PositionerParms {
 		for (int i = 0; i < numberOfPositioners; i++) {
 			j= i + 1;
 			posNV[i] = new PositionerNV(scanPv, j, context);					
-			posNV[i].createPV();
+			posNV[i].createChannel();
+			posNV[i].channelLabels();
+			posNV[i].setMonitor();
 			
 			posMin[i] = new PositionerMin(scanPv, j, context);	
-			posMin[i].createPV();
+			posMin[i].createChannel();
+			posMin[i].setMonitor();
 			
 			posWidth[i] = new PositionerWidth(scanPv,j, context);
-			posWidth[i].createPV();
+			posWidth[i].createChannel();
+			posWidth[i].setMonitor();
 			
 			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
-			posRelAbs[i].createPV();
+			posRelAbs[i].createChannel();
+			posRelAbs[i].setMonitor();
 			
 			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
-			posPnPV[i].createPV();
+			posPnPV[i].createChannel();
+			posPnPV[i].setMonitor();
 
 			posPnPP[i] = new PositionerPnPP(scanPv, j, context);
-			posPnPP[i].createPV();
+			posPnPP[i].createChannel();
+			posPnPP[i].setMonitor();
 			
 			posPnPA[i] = new PositionerPnPA(scanPv,j, context);
-			posPnPA[i].createPV();	
-			
+			posPnPA[i].createChannel();	
+			posPnPA[i].setMonitor();
+					
 			posCV[i] = new PositionerCV(scanPv, j, context);
-			posCV[i].createPV();
+			posCV[i].createChannel();
+			posCV[i].setMonitor();
 			
 			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
-			posScanMode[i].createPV();
-			
+			posScanMode[i].createChannel();
+			posScanMode[i].setMonitor();
+					
 			posPnRA[i] = new PositionerPnRA(scanPv, j, context);
-			posPnRA[i].createPV();
+			posPnRA[i].createChannel();
+			posPnRA[i].setMonitor();
 		}
 	}
 	

@@ -28,14 +28,12 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.vecmath.Point3d;
-import java.awt.GridBagLayout;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
-import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
 public class Saved_2D_ScanPanel extends JPanel {

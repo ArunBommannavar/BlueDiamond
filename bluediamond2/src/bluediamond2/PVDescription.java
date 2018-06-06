@@ -2,8 +2,7 @@ package bluediamond2;
 
 import javax.swing.JCheckBox;
 
-import edu.ciw.hpcat.epics.data.CountDownConnection;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
+
 import gov.aps.jca.CAException;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
@@ -12,7 +11,7 @@ import gov.aps.jca.dbr.DBR;
 import gov.aps.jca.dbr.DBRType;
 import gov.aps.jca.dbr.STRING;
 
-public class PVDescription /* implements Runnable */{
+public class PVDescription{
 
 	Context context;
 	Channel channel = null;
@@ -21,8 +20,6 @@ public class PVDescription /* implements Runnable */{
 	String pvName;
 	String recordType;
 	JCheckBox jCheckBox;
-	EpicsDataObject pvObject1;
-	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	public PVDescription(String str1, String str2, String rc, JCheckBox jc,Context context) {
     	this.context = context;
@@ -52,10 +49,7 @@ public class PVDescription /* implements Runnable */{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-//			pvObject1 = new EpicsDataObject(pvName, true);			
-//			countDownConnection.pendIO();
-			
+
 			
 		} else if (recordType.equals("ao")) {
 			pvName = firstPart + ".DESC";
@@ -77,11 +71,7 @@ public class PVDescription /* implements Runnable */{
 				e.printStackTrace();
 			}
 
-			
-			
-//			pvObject1 = new EpicsDataObject(pvName, true);
-//			countDownConnection.pendIO();
-		
+
 
 		} else if (recordType.equals("scaler")) {
 			String str = secondPart.replace("S", "NM");
@@ -105,9 +95,6 @@ public class PVDescription /* implements Runnable */{
 			}
 
 			
-//			pvObject1 = new EpicsDataObject(pvName, true);
-//			countDownConnection.pendIO();
-			
 		} else if (recordType.equals("transform")) {
 			String str = ".CMT" + secondPart;
 			pvName = firstPart + str;
@@ -129,10 +116,7 @@ public class PVDescription /* implements Runnable */{
 				e.printStackTrace();
 			}
 
-			
-//			pvObject1 = new EpicsDataObject(pvName, true);
-//			countDownConnection.pendIO();
-			
+
 		}
 		
 	}
@@ -152,11 +136,7 @@ public class PVDescription /* implements Runnable */{
 			e.printStackTrace();
 		}
 	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
-	}
-	*/
+
 }
 
 	public String getDescription() {
@@ -179,20 +159,8 @@ public class PVDescription /* implements Runnable */{
 			e.printStackTrace();
 		}
 		
-//		return pvObject1.getVal();
+
 		return ret;
 	}
-/*
-	public void run() {
-		boolean proceed = makeEpicsDataObject();
-		countDownConnection.pendIO();
-		if (proceed) {
-			String descr = pvObject1.getVal();
-			System.out.println(" Finally = " + descr);
 
-			jCheckBox.setText(descr);
-			jCheckBox.getParent().validate();
-		}
-	}
-	*/
 }

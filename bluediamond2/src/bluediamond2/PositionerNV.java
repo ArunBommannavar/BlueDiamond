@@ -1,94 +1,107 @@
 package bluediamond2;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
 import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBRType;
+import gov.aps.jca.dbr.LABELS;
+import gov.aps.jca.dbr.DBR_Enum;
 import gov.aps.jca.event.MonitorEvent;
 import gov.aps.jca.event.MonitorListener;
 
 /*
  *  If there is a valid positioner, then value will be "PV OK" 
  */
-public class PositionerNV implements /* PropertyChangeListener,*/ MonitorListener {
-	Context context;	
+public class PositionerNV implements MonitorListener {
+	Context context;
 	Channel channel = null;
+	String[] labels = null;
+	Monitor monitor = null;
 
-	EpicsDataObject pvObject = null;
-	
 	String pvName;
-	int val = -1;
+
 	boolean valid = false;
-	String temp;
+	String pvStatus;
 
 	boolean init = false;
-	PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
-	public PositionerNV(String str, int i,Context context) {
+	public PositionerNV(String str, int i, Context context) {
 		this.context = context;
 		pvName = str + ".P" + String.valueOf(i) + "NV";
 	}
-/*
-	public void createPV() {
-		pvObject = new EpicsDataObject(pvName, true);
-		pvObject.addPropertyChangeListener("val", this);
-	}
-*/
+
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
-            context.pendIO(3.0);
-        	channel.addMonitor(Monitor.VALUE,this);
-        	context.flushIO();
+			context.pendIO(3.0);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
+
 			e.printStackTrace();
 		} catch (TimeoutException e) {
-			
+
 			e.printStackTrace();
 		}
 	}
-	
-	public void disconnectChannel() {
-		
-	
-			try {
-				if (channel!=null)
-				channel.destroy();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CAException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		/*
-		if (pvObject != null) {
-			pvObject.setDropPv(true);
+
+	public void channelLabels() {
+		try {
+			DBR dbr = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
+			context.pendIO(3.0);
+			labels = ((LABELS) dbr).getLabels();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		*/
-	}
-
-	public void removePropertyChangeListener(String str, PropertyChangeListener l) {
-		changes.removePropertyChangeListener(str, l);
-	}
-
-	public void addPropertyChangeListener(String str, PropertyChangeListener l) {
-		changes.addPropertyChangeListener(str, l);
 
 	}
 
+	public void setMonitor() {
+		try {
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void disconnectChannel() {
+
+		try {
+			if (monitor != null) {
+				monitor.removeMonitorListener(this);
+			}
+			if (channel != null)
+				channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	public boolean isValid() {
 
-		if (temp.equals("PV OK")) {
+		if (pvStatus.equals("PV OK")) {
 			valid = true;
 		} else {
 			valid = false;
@@ -100,15 +113,14 @@ public class PositionerNV implements /* PropertyChangeListener,*/ MonitorListene
 		init = b;
 	}
 
-	/*
-	public void propertyChange(PropertyChangeEvent evt) {
-		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
-		temp = evtObj.getVal();
-	}
-*/
-	@Override
 	public void monitorChanged(MonitorEvent event) {
-		
-		
+
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			int mm = ((DBR_Enum) convert).getEnumValue()[0];
+			pvStatus = labels[mm];
+		} else
+			System.err.println("Monitor error: " + event.getStatus());
 	}
+
 }

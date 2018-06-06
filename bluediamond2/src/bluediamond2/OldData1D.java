@@ -416,8 +416,8 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
 		return selectedPositioner;
 	}
 	
-	public List getSelectedChartDetectors() {
-		List list = new ArrayList();
+	public List<Integer> getSelectedChartDetectors() {
+		List<Integer> list = new ArrayList<Integer>();
 
 		for (int i = 0; i < numberOfDetectors; i++) {
 			if (oldChart.getDataView(dataViewNumber).getSeries(i).isVisible()) {

@@ -58,12 +58,13 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import net.miginfocom.swing.MigLayout;
-import java.awt.FlowLayout;
+
 import java.awt.Font;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import gov.aps.jca.dbr.STRING;
+
 public class Active_1D_ScanPanel extends JPanel {
 	
 	Context context;
@@ -1458,15 +1459,12 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public void setXPositionerName_1D(int pos, String str) {
-		// System.out.println(" In MainPanel setXPositionerName_1D "+" Pos = "+pos+" str
-		// = "+str);
 		JCheckBox jb = posXMap.get(pos);
 		String firstPart;
 		String secondPart;
 		String rtyp = str;
 		int lastIndexOfDot;
 		String pvName;
-		EpicsDataObject pvObject;
 		Channel channel;
 
 		lastIndexOfDot = str.lastIndexOf(".");
@@ -1495,15 +1493,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			e.printStackTrace();
 		}
 		
-		
-//		pvObject = new EpicsDataObject(pvName, true);
-//		countDownConnection.pendIO();
-//		rtyp = pvObject.getVal();
-//		pvObject.setDropPv(true);
-
-		
-		
-		
+	
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
 

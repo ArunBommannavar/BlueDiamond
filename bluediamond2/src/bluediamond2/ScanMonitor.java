@@ -2,20 +2,13 @@ package bluediamond2;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-//import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-//import java.util.Collections;
 import java.util.List;
-
-import javax.swing.JCheckBox;
-
-import edu.ciw.hpcat.epics.data.CountDownConnection;
 import gov.aps.jca.Context;
 
 public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	Context context;
-	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	String scan1Prefix = "";
 	String scan2Prefix = "";

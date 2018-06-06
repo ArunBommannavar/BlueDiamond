@@ -39,7 +39,6 @@ import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.BevelBorder;

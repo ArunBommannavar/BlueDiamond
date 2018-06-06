@@ -1,33 +1,29 @@
 package bluediamond2;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
+
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_Double;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
-public class PositionerPnRA implements PropertyChangeListener{
+public class PositionerPnRA implements MonitorListener{
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
-	String pvName;
+	Monitor monitor = null;
+
+	String pvName;	
 	double[] val;
-	EpicsDataObject evtObj;
-
-	int cpt;
-
 	public PositionerPnRA(String str, int i,Context context) {
 		this.context = context;
 		pvName = str + ".P" + String.valueOf(i) + "RA";
 	}
 
-	public void createPV() {
-		pvObject = new EpicsDataObject(pvName, true);
-		pvObject.addPropertyChangeListener("val", this);
-	}
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
@@ -42,9 +38,21 @@ public class PositionerPnRA implements PropertyChangeListener{
 		}
 	}
 
+	public void setMonitor() {
+		try {
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void disconnectChannel() {
-		
-		
+				
 		try {
 			if (channel!=null)
 			channel.destroy();
@@ -55,18 +63,8 @@ public class PositionerPnRA implements PropertyChangeListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
 
-
-	public void setCPT(int n) {
-		cpt = n;
-	}
 
 	public double[] getArrayValues() {
 		return val;	
@@ -83,14 +81,12 @@ public class PositionerPnRA implements PropertyChangeListener{
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String[] strVal;
-		pvObject.getArrayVal();		
-		strVal = pvObject.getArrayVal();
-		val= new double[strVal.length];
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			val = ((DBR_Double) convert).getDoubleValue();
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
+	}		
 
-		for (int i = 0; i < strVal.length; i++) {
-			val[i]= Double.parseDouble(strVal[i]);
-		}		
-	}
 }

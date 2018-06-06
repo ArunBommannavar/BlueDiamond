@@ -1,40 +1,36 @@
 package bluediamond2;
 
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_Double;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
-
-public class PositionerMin implements PropertyChangeListener{
+public class PositionerMin implements MonitorListener {
 
 	Context context;
 	Channel channel = null;
-	EpicsDataObject pvObject = null;
+	Monitor monitor = null;
+
 	String pvName;
 	double val;
 
-	
-    public PositionerMin(String str, int i,	Context context) {
-    	this.context = context;
-    	pvName = str + ".P" + String.valueOf(i) + "SP";    	
-    }
-    
-	public void createPV(){
-		pvObject = new EpicsDataObject(pvName, true);	
-		pvObject.addPropertyChangeListener("val", this);
+	public PositionerMin(String str, int i, Context context) {
+		this.context = context;
+		pvName = str + ".P" + String.valueOf(i) + "SP";
 	}
-	
-	public void disconnectChannel() {
-		
-		
+
+	public void disconnectChannel() {		
 		try {
-			if (channel!=null)
-			channel.destroy();
+			if(monitor != null)
+				monitor.removeMonitorListener(this);
+			if (channel != null)
+				channel.destroy();
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,38 +38,44 @@ public class PositionerMin implements PropertyChangeListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
 
-		public void createChannel() {
-			try {
-				channel = context.createChannel(pvName);
-	            context.pendIO(3.0);
-	 
-			} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-				
-				e.printStackTrace();
-			} catch (TimeoutException e) {
-				
-				e.printStackTrace();
-			}
+	public void createChannel() {
+		try {
+			channel = context.createChannel(pvName);
+			context.pendIO(3.0);
+		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
+
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+
+			e.printStackTrace();
 		}
-
-	   
-	public double getDoubleVal(){
-		
-		return val;		
 	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-	       EpicsDataObject evtObj = (EpicsDataObject)evt.getNewValue();	      
-	       val = Double.parseDouble( evtObj.getVal());
-		
+	public void setMonitor() {
+		try {
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public double getDoubleVal() {
+		return val;
+	}
+
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			val = ((DBR_Double) convert).getDoubleValue()[0];
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
 	}
 }

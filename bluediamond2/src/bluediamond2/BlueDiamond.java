@@ -474,7 +474,7 @@ public class BlueDiamond {
 			saved_2D_ScanPanel = mainPanel.getSaved_2D_ScanPanel();
 
 			scan1PositionerParms.createPosPVs();
-			countDownConnection.pendIO();
+//			countDownConnection.pendIO();
 
 			scan1DetectorParms.createDetPVs();
 			countDownConnection.pendIO();

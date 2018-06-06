@@ -1,24 +1,28 @@
 package bluediamond2;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
+
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_Double;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
 /**
  * 
  * @author Arun Bommannavar
  * 
  */
-public class PositionerPnPA implements PropertyChangeListener{
+public class PositionerPnPA implements MonitorListener{
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
-	String pvName;
+	Monitor monitor = null;
+
+	String pvName;	
 	double[] val;
 
 	public PositionerPnPA(String str, int i,Context context) {
@@ -26,10 +30,6 @@ public class PositionerPnPA implements PropertyChangeListener{
 		pvName = str + ".P" + String.valueOf(i) + "PA";
 	}
 
-	public void createPV() {
-		pvObject = new EpicsDataObject(pvName, true);		
-		pvObject.addPropertyChangeListener("val", this);
-	}
 	
 	public void createChannel() {
 		try {
@@ -44,13 +44,12 @@ public class PositionerPnPA implements PropertyChangeListener{
 			e.printStackTrace();
 		}
 	}
-
-	public void disconnectChannel() {
-		
-		
+	
+	public void setMonitor() {
 		try {
-			if (channel!=null)
-			channel.destroy();
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,28 +57,37 @@ public class PositionerPnPA implements PropertyChangeListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
+	
+	public void disconnectChannel() {		
+		try {
+			if(monitor != null)
+				monitor.removeMonitorListener(this);
+			if (channel != null)
+				channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 	public void putValue(String[] str) {
-		pvObject.putVal(str);
+		try {
+			channel.put(str);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public double[] getArrayValues() {
-		String[] strVal;
-
-		strVal = pvObject.getArrayVal();
-		val = new double[strVal.length];
-
-		for (int i = 0; i < strVal.length; i++) {
-			val[i] = Double.parseDouble(strVal[i]);
-		}
 		return val;
 	}
 	
@@ -94,15 +102,15 @@ public class PositionerPnPA implements PropertyChangeListener{
 		return values;
 	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String[] strVal;
-		pvObject.getArrayVal();		
-		strVal = pvObject.getArrayVal();
-		val= new double[strVal.length];
 
-		for (int i = 0; i < strVal.length; i++) {
-			val[i]= Double.parseDouble(strVal[i]);
-		}		
-	}
+
+	@Override
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			val = ((DBR_Double) convert).getDoubleValue();
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
+	}		
+	
 }

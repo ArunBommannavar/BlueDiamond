@@ -292,12 +292,13 @@ public class ReadSavedMdaData {
 
 	    // Ensure all the bytes have been read in
 	    if (offset < bytes.length) {
+	    	is.close();
 	      throw new IOException("Could not completely read file " +
 	                            file.getName());	     
 	    
 	    }
 
-	    // Close the input stream and return bytes
+	    
 	    is.close();
 	    return bytes;
 	  }

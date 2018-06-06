@@ -1,40 +1,34 @@
 package bluediamond2;
 
-
 import gov.aps.jca.CAException;
-import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
 import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
-import gov.aps.jca.dbr.DBR;
-import gov.aps.jca.dbr.DBR_String;
 import gov.aps.jca.event.MonitorEvent;
 import gov.aps.jca.event.MonitorListener;
 
-public class PositionerRelAbs implements MonitorListener {
+public abstract class PVChannel implements MonitorListener {
+
 	Context context;
 	Channel channel = null;
 	Monitor monitor = null;
-
 	String pvName;
-	String val;
-
-	public PositionerRelAbs(String str, int i,Context context) {
+	
+	public PVChannel(String pvName, Context context) {
+		this.pvName = pvName;
 		this.context = context;
-		pvName = str + ".P" + String.valueOf(i) + "AR";
 	}
-
+	
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
-            context.pendIO(3.0);
- 
+			context.pendIO(3.0);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
+
 			e.printStackTrace();
 		} catch (TimeoutException e) {
-			
+
 			e.printStackTrace();
 		}
 	}
@@ -52,7 +46,7 @@ public class PositionerRelAbs implements MonitorListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void disconnectChannel() {		
 		try {
 			if(monitor != null)
@@ -68,17 +62,7 @@ public class PositionerRelAbs implements MonitorListener {
 		}
 	}
 
+	@Override
+	abstract public void monitorChanged(MonitorEvent event);
 
-	public String getVal() {
-		return val;
-	}
-	
-	public void monitorChanged(MonitorEvent event) {
-		if (event.getStatus() == CAStatus.NORMAL) {
-			DBR convert = event.getDBR();
-			val = ((DBR_String) convert).getStringValue()[0];
-		} else
-			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
-		
-	}
 }
