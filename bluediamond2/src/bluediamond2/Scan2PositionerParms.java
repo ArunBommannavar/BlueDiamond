@@ -2,16 +2,12 @@ package bluediamond2;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.ciw.hpcat.epics.data.CountDownConnection;
 import gov.aps.jca.Context;
 
 public class Scan2PositionerParms {
 	
 	Context context;
 	
-	CountDownConnection countDownConnection = CountDownConnection.getInstance();
-
 	private int numberOfPositioners = 4;
 	private PositionerPnPV[] posPnPV = new PositionerPnPV[numberOfPositioners];
 	private PositionerPnPA[] posPnPA = new PositionerPnPA[numberOfPositioners];
@@ -53,6 +49,7 @@ public class Scan2PositionerParms {
 			
 			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
 			posRelAbs[i].createChannel();
+			posRelAbs[i].channelLabels();
 			posRelAbs[i].setMonitor();
 			
 			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
@@ -70,6 +67,7 @@ public class Scan2PositionerParms {
 			
 			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
 			posScanMode[i].createChannel();
+			posScanMode[i].channelLabels();
 			posScanMode[i].setMonitor();
 					
 			posPnRA[i] = new PositionerPnRA(scanPv, j, context);

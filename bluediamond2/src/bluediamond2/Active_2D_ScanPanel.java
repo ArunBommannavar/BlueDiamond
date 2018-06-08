@@ -15,9 +15,13 @@ import com.klg.jclass.chart3d.JCData3dIndex;
 import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
 import com.klg.jclass.chart3d.j2d.beans.Chart3dJava2d;
 
-import edu.ciw.hpcat.epics.data.CountDownConnection;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
+import gov.aps.jca.CAException;
+import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBRType;
+import gov.aps.jca.dbr.STRING;
 
 import javax.swing.JComboBox;
 import java.awt.GridLayout;
@@ -47,8 +51,6 @@ import java.awt.Font;
 public class Active_2D_ScanPanel extends JPanel {
 
 	Context context;
-
-	CountDownConnection countDownConnection = CountDownConnection.getInstance();
 
 	Scan1PositionerParms scan1PositionerParms;
 	Scan2PositionerParms scan2PositionerParms;
@@ -414,26 +416,40 @@ public class Active_2D_ScanPanel extends JPanel {
 	}
 
 	public void setYPositionerName_2D(int pos, String str) {
-//		System.out.println(" In MainPanel setYPositionerName_2D  "+" Pos = "+pos+"  str = "+str);
-
 		JCheckBox jb = posYMap.get(pos);
 		String firstPart;
 		String secondPart;
-		String rtyp;
+		String rtyp = str;
 		int lastIndexOfDot;
 		String pvName;
-		EpicsDataObject pvObject;
+		Channel channel;
 
 		lastIndexOfDot = str.lastIndexOf(".");
 		firstPart = str.substring(0, lastIndexOfDot);
 		secondPart = str.substring(lastIndexOfDot + 1);
 		pvName = firstPart + ".RTYP";
-		pvObject = new EpicsDataObject(pvName, true);
-		countDownConnection.pendIO();
-
-		rtyp = pvObject.getVal();
-		pvObject.setDropPv(true);
-
+		
+		try {
+			channel = context.createChannel(pvName);
+			context.pendIO(1.0);
+			DBR dbr = channel.get(DBRType.STRING, 1);
+			context.pendIO(1.0);
+			rtyp = ((STRING) dbr).getStringValue()[0];
+			channel.destroy();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
 		jb.setText(pvDescription.getDescription());

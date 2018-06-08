@@ -63,7 +63,6 @@ public class MainPanel extends JPanel {
 	public void set2DDataSource(Data2D d2) {
 		active_2D_ScanPanel.set2DDataSource(d2);
 	}
-
 	
 	public Active_1D_ScanPanel getActive_1D_ScanPanel() {
 		return active_1D_ScanPanel;

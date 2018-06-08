@@ -51,6 +51,7 @@ public class Scan1PositionerParms {
 			
 			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
 			posRelAbs[i].createChannel();
+			posRelAbs[i].channelLabels();
 			posRelAbs[i].setMonitor();
 			
 			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
@@ -71,6 +72,7 @@ public class Scan1PositionerParms {
 			
 			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
 			posScanMode[i].createChannel();
+			posScanMode[i].channelLabels();
 			posScanMode[i].setMonitor();
 					
 			posPnRA[i] = new PositionerPnRA(scanPv, j, context);

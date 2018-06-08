@@ -68,8 +68,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	Active_1D_ScanPanel active_1D_ScanPanel;
 	Active_2D_ScanPanel active_2D_ScanPanel;
 	
-//	MainPanel_1 mainPanel;
-
 	public ScanMonitor(String s1, String s2,Context context) {
 		this.context = context;
 		this.scan1Prefix = s1;
@@ -94,60 +92,77 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2EXSCObj = new ScanEXSC(scan2Prefix + ".EXSC",context);
 		scan2BUSYObj = new ScanBUSY(scan2Prefix + ".BUSY",context);
 
-		scan1CPTObj.createPV();
-		scan2CPTObj.createPV();
-		scan1NPTSObj.createPV();
-		scan2NPTSObj.createPV();
-		saveFileNameObj.createPV();
+		scan1CPTObj.createChannel();
+		scan1CPTObj.setMonitor();
+		
+		scan2CPTObj.createChannel();
+		scan2CPTObj.setMonitor();
+		
+		scan1NPTSObj.createChannel();
+		scan1NPTSObj.setMonitor();
+		
+		scan2NPTSObj.createChannel();
+		scan2NPTSObj.setMonitor();
+		
+		saveFileNameObj.createChannel();
 		saveFileNameObj.addPropertyChangeListener("FileName", this);
-		scanStatusMessageObj.createPV();
+		saveFileNameObj.setMonitor();
+		
+		scanStatusMessageObj.createChannel();
 		scanStatusMessageObj.addPropertyChangeListener("ScanMessage", this);
+		scanStatusMessageObj.setMonitor();
 		
-
-		scan1BUSYObj.createPV();
+		scan1BUSYObj.createChannel();
 		scan1BUSYObj.addPropertyChangeListener("SCAN1BUSY", this);
+		scan1BUSYObj.setMonitor();
 
-		scan1VALObj.createPV();
+		scan1VALObj.createChannel();
 		scan1VALObj.addPropertyChangeListener("VAL", this);
+		scan1VALObj.setMonitor();
 
-		scan1EXSCObj.createPV();
+		scan1EXSCObj.createChannel();;
 		scan1EXSCObj.addPropertyChangeListener("SCAN1EXSC", this);
+		scan1EXSCObj.setMonitor();
 
-		scan2EXSCObj.createPV();
+		scan2EXSCObj.createChannel();
 		scan2EXSCObj.addPropertyChangeListener("SCAN2EXSC", this);
+		scan2EXSCObj.setMonitor();
 		
-		scan2BUSYObj.createPV();
+		scan2BUSYObj.createChannel();
 		scan2BUSYObj.addPropertyChangeListener("SCAN2BUSY", this);
+		scan2BUSYObj.setMonitor();
 		
 	}
 
 	public void createDSTATE() {
-		scan1DSTATEObj.createPV();
+		scan1DSTATEObj.createChannel();
+		scan1DSTATEObj.channelLabels();
 		scan1DSTATEObj.addPropertyChangeListener("DSTATE", this);
+		scan1DSTATEObj.setMonitor();
 	}
 
 	public void createDATA() {
-		scan1DATAObj.createPV();
+		scan1DATAObj.createChannel();
 		scan1DATAObj.addPropertyChangeListener("DATA", this);
+		scan1DATAObj.setMonitor();
 	}
 
 	public void disconnectChannel() {
 		scan1NPTSObj.disconnectChannel();
 		scan2NPTSObj.disconnectChannel();
 		scan1CPTObj.disconnectChannel();
+		
 		scan1EXSCObj.disconnectChannel();
 		scan1VALObj.disconnectChannel();
 		scan1DSTATEObj.disconnectChannel();
 		scan1BUSYObj.disconnectChannel();
 		scan2BUSYObj.disconnectChannel();
 		scan2EXSCObj.disconnectChannel();
+		
+		saveFileNameObj.removePropertyChangeListener(this);
 		saveFileNameObj.disconnectChannel();
 	}
-/*
-	public void setMainPanel(MainPanel_1 m) {
-		this.mainPanel = m;
-	}
-	*/
+
 	public void setActive_1D_ScanPanel(Active_1D_ScanPanel active_1D_ScanPanel) {
 		this.active_1D_ScanPanel = active_1D_ScanPanel;
 	}

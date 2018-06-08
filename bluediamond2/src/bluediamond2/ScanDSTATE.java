@@ -4,23 +4,32 @@ package bluediamond2;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
+
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBRType;
+import gov.aps.jca.dbr.DBR_Enum;
+import gov.aps.jca.dbr.LABELS;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
 
-public class ScanDSTATE implements PropertyChangeListener{
+public class ScanDSTATE implements MonitorListener{
 	
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
+	Monitor monitor = null;
+
 	String pvName;
-	int val = -1;
-	EpicsDataObject ret;
-	String valString;
+	String val;
+
+	String[] labels = null;
+
 	String changePropertyName ;
 	PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
@@ -29,11 +38,6 @@ public class ScanDSTATE implements PropertyChangeListener{
 		pvName = str;	
 	}
 	
-	public void createPV(){
-		pvObject = new EpicsDataObject(pvName, true);
-		pvObject.addPropertyChangeListener("val", this);
-
-	}
 	
 	public void createChannel() {
 		try {
@@ -49,12 +53,28 @@ public class ScanDSTATE implements PropertyChangeListener{
 		}
 	}
 
-	public void disconnectChannel() {
-		
-		
+	public void channelLabels() {
 		try {
-			if (channel!=null)
-			channel.destroy();
+			DBR dbr = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
+			context.pendIO(3.0);
+			labels = ((LABELS) dbr).getLabels();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void setMonitor() {
+		try {
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,13 +82,22 @@ public class ScanDSTATE implements PropertyChangeListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
+	
+	public void disconnectChannel() {		
+		try {
+			if(monitor != null)
+				monitor.removeMonitorListener(this);
+			if (channel != null)
+				channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void addPropertyChangeListener(String str, PropertyChangeListener l) {
 		changePropertyName = str;
@@ -82,22 +111,16 @@ public class ScanDSTATE implements PropertyChangeListener{
 		
 		changes.removePropertyChangeListener(str,l);
 	}
-	public int getIntValue(){
-		int retVal = -1;
-		retVal = Integer.parseInt(pvObject.getVal());
-		return retVal;
-	}
-
-//	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-	      Object evtObj = evt.getNewValue();
-	      ret = (EpicsDataObject)evtObj;
-
-	      val = ret.getEnumIndex();
-	      valString = ret.getVal();
-//	      if (val== 7){
-	    	  changes.firePropertyChange(changePropertyName, " " , valString);
-//      }
+	
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			int mm = ((DBR_Enum) convert).getEnumValue()[0];
+			val = labels[mm];			
+			changes.firePropertyChange(changePropertyName, "-99", val); 
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
+		
 	}
 
 }

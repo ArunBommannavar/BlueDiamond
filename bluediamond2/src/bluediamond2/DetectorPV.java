@@ -1,31 +1,28 @@
 package bluediamond2;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_String;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
-public class DetectorPV implements PropertyChangeListener{
+public class DetectorPV implements MonitorListener{
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
+	Monitor monitor = null;
+
 	String pvName;
 	String val = null;
-	EpicsDataObject ret;
 
 	public DetectorPV(String str, int i,Context context) {
 		this.context = context;
 		pvName = str + ".D" + String.format("%02d", i) + "PV";
-	}
-
-	public void createPV() {
-		pvObject = new EpicsDataObject(pvName, true);
-		pvObject.addPropertyChangeListener("val", this);
 	}
 	
 	public void createChannel() {
@@ -42,8 +39,20 @@ public class DetectorPV implements PropertyChangeListener{
 		}
 	}
 
+	public void setMonitor() {
+		try {
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void disconnectChannel() {
-		
 		
 		try {
 			if (channel!=null)
@@ -55,24 +64,20 @@ public class DetectorPV implements PropertyChangeListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
 
 
 	public String getVal() {
-
 		return val;
 	}
 
-	
-	public void propertyChange(PropertyChangeEvent evt) {
-		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
-		val = evtObj.getVal();		
+
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			val = ((DBR_String) convert).getStringValue()[0];
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
 		
 	}
 }

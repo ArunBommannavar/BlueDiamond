@@ -1,39 +1,38 @@
 package bluediamond2;
 
-import edu.ciw.hpcat.epics.data.*;
+
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_Short;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class ScanEXSC implements PropertyChangeListener {
+public class ScanEXSC implements MonitorListener {
 	
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
+	Monitor monitor = null;
+
 	String pvName;
-	int val = -1;
-	EpicsDataObject ret;
-	String valString;
-	String changePropertyName = " " ;
+	int val;
 
 	protected PropertyChangeSupport changes = new PropertyChangeSupport(this);
+	String changePropertyName = " ";
+
 
 	public ScanEXSC(String str,Context context){
 		this.context = context;
 		pvName = str;
 	}
-	
-	public void createPV(){
-		pvObject = new EpicsDataObject(pvName,true);
-		pvObject.addPropertyChangeListener("val", this);
-	}
-	
+		
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
@@ -48,12 +47,11 @@ public class ScanEXSC implements PropertyChangeListener {
 		}
 	}
 
-	public void disconnectChannel() {
-		
-		
+	public void setMonitor() {
 		try {
-			if (channel!=null)
-			channel.destroy();
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,13 +59,22 @@ public class ScanEXSC implements PropertyChangeListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
+
+	public void disconnectChannel() {
+		try {
+			if (monitor != null)
+				monitor.removeMonitorListener(this);
+			if (channel != null)
+				channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void addPropertyChangeListener(String str, PropertyChangeListener l) {
 		changePropertyName = str;
@@ -81,14 +88,14 @@ public class ScanEXSC implements PropertyChangeListener {
 		changes.removePropertyChangeListener(str,l);
 	}
 	
-	public void propertyChange(PropertyChangeEvent evt) {
-	      Object evtObj = evt.getNewValue();
-	      ret = (EpicsDataObject)evtObj;
-	      valString = ret.getVal();
-	      val = Integer.parseInt(valString);	  
-	      
-    	  changes.firePropertyChange(changePropertyName, "-99", valString);   
-	   
-
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			short shortVal = ((DBR_Short) convert).getShortValue()[0];
+			val = (int) shortVal;
+			changes.firePropertyChange(changePropertyName, "-99", val);
+		} else
+			System.err.println("Monitor error: " + event.getStatus() + "  PV = " + pvName);
 	}
+
 }

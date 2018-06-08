@@ -28,7 +28,7 @@ import javax.swing.UIManager;
 
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart3d.j2d.JCChart3dJava2d;
-import edu.ciw.hpcat.epics.data.*;
+
 import gov.aps.jca.CAException;
 import gov.aps.jca.Context;
 import gov.aps.jca.JCALibrary;
@@ -78,8 +78,6 @@ public class BlueDiamond {
 	protected JCChart3dJava2d oldChart3d = null;
 
 	
-	CountDownConnection countDownConnection = CountDownConnection.getInstance();
-
 	/**
 	 * Launch the application.
 	 */
@@ -464,26 +462,24 @@ public class BlueDiamond {
 			scanMonitor.setScan2PositionerParms(scan2PositionerParms);
 
 			active_1D_ScanPanel = mainPanel.getActive_1D_ScanPanel();
+			active_1D_ScanPanel.setContext(context);
 			scanMonitor.setActive_1D_ScanPanel(active_1D_ScanPanel);
 			active_1D_ScanPanel.resetPositioners_1D();
 
 			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
+			active_2D_ScanPanel.setContext(context);
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
 
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 			saved_2D_ScanPanel = mainPanel.getSaved_2D_ScanPanel();
 
 			scan1PositionerParms.createPosPVs();
-//			countDownConnection.pendIO();
-
 			scan1DetectorParms.createDetPVs();
-			countDownConnection.pendIO();
 
 			scan2PositionerParms.createPosPVs();
-			countDownConnection.pendIO();
+			
 			scanMonitor.createScanPVS();
 
-			countDownConnection.pendIO();
 			
 			scanMonitor.validate1DPositioners();
 			scanMonitor.validate2DPositioners();
@@ -503,7 +499,6 @@ public class BlueDiamond {
 
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
-			countDownConnection.pendIO();
 
 			Thread scanMonitorThread = new Thread(scanMonitor);
 			scanMonitorThread.start();

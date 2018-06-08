@@ -2,33 +2,33 @@ package bluediamond2;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import edu.ciw.hpcat.epics.data.EpicsDataObject;
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_Double;
+import gov.aps.jca.dbr.DBR_Float;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
-public class DetectorCV implements PropertyChangeListener {
+public class DetectorCV implements MonitorListener {
 
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
+	Monitor monitor = null;
+
 	String pvName;
 	double val;
-	EpicsDataObject ret;
-	String temp;
-	boolean ready = true;
 
 	public DetectorCV(String str, int i,Context context) {
 		this.context = context;
 		pvName = str + ".D" + String.format("%02d", i) + "CV";
 	}
 
-	public void createPV() {
-		pvObject = new EpicsDataObject(pvName, true);
-		pvObject.addPropertyChangeListener("val", this);
-	}
+	
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
@@ -43,12 +43,11 @@ public class DetectorCV implements PropertyChangeListener {
 		}
 	}
 
-	public void disconnectChannel() {
-		
-		
+	public void setMonitor() {
 		try {
-			if (channel!=null)
-			channel.destroy();
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,30 +55,36 @@ public class DetectorCV implements PropertyChangeListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
-	}
-	*/
-}
-
-
-	public void setReady(boolean b) {
-		ready = b;
-
 	}
 
-	synchronized public double getDoubleVal() {
+	public void disconnectChannel() {		
+		try {
+			if(monitor != null)
+				monitor.removeMonitorListener(this);
+			if (channel != null)
+				channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+
+	public double getDoubleVal() {
 		return val;
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		EpicsDataObject evtObj = (EpicsDataObject) evt.getNewValue();
-		temp = evtObj.getVal();
-		val = Double.parseDouble(temp);
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			val = (double) ((DBR_Float) convert).getFloatValue()[0];
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
 	}
+
 
 }

@@ -4,24 +4,28 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import edu.ciw.hpcat.epics.data.*;
+
 import gov.aps.jca.CAException;
+import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
+import gov.aps.jca.Monitor;
 import gov.aps.jca.TimeoutException;
+import gov.aps.jca.dbr.DBR;
+import gov.aps.jca.dbr.DBR_Double;
+import gov.aps.jca.event.MonitorEvent;
+import gov.aps.jca.event.MonitorListener;
 
-public class ScanVAL implements PropertyChangeListener {
+public class ScanVAL implements MonitorListener {
 	
 	Context context;
 	Channel channel = null;
-	
-	EpicsDataObject pvObject = null;
-	double val = -99.0;
-	String pvName;
+	Monitor monitor = null;
+
+	String pvName;	
+	double val = -99.0;	
 	String changePropertyName = "";
 
-	EpicsDataObject ret;
-	String temp;
 
 	protected PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
@@ -30,10 +34,6 @@ public class ScanVAL implements PropertyChangeListener {
 		pvName = str;
 	}
 
-	public void createPV() {
-		pvObject = new EpicsDataObject(pvName, true);
-		pvObject.addPropertyChangeListener("val", this);
-	}
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
@@ -48,12 +48,11 @@ public class ScanVAL implements PropertyChangeListener {
 		}
 	}
 
-	public void disconnectChannel() {
-		
-		
+	public void setMonitor() {
 		try {
-			if (channel!=null)
-			channel.destroy();
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+			context.flushIO();
+
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,13 +60,22 @@ public class ScanVAL implements PropertyChangeListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	/*
-	if (pvObject != null) {
-		pvObject.setDropPv(true);
 	}
-	*/
-}
+
+	public void disconnectChannel() {		
+		try {
+			if(monitor != null)
+				monitor.removeMonitorListener(this);
+			if (channel != null)
+				channel.destroy();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void addPropertyChangeListener(String str, PropertyChangeListener l) {
 		changePropertyName = str;
@@ -82,12 +90,14 @@ public class ScanVAL implements PropertyChangeListener {
 		changes.removePropertyChangeListener(str, l);
 	}
 
-	synchronized public void propertyChange(PropertyChangeEvent evt) {
-		Object evtObj = evt.getNewValue();
-		ret = (EpicsDataObject) evtObj;
-		temp = ret.getVal();
-		val = Double.parseDouble(temp);
-		changes.firePropertyChange(changePropertyName, -1, temp);
-
+	public void monitorChanged(MonitorEvent event) {
+		if (event.getStatus() == CAStatus.NORMAL) {
+			DBR convert = event.getDBR();
+			val = ((DBR_Double) convert).getDoubleValue()[0];
+			changes.firePropertyChange(changePropertyName, -1, val);
+		} else
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
 	}
+	
+
 }
