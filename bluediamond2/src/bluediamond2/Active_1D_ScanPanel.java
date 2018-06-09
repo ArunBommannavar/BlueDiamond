@@ -422,6 +422,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		btnCenterMarkerButton = new JButton("Move");
 		btnCenterMarkerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				double dMove = Double.valueOf(lblCenterMarkerValue.getText());
 				scan1PosPnPV[selectedPositioner].movePositioner(lblCenterMarkerValue.getText());
 
 			}

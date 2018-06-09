@@ -152,15 +152,32 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2NPTSObj.disconnectChannel();
 		scan1CPTObj.disconnectChannel();
 		
+		scan1EXSCObj.removePropertyChangeListener(this);
 		scan1EXSCObj.disconnectChannel();
+		
+		scan1VALObj.removePropertyChangeListener(this);
 		scan1VALObj.disconnectChannel();
+		
+		scan1DSTATEObj.removePropertyChangeListener(this);
 		scan1DSTATEObj.disconnectChannel();
+		
+		scan1BUSYObj.removePropertyChangeListener(this);
 		scan1BUSYObj.disconnectChannel();
+		
+		scan2BUSYObj.removePropertyChangeListener(this);
 		scan2BUSYObj.disconnectChannel();
+		
+		scan2EXSCObj.removePropertyChangeListener(this);
 		scan2EXSCObj.disconnectChannel();
 		
 		saveFileNameObj.removePropertyChangeListener(this);
 		saveFileNameObj.disconnectChannel();
+		
+		scanStatusMessageObj.removePropertyChangeListener(this);
+		scanStatusMessageObj.disconnectChannel();
+		
+		
+		
 	}
 
 	public void setActive_1D_ScanPanel(Active_1D_ScanPanel active_1D_ScanPanel) {
@@ -248,8 +265,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			initPosDet1D();
 		}else {
 			init1DPlot();
-		}
-		
+		}		
 	}
 
 	private void doScan2EXSC() {
@@ -258,8 +274,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		
 		if(!hasScan2Parms) {
 			initPosDet2D();
-		}
-		
+		}		
 	}
 
 	public void validate1DPositioners() {
@@ -299,6 +314,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	private void updateData1DAfterScan() {
 		scan1AfterScanDataReady = false;
 		scan1CPT = scan1CPTObj.getValue();
+//		System.out.println(" updateData1DAfterScan CPT = "+scan1CPT);
 		if (scan1CPT > 0) {
 			data1D.setNumberOfPoints(scan1CPT);
 			data1D.setCurrentPoint(scan1CPT);

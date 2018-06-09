@@ -19,7 +19,7 @@ public class PositionerPnPV implements MonitorListener {
 	Monitor monitor = null;
 
 	String pvName;
-	String pvPvVal;
+	String pvPvVal = "";
 
 	Channel motorChannel = null;
 	
@@ -45,9 +45,14 @@ public class PositionerPnPV implements MonitorListener {
 	
 	public void createMotorChannel() {
 		try {
+			if (motorChannel!=null) {
+				motorChannel.destroy();
+				motorChannel= null;
+			}
 			motorChannel = context.createChannel(pvPvVal);
             context.pendIO(3.0);
- 
+            System.out.println(" Motor Channel");
+            motorChannel.printInfo();
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 			
 			e.printStackTrace();
@@ -93,13 +98,16 @@ public class PositionerPnPV implements MonitorListener {
 	}
 
 	public void movePositioner(double d) {
-		
 		try {
 			motorChannel.put(d);
+			context.pendIO(1.0);
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -111,23 +119,33 @@ public class PositionerPnPV implements MonitorListener {
 	public void movePositioner(String str) {
 		try {
 			motorChannel.put(str);
+			context.pendIO(1.0);
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 	}
-
-
+	
 	public void monitorChanged(MonitorEvent event) {
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
 			pvPvVal = ((DBR_String) convert).getStringValue()[0];
+			if (pvPvVal.length() >0) {
+			Thread thread = new Thread(new Runnable() {
+				public void run() {
+					createMotorChannel();
+				}
+			});
+			thread.start();
+			}
+//			createMotorChannel();
 		} else
-			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
-		
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
 	}
 }

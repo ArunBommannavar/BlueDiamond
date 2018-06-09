@@ -57,10 +57,9 @@ public class Data1D extends JCDefaultDataSource {
 		xaxis.setMinIsDefault(true);
 		xaxis.setMaxIsDefault(true);
 		yaxis.setMinIsDefault(true);
-		yaxis.setMaxIsDefault(true);
-
-		
+		yaxis.setMaxIsDefault(true);		
 	}
+	
 	public void setNumberOfPoints(int n) {
 		npts = n;
 	}
@@ -68,6 +67,7 @@ public class Data1D extends JCDefaultDataSource {
 	public int getScan1NumberOfPoints(){
 		return npts;
 	}
+	
 	public void setCurrentPoint(int n) {
 		cpt = n;
 	}
@@ -82,6 +82,7 @@ public class Data1D extends JCDefaultDataSource {
 	public int getSelectedPositioner(){
 		return selectedPositioner;
 	}
+	
 	public void initDataArray() {
 		xVals = new double[numberOfPositioners][npts];
 		yVals = new double[numberOfDetectors][npts];
@@ -273,6 +274,7 @@ public class Data1D extends JCDefaultDataSource {
 		}
 
 		delta = 0.1 * (tempXmax - tempXmin);
+//		System.out.println(" tempXmin = "+tempXmin+"  delta = "+delta);
 		xaxis = dataView.getXAxis();
 		xaxis.setMin(tempXmin - delta);
 		xaxis.setMax(tempXmax + delta);
@@ -333,6 +335,9 @@ public class Data1D extends JCDefaultDataSource {
 
 	public void setPositionerDataArray(int pos, double[] d) {
 		xVals[pos] = d;
+		for (int i=0; i<d.length;i++) {
+//			System.out.println(" Data1D positioner vales pos ="+pos+"  value = "+d[i]);
+		}
 	}
 
 	public void setDetectorDataArray(int det, double[] d) {

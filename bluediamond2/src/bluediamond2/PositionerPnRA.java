@@ -84,7 +84,7 @@ public class PositionerPnRA implements MonitorListener{
 	public void monitorChanged(MonitorEvent event) {
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
-			val = ((DBR_Double) convert).getDoubleValue();
+			val = ((DBR_Double) convert).getDoubleValue();			
 		} else
 			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
 	}		
