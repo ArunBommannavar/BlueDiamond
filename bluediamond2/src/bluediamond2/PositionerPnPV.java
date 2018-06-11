@@ -51,7 +51,6 @@ public class PositionerPnPV implements MonitorListener {
 			}
 			motorChannel = context.createChannel(pvPvVal);
             context.pendIO(3.0);
-            System.out.println(" Motor Channel");
             motorChannel.printInfo();
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 			
@@ -93,6 +92,9 @@ public class PositionerPnPV implements MonitorListener {
 		}
 	}
 
+	public void initMotorChannelPV() {
+		pvPvVal="";
+	}
 	public String getVal() {
 		return pvPvVal;
 	}
@@ -110,10 +112,7 @@ public class PositionerPnPV implements MonitorListener {
 		} catch (TimeoutException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-//		String str = String.valueOf(d);
-//		posValObject.putVal(str);
+		}		
 	}
 	
 	public void movePositioner(String str) {
@@ -144,7 +143,6 @@ public class PositionerPnPV implements MonitorListener {
 			});
 			thread.start();
 			}
-//			createMotorChannel();
 		} else
 			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
 	}
