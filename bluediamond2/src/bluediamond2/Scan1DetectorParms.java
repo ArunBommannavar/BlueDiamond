@@ -2,7 +2,10 @@ package bluediamond2;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import gov.aps.jca.CAException;
 import gov.aps.jca.Context;
+import gov.aps.jca.TimeoutException;
 
 public class Scan1DetectorParms {
 	
@@ -24,6 +27,88 @@ public class Scan1DetectorParms {
 		scanPv = str;
 	}
 
+	
+	public void createDetPVs() {
+//		System.out.println("Before create Time = "+System.currentTimeMillis());
+
+		int j;
+		for (int i = 0; i < numberOfDetectors; i++) {
+			j = i + 1;
+			detNV[i] = new DetectorNV(scanPv, j,context);
+			detNV[i].createChannel();
+			
+			detPV[i] = new DetectorPV(scanPv, j,context);
+			detPV[i].createChannel();
+			
+			detCV[i] = new DetectorCV(scanPv, j,context);
+			detCV[i].createChannel();
+			
+			detDnnRA[i] = new DetectorDnnRA(scanPv, j,context);
+			detDnnRA[i].createChannel();
+		}	
+		
+		try {
+			context.pendIO(5.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		System.out.println("After create Time = "+System.currentTimeMillis());
+		for (int i = 0; i < numberOfDetectors; i++) {
+			j = i + 1;
+			detNV[i].channelLabels();			
+		}		
+
+		try {
+			context.pendIO(3.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for (int i = 0; i < numberOfDetectors; i++) {
+			j = i + 1;
+			detNV[i].setLabels();			
+		}		
+
+//		System.out.println("After ChannelLabels Time = "+System.currentTimeMillis());
+
+		for (int i = 0; i < numberOfDetectors; i++) {
+			j = i + 1;
+			detNV[i].setMonitor();
+			detPV[i].setMonitor();
+			detCV[i].setMonitor();
+			detDnnRA[i].setMonitor();			
+		}
+		try {
+			context.flushIO();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+//		System.out.println("After setMonitor Time = "+System.currentTimeMillis());
+
+	}
+	
+	
+	/*
 	public void createDetPVs() {
 		int j;
 		for (int i = 0; i < numberOfDetectors; i++) {
@@ -44,9 +129,9 @@ public class Scan1DetectorParms {
 			detDnnRA[i] = new DetectorDnnRA(scanPv, j,context);
 			detDnnRA[i].createChannel();
 			detDnnRA[i].setMonitor();
-		}
+		}	
 	}
-
+*/
 	public void disconnectChannel() {
 		if (initDet) {
 

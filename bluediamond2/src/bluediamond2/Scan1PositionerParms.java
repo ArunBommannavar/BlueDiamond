@@ -2,7 +2,10 @@ package bluediamond2;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import gov.aps.jca.CAException;
 import gov.aps.jca.Context;
+import gov.aps.jca.TimeoutException;
 
 public class Scan1PositionerParms {
 	
@@ -31,6 +34,7 @@ public class Scan1PositionerParms {
 		this.context = context;
 		this.scanPv = str;
 	}
+	/*
 	public void createPosPVs() {
 
 		int j;		
@@ -81,7 +85,118 @@ public class Scan1PositionerParms {
 		}
 	}
 	
-	   public void disconnectChannel() {
+	*/
+
+	public void createPosPVs() {
+
+		int j;		
+		
+		for (int i = 0; i < numberOfPositioners; i++) {
+			j= i + 1;
+			
+			posNV[i] = new PositionerNV(scanPv, j, context);					
+			posNV[i].createChannel();
+			
+			posMin[i] = new PositionerMin(scanPv, j, context);	
+			posMin[i].createChannel();
+
+			posWidth[i] = new PositionerWidth(scanPv,j, context);
+			posWidth[i].createChannel();
+
+			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
+			posRelAbs[i].createChannel();
+
+			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
+			posPnPV[i].createChannel();
+
+			posPnPP[i] = new PositionerPnPP(scanPv, j, context);
+			posPnPP[i].createChannel();
+
+			posPnPA[i] = new PositionerPnPA(scanPv,j, context);
+			posPnPA[i].createChannel();	
+
+			posCV[i] = new PositionerCV(scanPv, j, context);
+			posCV[i].createChannel();
+
+			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
+			posScanMode[i].createChannel();
+
+			posPnRA[i] = new PositionerPnRA(scanPv, j, context);
+			posPnRA[i].createChannel();
+
+		}
+		
+		
+		try {
+			context.pendIO(5.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		for (int i = 0; i < numberOfPositioners; i++) {
+			j= i + 1;
+
+			posNV[i].channelLabels();
+			posRelAbs[i].channelLabels();
+			posScanMode[i].channelLabels();			
+		}
+		
+		try {
+			context.pendIO(3.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for (int i = 0; i < numberOfPositioners; i++) {
+			j = i + 1;
+			posNV[i].setLabels();
+			posRelAbs[i].setLabels();
+			posScanMode[i].setLabels();
+		}		
+
+		
+		for (int i = 0; i < numberOfPositioners; i++) {
+			j= i + 1;
+
+			posNV[i].setMonitor();
+			posMin[i].setMonitor();
+			posWidth[i].setMonitor();
+			posRelAbs[i].setMonitor();
+			posPnPV[i].setMonitor();
+			posPnPP[i].setMonitor();
+			posPnPA[i].setMonitor();
+			posCV[i].setMonitor();
+			posScanMode[i].setMonitor();
+			posPnRA[i].setMonitor();		
+		}
+		
+		try {
+			context.flushIO();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void disconnectChannel() {
 	    	if (initPos){		
 			for (int i = 0; i < numberOfPositioners; i++) {
 						

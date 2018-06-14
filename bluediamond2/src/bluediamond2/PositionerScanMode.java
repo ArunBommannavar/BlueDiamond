@@ -20,6 +20,7 @@ public class PositionerScanMode implements MonitorListener {
 	Channel channel = null;
 	Monitor monitor = null;
 	String[] labels = null;
+	DBR dbrLabel; 
 
 	String pvName;
 	String val;
@@ -33,12 +34,9 @@ public class PositionerScanMode implements MonitorListener {
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
-            context.pendIO(3.0);
+ //           context.pendIO(3.0);
  
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
-			e.printStackTrace();
-		} catch (TimeoutException e) {
 			
 			e.printStackTrace();
 		}
@@ -46,26 +44,26 @@ public class PositionerScanMode implements MonitorListener {
 	
 	public void channelLabels() {
 		try {
-			DBR dbr = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
-			context.pendIO(3.0);
-			labels = ((LABELS) dbr).getLabels();
+			dbrLabel = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
+//			context.pendIO(3.0);
+//			labels = ((LABELS) dbr).getLabels();
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+	}
 
+	public void setLabels() {
+		labels = ((LABELS) dbrLabel).getLabels();
 	}
 
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-			context.flushIO();
+//			context.flushIO();
 
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block

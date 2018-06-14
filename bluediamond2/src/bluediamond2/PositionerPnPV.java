@@ -51,7 +51,6 @@ public class PositionerPnPV implements MonitorListener {
 			}
 			motorChannel = context.createChannel(pvPvVal);
             context.pendIO(3.0);
-            motorChannel.printInfo();
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 			
 			e.printStackTrace();
