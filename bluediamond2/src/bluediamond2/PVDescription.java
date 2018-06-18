@@ -157,8 +157,7 @@ public class PVDescription{
 		} catch (TimeoutException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 
 		return ret;
 	}

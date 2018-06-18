@@ -20,10 +20,10 @@ public abstract class PVChannel implements MonitorListener {
 		this.context = context;
 	}
 	
-	public void createChannel() {
+	public void createChannel(double t) {
 		try {
 			channel = context.createChannel(pvName);
-			context.pendIO(3.0);
+			context.pendIO(t);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 
 			e.printStackTrace();
@@ -33,7 +33,28 @@ public abstract class PVChannel implements MonitorListener {
 		}
 	}
 	
+	public void createChannel() {
+		try {
+			channel = context.createChannel(pvName);
+		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
+
+			e.printStackTrace();
+		}
+	}
+	
 	public void setMonitor() {
+		try {
+			monitor = channel.addMonitor(Monitor.VALUE, this);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void setMonitorAndFlushIO() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
 			context.flushIO();

@@ -32,13 +32,8 @@ public class ScanDATA implements MonitorListener {
 	
 	public void createChannel() {
 		try {
-			channel = context.createChannel(pvName);
-            context.pendIO(3.0);
- 
+			channel = context.createChannel(pvName); 
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
-			e.printStackTrace();
-		} catch (TimeoutException e) {
 			
 			e.printStackTrace();
 		}
@@ -47,7 +42,6 @@ public class ScanDATA implements MonitorListener {
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-			context.flushIO();
 
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block

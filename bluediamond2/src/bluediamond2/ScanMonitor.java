@@ -74,6 +74,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		this.scan2Prefix = s2;
 	}
 
+	
 	public void createScanPVS() {
 		scan1CPTObj = new CPT(scan1Prefix + ".CPT",context);
 		scan2CPTObj = new CPT(scan2Prefix + ".CPT",context);
@@ -147,6 +148,11 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan1DATAObj.setMonitor();
 	}
 
+	public void connectPVs() {
+		
+		
+	}
+	
 	public void disconnectChannel() {
 		scan1NPTSObj.disconnectChannel();
 		scan2NPTSObj.disconnectChannel();

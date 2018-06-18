@@ -1,6 +1,5 @@
 package bluediamond2;
 
-
 import gov.aps.jca.CAException;
 import gov.aps.jca.CAStatus;
 import gov.aps.jca.Channel;
@@ -20,13 +19,12 @@ public class PositionerScanMode implements MonitorListener {
 	Channel channel = null;
 	Monitor monitor = null;
 	String[] labels = null;
-	DBR dbrLabel; 
+	DBR dbrLabel;
 
 	String pvName;
 	String val;
 
-
-	public PositionerScanMode(String str, int i,Context context) {
+	public PositionerScanMode(String str, int i, Context context) {
 		this.context = context;
 		pvName = str + ".P" + String.valueOf(i) + "SM";
 	}
@@ -34,24 +32,20 @@ public class PositionerScanMode implements MonitorListener {
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
- //           context.pendIO(3.0);
- 
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
+
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void channelLabels() {
 		try {
 			dbrLabel = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
-//			context.pendIO(3.0);
-//			labels = ((LABELS) dbr).getLabels();
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (CAException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
@@ -60,23 +54,25 @@ public class PositionerScanMode implements MonitorListener {
 		labels = ((LABELS) dbrLabel).getLabels();
 	}
 
+	public String[] getLabels() {
+		return labels;
+	}
+
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-//			context.flushIO();
-
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (CAException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
 
-	public void disconnectChannel() {		
+	public void disconnectChannel() {
 		try {
-			if(monitor != null)
+			if (monitor != null)
 				monitor.removeMonitorListener(this);
 			if (channel != null)
 				channel.destroy();
@@ -89,20 +85,16 @@ public class PositionerScanMode implements MonitorListener {
 		}
 	}
 
-
 	public String getVal() {
 		return val;
 	}
 
-	@Override
 	public void monitorChanged(MonitorEvent event) {
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
 			int mm = ((DBR_Enum) convert).getEnumValue()[0];
 			val = labels[mm];
 		} else
-			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
+			System.err.println("Monitor error: " + event.getStatus() + "  PV = " + pvName);
 	}
-
-
 }

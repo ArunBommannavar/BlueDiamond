@@ -39,7 +39,6 @@ public class PositionerNV implements MonitorListener {
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
-//			context.pendIO(3.0);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 
 			e.printStackTrace();
@@ -49,15 +48,23 @@ public class PositionerNV implements MonitorListener {
 	public void channelLabels() {
 		try {
 			dbrLabel = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
-			context.pendIO(3.0);
-//			labels = ((LABELS) dbrLabel).getLabels();
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (TimeoutException e) {
+		}
+	}
+	
+	public void channelLabelsAndPendIO() throws TimeoutException {
+		try {
+			dbrLabel = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
+			context.pendIO(1.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -72,8 +79,6 @@ public class PositionerNV implements MonitorListener {
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-//			context.flushIO();
-
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

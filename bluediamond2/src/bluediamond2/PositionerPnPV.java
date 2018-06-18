@@ -32,12 +32,7 @@ public class PositionerPnPV implements MonitorListener {
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
-            context.pendIO(3.0);
- 
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
-			e.printStackTrace();
-		} catch (TimeoutException e) {
 			
 			e.printStackTrace();
 		}
