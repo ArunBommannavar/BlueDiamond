@@ -4,7 +4,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import gov.aps.jca.CAException;
 import gov.aps.jca.Context;
+import gov.aps.jca.TimeoutException;
 
 public class ScanMonitor implements PropertyChangeListener, Runnable {
 
@@ -94,58 +97,133 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2BUSYObj = new ScanBUSY(scan2Prefix + ".BUSY",context);
 
 		scan1CPTObj.createChannel();
-		scan1CPTObj.setMonitor();
-		
 		scan2CPTObj.createChannel();
-		scan2CPTObj.setMonitor();
-		
 		scan1NPTSObj.createChannel();
-		scan1NPTSObj.setMonitor();
-		
 		scan2NPTSObj.createChannel();
-		scan2NPTSObj.setMonitor();
-		
 		saveFileNameObj.createChannel();
-		saveFileNameObj.addPropertyChangeListener("FileName", this);
-		saveFileNameObj.setMonitor();
-		
 		scanStatusMessageObj.createChannel();
-		scanStatusMessageObj.addPropertyChangeListener("ScanMessage", this);
-		scanStatusMessageObj.setMonitor();
-		
 		scan1BUSYObj.createChannel();
-		scan1BUSYObj.addPropertyChangeListener("SCAN1BUSY", this);
-		scan1BUSYObj.setMonitor();
-
 		scan1VALObj.createChannel();
-		scan1VALObj.addPropertyChangeListener("VAL", this);
-		scan1VALObj.setMonitor();
-
 		scan1EXSCObj.createChannel();;
-		scan1EXSCObj.addPropertyChangeListener("SCAN1EXSC", this);
-		scan1EXSCObj.setMonitor();
-
 		scan2EXSCObj.createChannel();
-		scan2EXSCObj.addPropertyChangeListener("SCAN2EXSC", this);
-		scan2EXSCObj.setMonitor();
-		
 		scan2BUSYObj.createChannel();
+
+		try {
+			context.pendIO(3.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		saveFileNameObj.addPropertyChangeListener("FileName", this);
+		scanStatusMessageObj.addPropertyChangeListener("ScanMessage", this);
+		scan1BUSYObj.addPropertyChangeListener("SCAN1BUSY", this);
+		scan1VALObj.addPropertyChangeListener("VAL", this);
+		scan1EXSCObj.addPropertyChangeListener("SCAN1EXSC", this);
+		scan2EXSCObj.addPropertyChangeListener("SCAN2EXSC", this);
 		scan2BUSYObj.addPropertyChangeListener("SCAN2BUSY", this);
+
+		
+		scan1CPTObj.setMonitor();		
+		scan2CPTObj.setMonitor();		
+		scan1NPTSObj.setMonitor();		
+		scan2NPTSObj.setMonitor();		
+		saveFileNameObj.setMonitor();		
+		scanStatusMessageObj.setMonitor();
+		scan1BUSYObj.setMonitor();
+		scan1VALObj.setMonitor();
+		scan1EXSCObj.setMonitor();
+		scan2EXSCObj.setMonitor();
 		scan2BUSYObj.setMonitor();
 		
+		try {
+			context.flushIO();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
 	public void createDSTATE() {
 		scan1DSTATEObj.createChannel();
+		try {
+			context.pendIO(1.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		scan1DSTATEObj.channelLabels();
+		try {
+			context.pendIO(1.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		scan1DSTATEObj.setLabels();
 		scan1DSTATEObj.addPropertyChangeListener("DSTATE", this);
+		
 		scan1DSTATEObj.setMonitor();
+		try {
+			context.flushIO();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void createDATA() {
 		scan1DATAObj.createChannel();
+		try {
+			context.pendIO(1.0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		scan1DATAObj.addPropertyChangeListener("DATA", this);
+		
 		scan1DATAObj.setMonitor();
+		try {
+			context.flushIO();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void connectPVs() {

@@ -23,12 +23,12 @@ public class ScanDSTATE implements MonitorListener{
 	
 	Context context;
 	Channel channel = null;
+	String[] labels = null;
 	Monitor monitor = null;
 
 	String pvName;
 	String val;
-
-	String[] labels = null;
+	DBR dbrLabel; 
 
 	String changePropertyName ;
 	PropertyChangeSupport changes = new PropertyChangeSupport(this);
@@ -50,26 +50,22 @@ public class ScanDSTATE implements MonitorListener{
 
 	public void channelLabels() {
 		try {
-			DBR dbr = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
-			context.pendIO(3.0);
-			labels = ((LABELS) dbr).getLabels();
+			dbrLabel = channel.get(DBRType.LABELS_ENUM, channel.getElementCount());
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+	}
+	public void setLabels() {
+		labels = ((LABELS) dbrLabel).getLabels();
 	}
 
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-//			context.flushIO();
-
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
