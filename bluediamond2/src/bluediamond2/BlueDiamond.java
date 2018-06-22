@@ -3,6 +3,10 @@ package bluediamond2;
 import java.awt.EventQueue;
 
 import javax.swing.UIManager.*;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.DefaultMetalTheme;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -40,9 +44,12 @@ import java.awt.Font;
 
 public class BlueDiamond {
 
+	private static final String LOOKANDFEEL = null;
+	final static String THEME = "Test";
+
 	LogoPanel logoPanel = new LogoPanel();
 
-	private JFrame frame;	
+	private JFrame frmBluediamond;	
 	private Context context = null;
 
 	Config config = null;
@@ -81,12 +88,13 @@ public class BlueDiamond {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					try {
 						for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-							if ("Nimbus".equals(info.getName())) {
+							if ("Windows".equals(info.getName())) {
 								UIManager.setLookAndFeel(info.getClassName());
 								break;
 							}
@@ -95,7 +103,7 @@ public class BlueDiamond {
 						// If Nimbus is not available, you can set the GUI to another look and feel.
 					}
 					BlueDiamond window = new BlueDiamond();
-					window.frame.setVisible(true);
+					window.frmBluediamond.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -116,22 +124,23 @@ public class BlueDiamond {
 	private void initialize() {
 		Path currentRelativePath = Paths.get("");
 		programPath = new File(currentRelativePath.toAbsolutePath().toString());
-		frame = new JFrame();
-		frame.setBounds(20, 20, 1100, 770);
-		frame.setPreferredSize(new Dimension(1100, 770));
-		frame.addWindowListener(new WindowAdapter() {
+		frmBluediamond = new JFrame();
+		frmBluediamond.setTitle("BlueDiamond");
+		frmBluediamond.setBounds(20, 20, 1100, 770);
+		frmBluediamond.setPreferredSize(new Dimension(1100, 770));
+		frmBluediamond.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				closeApplication();
 			}
 		});
 		// frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		frame.getContentPane().add(logoPanel, java.awt.BorderLayout.CENTER);
+		frmBluediamond.getContentPane().add(logoPanel, java.awt.BorderLayout.CENTER);
 		// frame.getContentPane().getComponent(0).setName("BlueDiamond");
 		
 		initializeJCA();
 
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmBluediamond.setJMenuBar(menuBar);
 
 		JMenu mnFile = new JMenu("File");
 		mnFile.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -175,8 +184,8 @@ public class BlueDiamond {
 		JMenuItem mntmYaxislog = new JMenuItem("y-axis->log");
 		mnUtil.add(mntmYaxislog);
 
-		JMenu mnNewMenu = new JMenu("Markers");
-		mnUtil.add(mnNewMenu);
+		JMenu mnMarkerMenu = new JMenu("Markers");
+		mnUtil.add(mnMarkerMenu);
 
 		JMenuItem mntmShowVMarkers = new JMenuItem("Hide V Markers");
 		mntmShowVMarkers.addActionListener(new ActionListener() {
@@ -190,7 +199,7 @@ public class BlueDiamond {
 				mntmShowVMarkers.setText(((showVMarkers) ? "Show V Marker" : "Hide V Marker"));
 			}
 		});
-		mnNewMenu.add(mntmShowVMarkers);
+		mnMarkerMenu.add(mntmShowVMarkers);
 
 		JMenuItem mntmShowHMarkers = new JMenuItem("Hide H Markers");
 		mntmShowHMarkers.addActionListener(new ActionListener() {
@@ -205,7 +214,7 @@ public class BlueDiamond {
 
 			}
 		});
-		mnNewMenu.add(mntmShowHMarkers);
+		mnMarkerMenu.add(mntmShowHMarkers);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Reset");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
@@ -213,7 +222,7 @@ public class BlueDiamond {
 				mainPanel.getSelectedPanelIndex();
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem);
+		mnMarkerMenu.add(mntmNewMenuItem);
 
 		mntmYaxislog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -248,8 +257,7 @@ public class BlueDiamond {
 		mntmAbout.addActionListener(new BlueDiamond_About_ActionAdapter(this));
 
 	}
-
-	
+		
 	private void initializeJCA() {
 		JCALibrary jca = JCALibrary.getInstance();
 		// Create a context with default configuration values.
@@ -352,7 +360,7 @@ public class BlueDiamond {
 
 	public void showNewConfigPanel() {
 		int returnValue = 0;
-		config = new Config(frame, true);
+		config = new Config(frmBluediamond, true);
 
 		config.set_1DScanPV(scan1Str);
 		config.set_2DScanPV(scan2Str);
@@ -366,7 +374,7 @@ public class BlueDiamond {
 			JFileChooser fc = new JFileChooser();
 			fc.setCurrentDirectory(programPath);
 			fc.setFileFilter(new TXTfilter());
-			int returnVal = fc.showSaveDialog(frame);
+			int returnVal = fc.showSaveDialog(frmBluediamond);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
@@ -410,7 +418,7 @@ public class BlueDiamond {
 		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(programPath);
 		fc.setFileFilter(new TXTfilter());
-		int retVal = fc.showOpenDialog(frame);
+		int retVal = fc.showOpenDialog(frmBluediamond);
 
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			inFile = fc.getSelectedFile();
@@ -512,10 +520,10 @@ public class BlueDiamond {
 	}
 
 	private void initDisplay() {
-		frame.getContentPane().remove(0);
-		frame.getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
-		frame.getContentPane().validate();
-		frame.revalidate();
+		frmBluediamond.getContentPane().remove(0);
+		frmBluediamond.getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+		frmBluediamond.getContentPane().validate();
+		frmBluediamond.revalidate();
 
 	}
 

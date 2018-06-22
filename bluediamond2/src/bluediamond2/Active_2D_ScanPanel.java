@@ -387,6 +387,8 @@ public class Active_2D_ScanPanel extends JPanel {
 		setSelectedYPositionerFontSize(20);
 		chart3dJava2d.setAllowUserChanges(true);
 		chart3dJava2d.getLegend().setVisible(true);
+		chart3dJava2d.getActionTable().addAllDefaultActions();
+
 
 	}
 

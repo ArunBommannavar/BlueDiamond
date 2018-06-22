@@ -353,7 +353,8 @@ public class Saved_2D_ScanPanel extends JPanel {
 		setSelectedXPositionerFontSize(20);
 		setSelectedYPositionerFontSize(20);
 		chart3dJava2d.setAllowUserChanges(true);
-
+		chart3dJava2d.getActionTable().addAllDefaultActions();
+		chart3dJava2d.getLegend().setVisible(true);
 	}
 
 	public JCChart3dJava2d get3DChart() {
