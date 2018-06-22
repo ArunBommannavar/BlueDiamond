@@ -19,7 +19,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	boolean scan1InProgress = false;
 	boolean scan2InProgress = false;
 	boolean hasScan1Parms = false;
-	boolean hasScan2Parms = false;
+//	boolean hasScan2Parms = false;
 
 	ScanVAL scan1VALObj;
 	ScanEXSC scan1EXSCObj;
@@ -342,23 +342,29 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	}
 
 	private void doScan1EXSC() {
+//		System.out.println(" In doScan1EXSC hasScan1Parms = "+hasScan1Parms);
 		setScan1EXSCStatus(false);
-		initPosDet1D();
+//		initPosDet1D();
 		
 		if(!hasScan1Parms) {
 			initPosDet1D();
 		}else {
-			init1DPlot();
+			data1D.clearYValues();
+			data1D.updateChartDisplay();
 		}		
+		
 	}
 
 	private void doScan2EXSC() {
 		setScan2EXSCStatus(false);
 		active_2D_ScanPanel.clear2dDetector();
 		
+		initPosDet2D();
+		/*
 		if(!hasScan2Parms) {
 			initPosDet2D();
-		}		
+		}	
+		*/
 	}
 
 	public void validate1DPositioners() {
@@ -376,16 +382,17 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	private void setHasScan1Parms(boolean b) {
 		hasScan1Parms = b;
 	}
-	
+	/*
 	private void setHasScan2Parms(boolean b) {
 		hasScan2Parms = b;
 	}
-	
+	*/
 	private void doScan1Val() {
-//		System.out.println(" In doScan1Val " );
 
 		setScan1VALStatus(false);
 		scan1CPT = scan1CPTObj.getValue();
+//		System.out.println(" In doScan1Val scan1CPT = "+scan1CPT+"   scan1NumberOfPoints = "+scan1NumberOfPoints );
+
 		validDet.forEach((n) -> {
 			data1D.setDetectorValue(n, scan1CPT, scan1DetectorParms.getDetCV(n));
 		});
@@ -510,6 +517,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	}
 	
 	public void initPosDet1D() {
+		
+//		System.out.println(" Entering initPosDet1D ");
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
@@ -583,7 +592,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		active_1D_ScanPanel.updateHMarkers();
 		active_1D_ScanPanel.updateUserAuto();
 		setScan1InProgress(true);
-//		setHasScan1Parms(true);
+		setHasScan1Parms(true);
 
 	}
 
@@ -682,7 +691,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		data2D.setScanGridRange();
-		setHasScan2Parms(true);
+		active_2D_ScanPanel.setSelectedX_Positioner(0);
+		active_2D_ScanPanel.setSelectedY_Positioner(0);
+//		setHasScan2Parms(true);
 	}
 
 	synchronized public void propertyChange(PropertyChangeEvent evt) {
@@ -697,16 +708,14 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		} else if (propertyName.equals("SCAN1EXSC")) {
 			if (srcString.equals("1")) {
-				// setScan1EXSCStatus(true & !scan2InProgress);
+//				 setScan1EXSCStatus(true & !scan2InProgress);
 				active_1D_ScanPanel.setMoveButtonsEnable(false);
 				setScan1EXSCStatus(true);
-//				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
-//				active_1D_ScanPanel.setScanStatus("Done");
 				if(!scan2InProgress) {
 					setScan1InProgress(false);
 					setScan1EXSCStatus(false);
-//					setHasScan1Parms(false);
+					setHasScan1Parms(false);
 				}
 				active_1D_ScanPanel.setMoveButtonsEnable(true);
 
@@ -729,12 +738,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			if (srcString.equals("1")) {
 				active_2D_ScanPanel.setBtnMoveButton2DEnable(false);
 				setScan2EXSCStatus(true);
-//				active_1D_ScanPanel.setScanStatus("in progress");
 			} else if (srcString.equals("0")) {
-//				active_2D_ScanPanel.setBtnMoveButton2DEnable(true);
-
 				setScan2EXSCStatus(false);
-				setHasScan2Parms(false);
+//				setHasScan2Parms(false);
 			}
 
 		} else if(propertyName.equals("SCAN2BUSY")) {
@@ -743,8 +749,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			}
 			if (srcString.equals("0")) {
 			setScan2InProgress(false);
+			setHasScan1Parms(false);
+			
 			}
-
 		}
 		else if(propertyName.equals("SCAN1BUSY")) {
 			if (srcString.equals("1")) {
@@ -760,8 +767,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		}		
 		
 		else if (propertyName.equals("FileName")) {
-			
-//			active_1D_ScanPanel.setFileName(srcString);
 			active_1D_ScanPanel.setChartHeader(srcString);
 			active_2D_ScanPanel.setChartHeader(srcString);
 		}

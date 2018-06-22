@@ -83,6 +83,7 @@ public class Data1D extends JCDefaultDataSource {
 		return selectedPositioner;
 	}
 	
+		
 	public void initDataArray() {
 		xVals = new double[numberOfPositioners][npts];
 		yVals = new double[numberOfDetectors][npts];
@@ -100,6 +101,21 @@ public class Data1D extends JCDefaultDataSource {
 		}
 	}
 
+	public void setDataArray(int pos) {
+	
+		for (int i = 0; i < npts; i++) {
+			xVals[pos][i] = pStart[pos] + ((double) i / (double) (npts - 1)) * pWidth[pos];
+		}
+	}
+		
+	public void clearYValues() {
+		for (int i = 0; i < numberOfDetectors; i++) {
+			for (int j = 0; j < npts; j++) {
+				yvalues[i][j] = HOLE_VALUE;
+			}
+		}
+	}
+	
 	public void initChartData() {
 		xvalues = new double[1][npts];
 		yvalues = new double[numberOfDetectors][npts];
@@ -295,6 +311,9 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public void setXAxisRange(int n) {
+//		System.out.println(" In Data1D  setXAxisRange posiitoner =  "+n+" number of points = "+npts);
+//		System.out.println(" scanmode ="+ scanMode[n]+"  relAbs = "+relAbs[n]);
+		
 		if (scanMode[n].equals("LINEAR")) {
 
 			if (relAbs[n].equals("RELATIVE")) {
@@ -306,6 +325,7 @@ public class Data1D extends JCDefaultDataSource {
 			}
 			for (int i = 0; i < npts; i++) {
 				xVals[n][i] = pStart[n] + ((double) i / (double) (npts - 1)) * pWidth[n];
+//				System.out.println(" X Vals = "+ xVals[n][i]);
 			}
 
 		} else if (scanMode[n].equals("TABLE")) {
@@ -327,10 +347,8 @@ public class Data1D extends JCDefaultDataSource {
 		xVals[pos][cpt - 1] = d;
 	}
 
-	synchronized public void setDetectorValue(int det, int cpt, double d) {
-		
-		yVals[det][cpt - 1] = d;
-		
+	synchronized public void setDetectorValue(int det, int cpt, double d) {		
+		yVals[det][cpt - 1] = d;		
 	}
 
 	public void setPositionerDataArray(int pos, double[] d) {
@@ -407,7 +425,8 @@ public class Data1D extends JCDefaultDataSource {
 		int rawLastPlotPoint = n;
 		int derTotalPlotPints = m - 1;
 		int derLastPlotPoint = n - 1;
-
+//	System.out.println(" In Data1D updateChartDisplay(int n, int m) displayModeSwitched = "+ displayModeSwitched );
+//	System.out.println(" X-Axis Min = "+xaxis.getMin()+"  X-Axis Max = "+xaxis.getMax());
 		chart.setBatched(true);
 
 		if (derivative) {
@@ -434,6 +453,7 @@ public class Data1D extends JCDefaultDataSource {
 			}
 		} else {
 			if (displayModeSwitched) {
+//				System.out.println(" Inside Data1D displayModeSwitched=true ");
 				xvalues = new double[1][rawTotalPlotPints];
 				yvalues = new double[numberOfDetectors][rawTotalPlotPints];
 				for (int i = 0; i < numberOfDetectors; i++) {
@@ -567,7 +587,5 @@ public class Data1D extends JCDefaultDataSource {
 				fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
 			}
 		});
-
 	}
-
 }

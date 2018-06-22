@@ -2,6 +2,7 @@ package bluediamond2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -25,6 +26,7 @@ import javax.swing.SpringLayout;
 import java.awt.BorderLayout;
 
 import com.klg.jclass.chart.ChartDataView;
+import com.klg.jclass.chart.EventTrigger;
 import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCAxisTitle;
 import com.klg.jclass.chart.JCChart;
@@ -751,6 +753,14 @@ public class Active_1D_ScanPanel extends JPanel {
 		plotPanel.add(chart, BorderLayout.CENTER);
 		add(detectorPanel_1D);
 		chart.getHeader().setVisible(true);
+		Font trb18 = new Font("TimesRoman", Font.BOLD, 18);
+		chart.getHeader().setFont(trb18);
+		chart.getHeader().setForeground(Color.BLUE);
+		
+		JCAxis xAxis = chart.getDataView(0).getXAxis();
+		Font trb14 = new Font("TimesRoman", Font.BOLD, 14);
+		xAxis.setFont(trb14);
+		
 		detectorPanel_1D.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane detectorTabbedPane_1D = new JTabbedPane(JTabbedPane.TOP);
@@ -786,8 +796,10 @@ public class Active_1D_ScanPanel extends JPanel {
 			}
 		});
 		
-		
+		chart.setAllowUserChanges(true);
+		chart.setTrigger(0, new EventTrigger(InputEvent.META_MASK,EventTrigger.CUSTOMIZE));
 		dataView = chart.getDataView(0);
+		
 		addDetectorPanels_1D();
 		vMarker1 = new JCMarker();
 		vMarker1.setAssociatedWithYAxis(false);

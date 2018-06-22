@@ -42,8 +42,7 @@ public class BlueDiamond {
 
 	LogoPanel logoPanel = new LogoPanel();
 
-	private JFrame frame;
-	
+	private JFrame frame;	
 	private Context context = null;
 
 	Config config = null;
