@@ -31,6 +31,7 @@ public class PVDescription{
 
 	public void makeEpicsDataObject() {
 
+		
 		if (recordType.equals("motor")) {
 			pvName = firstPart + ".DESC";
 			try {
@@ -99,6 +100,30 @@ public class PVDescription{
 			String str = ".CMT" + secondPart;
 			pvName = firstPart + str;
 			
+			try {
+				channel = context.createChannel(pvName);
+				context.pendIO(1.0);
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+		}
+		
+		else if (recordType.equals("mca")) {
+			String str = "."+secondPart+"NM";
+			pvName = firstPart+str;
+
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);

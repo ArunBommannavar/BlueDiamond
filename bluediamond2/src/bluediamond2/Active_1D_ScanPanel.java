@@ -1465,6 +1465,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		int lastIndexOfDot;
 		String pvName;
 		Channel channel;
+		String defaultName = str;
 
 		lastIndexOfDot = str.lastIndexOf(".");
 		firstPart = str.substring(0, lastIndexOfDot);
@@ -1492,11 +1493,17 @@ public class Active_1D_ScanPanel extends JPanel {
 			e.printStackTrace();
 		}
 		
+		
 	
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
 
-		jb.setText(pvDescription.getDescription());
+		String pvDescriptionResult = pvDescription.getDescription();
+		
+		if (pvDescriptionResult.length()<1) {
+			pvDescriptionResult = defaultName;
+		}
+		jb.setText(pvDescriptionResult);
 		pvDescription.disconnectChannel();
 	}
 
