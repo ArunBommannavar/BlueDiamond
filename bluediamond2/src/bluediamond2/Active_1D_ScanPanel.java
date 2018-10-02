@@ -111,7 +111,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	JCMarker hMarker1;
 	JCMarker hMarker2;
 	JCMarker hMarkerCenter;
-
+	JCLineStyle centerVMarkerStyle;
 	double hMarker1Pos;
 	double hMarker2Pos;
 	double hMarkerCenterPos;
@@ -809,6 +809,9 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		vMarkerCenter = new JCMarker();
 		vMarkerCenter.setAssociatedWithYAxis(false);
+		   centerVMarkerStyle = vMarkerCenter.getLineStyle();
+	        centerVMarkerStyle.setPattern(JCLineStyle.SHORT_DASH);
+	        centerVMarkerStyle.setColor(java.awt.Color.BLUE);
 
 		hMarker1 = new JCMarker();
 		hMarker1.setAssociatedWithYAxis(true);

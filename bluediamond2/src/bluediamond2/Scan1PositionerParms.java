@@ -34,58 +34,6 @@ public class Scan1PositionerParms {
 		this.context = context;
 		this.scanPv = str;
 	}
-	/*
-	public void createPosPVs() {
-
-		int j;		
-		for (int i = 0; i < numberOfPositioners; i++) {
-			j= i + 1;
-			posNV[i] = new PositionerNV(scanPv, j, context);					
-			posNV[i].createChannel();
-			posNV[i].channelLabels();
-			posNV[i].setMonitor();
-			
-			posMin[i] = new PositionerMin(scanPv, j, context);	
-			posMin[i].createChannel();
-			posMin[i].setMonitor();
-			
-			posWidth[i] = new PositionerWidth(scanPv,j, context);
-			posWidth[i].createChannel();
-			posWidth[i].setMonitor();
-			
-			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
-			posRelAbs[i].createChannel();
-			posRelAbs[i].channelLabels();
-			posRelAbs[i].setMonitor();
-			
-			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
-			posPnPV[i].createChannel();
-			posPnPV[i].setMonitor();
-
-			posPnPP[i] = new PositionerPnPP(scanPv, j, context);
-			posPnPP[i].createChannel();
-			posPnPP[i].setMonitor();
-			
-			posPnPA[i] = new PositionerPnPA(scanPv,j, context);
-			posPnPA[i].createChannel();	
-			posPnPA[i].setMonitor();
-					
-			posCV[i] = new PositionerCV(scanPv, j, context);
-			posCV[i].createChannel();
-			posCV[i].setMonitor();
-			
-			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
-			posScanMode[i].createChannel();
-			posScanMode[i].channelLabels();
-			posScanMode[i].setMonitor();
-					
-			posPnRA[i] = new PositionerPnRA(scanPv, j, context);
-			posPnRA[i].createChannel();
-			posPnRA[i].setMonitor();
-		}
-	}
-	
-	*/
 
 	public void createPosPVs() {
 

@@ -448,6 +448,7 @@ public class Active_2D_ScanPanel extends JPanel {
 		int lastIndexOfDot;
 		String pvName;
 		Channel channel;
+		String defaultName = str;
 
 		lastIndexOfDot = str.lastIndexOf(".");
 		firstPart = str.substring(0, lastIndexOfDot);
@@ -474,11 +475,24 @@ public class Active_2D_ScanPanel extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
+		pvDescription.makeEpicsDataObject();
 
+		String pvDescriptionResult = pvDescription.getDescription();
+		
+		if (pvDescriptionResult.length()<1) {
+			pvDescriptionResult = defaultName;
+		}
+		jb.setText(pvDescriptionResult);
+		pvDescription.disconnectChannel();
+		
+/*
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb, context);
 		pvDescription.makeEpicsDataObject();
 		jb.setText(pvDescription.getDescription());
 		pvDescription.disconnectChannel();
+		*/
 	}
 
 	public void setXPositionerName_2D(int pos, String str) {
