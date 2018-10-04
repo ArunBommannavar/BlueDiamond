@@ -112,6 +112,8 @@ public class Active_1D_ScanPanel extends JPanel {
 	JCMarker hMarker2;
 	JCMarker hMarkerCenter;
 	JCLineStyle centerVMarkerStyle;
+	JCLineStyle centerHMarkerStyle;
+	
 	double hMarker1Pos;
 	double hMarker2Pos;
 	double hMarkerCenterPos;
@@ -821,6 +823,10 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		hMarkerCenter = new JCMarker();
 		hMarkerCenter.setAssociatedWithYAxis(true);
+		   centerHMarkerStyle = hMarkerCenter.getLineStyle();
+	        centerHMarkerStyle.setPattern(JCLineStyle.SHORT_DASH);
+	        centerHMarkerStyle.setColor(java.awt.Color.BLUE);
+
 
 		this.updateUI();
 
@@ -1497,17 +1503,27 @@ public class Active_1D_ScanPanel extends JPanel {
 		}
 		
 		
-	
+//		System.out.println(" first part = "+firstPart+"  second Part = "+secondPart+"  RTYP = "+rtyp);
+		String pvDescriptionResult = str;
+		
+		if (!rtyp.equals("table"))
+		{
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
+		
+		
 		pvDescription.makeEpicsDataObject();
 
-		String pvDescriptionResult = pvDescription.getDescription();
+		pvDescriptionResult = pvDescription.getDescription();
 		
 		if (pvDescriptionResult.length()<1) {
 			pvDescriptionResult = defaultName;
 		}
-		jb.setText(pvDescriptionResult);
+		
+		
 		pvDescription.disconnectChannel();
+		}
+		jb.setText(pvDescriptionResult);
+
 	}
 
 	public String getPositionerName(int pos) {
