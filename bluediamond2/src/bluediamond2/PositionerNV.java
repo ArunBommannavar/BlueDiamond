@@ -40,6 +40,7 @@ public class PositionerNV implements MonitorListener {
 		try {
 			channel = context.createChannel(pvName);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
+			System.out.println("createChannel PV Name = "+pvName+"  createChannel IllegalArgumentException | IllegalStateException | CAException");
 
 			e.printStackTrace();
 		}

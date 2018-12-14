@@ -25,15 +25,13 @@ public class CPT implements MonitorListener {
 		this.context = context;
 		pvName = str;
 	}
-
 	
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);
-//            context.pendIO(3.0);
  
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
+			System.out.println("createChannel PV Name = "+pvName+"  createChannel IllegalArgumentException | IllegalStateException | CAException");
 			e.printStackTrace();
 		}
 	}
@@ -41,7 +39,6 @@ public class CPT implements MonitorListener {
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-//			context.flushIO();
 
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block

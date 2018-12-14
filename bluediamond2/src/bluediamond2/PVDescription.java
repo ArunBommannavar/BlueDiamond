@@ -146,8 +146,7 @@ public class PVDescription{
 	}
 
 
-	public void disconnectChannel() {
-		
+	public void disconnectChannel() {		
 		
 		try {
 			if (channel!=null)

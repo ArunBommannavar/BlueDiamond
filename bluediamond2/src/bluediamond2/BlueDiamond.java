@@ -41,6 +41,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.Font;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JRadioButton;
 
 
 
@@ -84,6 +86,9 @@ public class BlueDiamond {
 	protected JCChart oldChart;
 	protected JCChart3dJava2d chart3d = null;
 	protected JCChart3dJava2d oldChart3d = null;
+	
+	JRadioButton rdbtnAutoConvertRadioButton;
+	boolean autoConvert = false;
 
 	
 	/**
@@ -256,6 +261,14 @@ public class BlueDiamond {
 
 		JMenu mnHelp = new JMenu("About");
 		mnHelp.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		JMenu mnAscii = new JMenu("ASCII");
+		menuBar.add(mnAscii);
+		
+		rdbtnAutoConvertRadioButton = new JRadioButton("Auto Convert");
+		mnAscii.add(rdbtnAutoConvertRadioButton);
+		rdbtnAutoConvertRadioButton.addActionListener(new BlueDiamond_AutoConvert_ActionAdapter(this));
+		
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(mnHelp);
 
@@ -491,10 +504,9 @@ public class BlueDiamond {
 			scan1DetectorParms.createDetPVs();
 
 			scan2PositionerParms.createPosPVs();
-			
+
 			scanMonitor.createScanPVS();
 
-			
 			scanMonitor.validate1DPositioners();
 			scanMonitor.validate2DPositioners();
 			scanMonitor.validateDets();
@@ -548,8 +560,23 @@ public class BlueDiamond {
 		showOpenConfigPanel();
 
 	}
+	
+	public void autoConvert_actionPerformed(ActionEvent e) {
+		autoConvert = rdbtnAutoConvertRadioButton.isSelected();
+	}
 }
 
+class BlueDiamond_AutoConvert_ActionAdapter implements ActionListener {
+	BlueDiamond adaptee;
+	
+	BlueDiamond_AutoConvert_ActionAdapter (BlueDiamond adaptee){
+		this.adaptee = adaptee;
+	}
+	public void actionPerformed(ActionEvent actionEvent) {
+		
+	}
+
+}
 class BlueDiamond_Mdafileopen_ActionAdapter implements ActionListener {
 	BlueDiamond adaptee;
 

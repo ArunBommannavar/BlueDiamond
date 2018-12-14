@@ -1028,6 +1028,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		double dd;
 
 		Point point = e.getPoint();
+//		System.out.println(" Blue X Point = "+point.getX());
 		com.klg.jclass.chart.JCLineStyle ll;
 
 		if (vMarkersShowing) {
@@ -1518,8 +1519,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		if (pvDescriptionResult.length()<1) {
 			pvDescriptionResult = defaultName;
 		}
-		
-		
+				
 		pvDescription.disconnectChannel();
 		}
 		jb.setText(pvDescriptionResult);
@@ -1681,7 +1681,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		btnLeftMarkerButton.setEnabled(b);
 		btnRightMarkerButton.setEnabled(b);
 		btnCenterMarkerButton.setEnabled(b);
-
 	}
 	public void setScan1PosPv(PositionerPnPV[] pp) {
 		for (int i = 0; i < 4; i++) {

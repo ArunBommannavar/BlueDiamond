@@ -102,36 +102,9 @@ public class Scan1DetectorParms {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-//		System.out.println("After setMonitor Time = "+System.currentTimeMillis());
-
 	}
 	
 	
-	/*
-	public void createDetPVs() {
-		int j;
-		for (int i = 0; i < numberOfDetectors; i++) {
-			j = i + 1;
-			detNV[i] = new DetectorNV(scanPv, j,context);
-			detNV[i].createChannel();
-			detNV[i].channelLabels();
-			detNV[i].setMonitor();
-			
-			detPV[i] = new DetectorPV(scanPv, j,context);
-			detPV[i].createChannel();
-			detPV[i].setMonitor();
-			
-			detCV[i] = new DetectorCV(scanPv, j,context);
-			detCV[i].createChannel();
-			detCV[i].setMonitor();
-			
-			detDnnRA[i] = new DetectorDnnRA(scanPv, j,context);
-			detDnnRA[i].createChannel();
-			detDnnRA[i].setMonitor();
-		}	
-	}
-*/
 	public void disconnectChannel() {
 		if (initDet) {
 

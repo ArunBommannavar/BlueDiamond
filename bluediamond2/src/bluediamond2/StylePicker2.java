@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-//import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -106,7 +105,7 @@ public class StylePicker2 extends JComponent {
 	JLabel jLabel4 = new JLabel();
 	JLabel jLabel5 = new JLabel();
 	JButton jButton3 = new JButton();
-	JComboBox<String> jComboBox3; // = new JComboBox();
+	JComboBox jComboBox3; // = new JComboBox();
 	GridBagLayout gridBagLayout1 = new GridBagLayout();
 	GridBagLayout gridBagLayout2 = new GridBagLayout();
 	JPanel jPanel17 = new JPanel();
@@ -114,8 +113,8 @@ public class StylePicker2 extends JComponent {
 	JPanel jPanel19 = new JPanel();
 	JLabel jLabel7 = new JLabel();
 	JLabel jLabel8 = new JLabel();
-	JComboBox<String> jComboBox4 = new JComboBox<String>(symbolSizeList);
-	JComboBox<String> jComboBox5 = new JComboBox<String>(shapeList);
+	JComboBox jComboBox4 = new JComboBox(symbolSizeList);
+	JComboBox jComboBox5 = new JComboBox(shapeList);
 	GridBagLayout gridBagLayout4 = new GridBagLayout();
 	GridBagLayout gridBagLayout5 = new GridBagLayout();
 	GridBagLayout gridBagLayout3 = new GridBagLayout();
@@ -164,7 +163,7 @@ public class StylePicker2 extends JComponent {
 	private void jbInit() throws Exception {
 
 		makeArrays();
-		jComboBox3 = new JComboBox<String>(thicknessList);
+		jComboBox3 = new JComboBox(thicknessList);
 
 		jPanel1.setBounds(new Rectangle(0, 0, 10, 10));
 		this.setLayout(borderLayout1);

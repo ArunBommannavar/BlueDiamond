@@ -33,7 +33,8 @@ public class PositionerPnPV implements MonitorListener {
 		try {
 			channel = context.createChannel(pvName);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
+			System.out.println("createChannel PV Name = "+pvName+"  createChannel IllegalArgumentException | IllegalStateException | CAException");
+
 			e.printStackTrace();
 		}
 	}
@@ -47,10 +48,10 @@ public class PositionerPnPV implements MonitorListener {
 			motorChannel = context.createChannel(pvPvVal);
             context.pendIO(3.0);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
-			
+			System.out.println(" PV Name = "+pvName+"  createMotorChannel CAException or IllegalStateException");
 			e.printStackTrace();
 		} catch (TimeoutException e) {
-			
+			System.out.println(" PV Name = "+pvName+"  pendIO exception");
 			e.printStackTrace();
 		}
 	}
@@ -61,10 +62,10 @@ public class PositionerPnPV implements MonitorListener {
 			context.flushIO();
 
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
+			System.out.println(" PV Name = "+pvName+"  setMonitor IllegalStateException");
 			e.printStackTrace();
 		} catch (CAException e) {
-			// TODO Auto-generated catch block
+			System.out.println(" PV Name = "+pvName+"  createMotorChannel CAException ");
 			e.printStackTrace();
 		}
 	}
