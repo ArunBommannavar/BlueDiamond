@@ -157,12 +157,12 @@ public class Config extends JDialog {
 				okButton = new JButton("Save");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
-				okButton.addActionListener(new Config_okbutton_ActionAdapte(this));
+				okButton.addActionListener(new Config_okbutton_ActionAdapter(this));
 				
 				cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
-				cancelButton.addActionListener(new Config_cancelbutton_ActionAdapte(this));
+				cancelButton.addActionListener(new Config_cancelbutton_ActionAdapter(this));
 				
 				JPanel panel1 = new JPanel();
 				buttonPane.add(panel1);
@@ -211,10 +211,10 @@ public class Config extends JDialog {
 	
 }
 
-class Config_okbutton_ActionAdapte implements ActionListener {
+class Config_okbutton_ActionAdapter implements ActionListener {
 	Config adaptee;
 
-	Config_okbutton_ActionAdapte(Config adaptee) {
+	Config_okbutton_ActionAdapter(Config adaptee) {
         this.adaptee = adaptee;
     }
 
@@ -223,10 +223,10 @@ class Config_okbutton_ActionAdapte implements ActionListener {
     }
 }
 
-class Config_cancelbutton_ActionAdapte implements ActionListener {
+class Config_cancelbutton_ActionAdapter implements ActionListener {
 	Config adaptee;
 
-	Config_cancelbutton_ActionAdapte(Config adaptee) {
+	Config_cancelbutton_ActionAdapter(Config adaptee) {
         this.adaptee = adaptee;
     }
 

@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
@@ -12,6 +13,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -19,10 +23,14 @@ import javax.swing.JTextField;
 public class TableDataConfig extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	
+	JButton okButton;
+	JButton cancelButton;
 
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		try {
 			TableDataConfig dialog = new TableDataConfig();
@@ -32,11 +40,12 @@ public class TableDataConfig extends JDialog {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	/**
 	 * Create the dialog.
 	 */
-	public TableDataConfig() {
+	public TableDataConfig(JFrame jFrame,boolean modal) {
+		super(jFrame,modal);
 		setBounds(100, 100, 457, 245);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,18 +69,46 @@ public class TableDataConfig extends JDialog {
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
+			
+				okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
+						{
+				cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
+				getRootPane().setDefaultButton(cancelButton);
+
 			}
 		}
 	}
+	
+}
 
+class TableDataConfig_okbutton_ActionAdapter implements ActionListener{
+	
+	TableDataConfig adaptee;
+	
+	TableDataConfig_okbutton_ActionAdapter(TableDataConfig adaptee){
+		this.adaptee = adaptee;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		
+		
+	}	
+}
+
+class TableDataConfig_cancelbutton_ActionAdapter implements ActionListener{
+	
+	TableDataConfig adaptee;
+	
+	TableDataConfig_cancelbutton_ActionAdapter(TableDataConfig adaptee){
+		this.adaptee = adaptee;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		
+		
+	}	
 }
