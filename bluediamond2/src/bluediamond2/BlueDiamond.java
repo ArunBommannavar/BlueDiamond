@@ -256,8 +256,10 @@ public class BlueDiamond {
 		mnTable.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		menuBar.add(mnTable);
 
-		JMenuItem mntmReadValues = new JMenuItem("Read Values");
-		mnTable.add(mntmReadValues);
+		JMenuItem mntmReadTableScanValues = new JMenuItem("Read Values");
+		mnTable.add(mntmReadTableScanValues);
+		mntmReadTableScanValues.addActionListener(new BlueDiamond_mntmReadTableScanValues_ActionAdapter(this));
+		
 
 		JMenu mnHelp = new JMenu("About");
 		mnHelp.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -636,6 +638,21 @@ class BlueDiamond_About_ActionAdapter implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 		adaptee.about_actionPerformed(actionEvent);
 	}
+}
+
+class BlueDiamond_mntmReadTableScanValues_ActionAdapter implements ActionListener {
+	BlueDiamond adptee;
+	
+	BlueDiamond_mntmReadTableScanValues_ActionAdapter(BlueDiamond adaptee){
+		this.adptee = adptee;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		
+		
+	}
+	
+	
 }
 
 class TXTfilter extends javax.swing.filechooser.FileFilter {
