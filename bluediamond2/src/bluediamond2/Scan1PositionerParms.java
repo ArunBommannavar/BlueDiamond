@@ -8,8 +8,7 @@ import gov.aps.jca.Context;
 import gov.aps.jca.TimeoutException;
 
 public class Scan1PositionerParms {
-	
-	
+
 	Context context;
 
 	private String scanPv;
@@ -23,9 +22,9 @@ public class Scan1PositionerParms {
 	private PositionerMin[] posMin = new PositionerMin[numberOfPositioners];
 	private PositionerWidth[] posWidth = new PositionerWidth[numberOfPositioners];
 	private PositionerRelAbs[] posRelAbs = new PositionerRelAbs[numberOfPositioners];
-	private PositionerScanMode[] posScanMode = new PositionerScanMode[numberOfPositioners];	
-	private PositionerPnRA[] posPnRA = new PositionerPnRA[numberOfPositioners];	
-		
+	private PositionerScanMode[] posScanMode = new PositionerScanMode[numberOfPositioners];
+	private PositionerPnRA[] posPnRA = new PositionerPnRA[numberOfPositioners];
+
 	List<Integer> validPos = new ArrayList<Integer>();
 	boolean initPos = false;
 	Data1D data1D;
@@ -36,45 +35,43 @@ public class Scan1PositionerParms {
 	}
 
 	public void createPosPVs() {
+		int j;
 
-		int j;		
-		
 		for (int i = 0; i < numberOfPositioners; i++) {
-			j= i + 1;
-			
-			posNV[i] = new PositionerNV(scanPv, j, context);					
+			j = i + 1;
+
+			posNV[i] = new PositionerNV(scanPv, j, context);
 			posNV[i].createChannel();
-			
-			posMin[i] = new PositionerMin(scanPv, j, context);	
+
+			posMin[i] = new PositionerMin(scanPv, j, context);
 			posMin[i].createChannel();
 
-			posWidth[i] = new PositionerWidth(scanPv,j, context);
+			posWidth[i] = new PositionerWidth(scanPv, j, context);
 			posWidth[i].createChannel();
 
-			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);	
+			posRelAbs[i] = new PositionerRelAbs(scanPv, j, context);
 			posRelAbs[i].createChannel();
 
-			posPnPV[i] = new PositionerPnPV(scanPv, j, context);	
+			posPnPV[i] = new PositionerPnPV(scanPv, j, context);
 			posPnPV[i].createChannel();
 
 			posPnPP[i] = new PositionerPnPP(scanPv, j, context);
 			posPnPP[i].createChannel();
 
-			posPnPA[i] = new PositionerPnPA(scanPv,j, context);
-			posPnPA[i].createChannel();	
+			posPnPA[i] = new PositionerPnPA(scanPv, j, context);
+			posPnPA[i].createChannel();
 
 			posCV[i] = new PositionerCV(scanPv, j, context);
 			posCV[i].createChannel();
 
-			posScanMode[i] = new PositionerScanMode(scanPv, j, context);	
+			posScanMode[i] = new PositionerScanMode(scanPv, j, context);
 			posScanMode[i].createChannel();
 
 			posPnRA[i] = new PositionerPnRA(scanPv, j, context);
 			posPnRA[i].createChannel();
 
 		}
-		
-		
+
 		try {
 			context.pendIO(5.0);
 		} catch (IllegalStateException e) {
@@ -87,15 +84,15 @@ public class Scan1PositionerParms {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				
+
 		for (int i = 0; i < numberOfPositioners; i++) {
-			j= i + 1;
+			j = i + 1;
 
 			posNV[i].channelLabels();
 			posRelAbs[i].channelLabels();
-			posScanMode[i].channelLabels();			
+			posScanMode[i].channelLabels();
 		}
-		
+
 		try {
 			context.pendIO(3.0);
 		} catch (IllegalStateException e) {
@@ -108,17 +105,16 @@ public class Scan1PositionerParms {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		for (int i = 0; i < numberOfPositioners; i++) {
 			j = i + 1;
 			posNV[i].setLabels();
 			posRelAbs[i].setLabels();
 			posScanMode[i].setLabels();
-		}		
+		}
 
-		
 		for (int i = 0; i < numberOfPositioners; i++) {
-			j= i + 1;
+			j = i + 1;
 
 			posNV[i].setMonitor();
 			posMin[i].setMonitor();
@@ -129,9 +125,9 @@ public class Scan1PositionerParms {
 			posPnPA[i].setMonitor();
 			posCV[i].setMonitor();
 			posScanMode[i].setMonitor();
-			posPnRA[i].setMonitor();		
+			posPnRA[i].setMonitor();
 		}
-		
+
 		try {
 			context.flushIO();
 		} catch (IllegalStateException e) {
@@ -142,15 +138,15 @@ public class Scan1PositionerParms {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void disconnectChannel() {
-	    	if (initPos){		
+		if (initPos) {
 			for (int i = 0; i < numberOfPositioners; i++) {
-						
-				posNV[i].disconnectChannel();	
+
+				posNV[i].disconnectChannel();
 				posMin[i].disconnectChannel();
-				posWidth[i].disconnectChannel();;
+				posWidth[i].disconnectChannel();
+				;
 				posRelAbs[i].disconnectChannel();
 				posPnPV[i].disconnectChannel();
 				posPnPP[i].disconnectChannel();
@@ -158,69 +154,81 @@ public class Scan1PositionerParms {
 				posCV[i].disconnectChannel();
 				posScanMode[i].disconnectChannel();
 				posPnRA[i].disconnectChannel();
-				}
-	    	}
-	   }
-	   
-	   
+			}
+		}
+	}
+
 	public void validatePositioners() {
 		boolean b = false;
 		validPos.clear();
 		for (int i = 0; i < numberOfPositioners; i++) {
 			b = false;
 			b = posNV[i].isValid();
-			if (b) {				
+			if (b) {
 				validPos.add(i);
-				}
+			}
 		}
 		initPos = true;
 	}
-	
+
 	public void setData1D(Data1D d1d) {
 		data1D = d1d;
 	}
-	public List<Integer> getValidPos(){
+
+	public List<Integer> getValidPos() {
 		return validPos;
 	}
-	public void setInitPos(boolean b){
+
+	public void setInitPos(boolean b) {
 		initPos = b;
 	}
-	public boolean getInitPos(){
+
+	public boolean getInitPos() {
 		return initPos;
 	}
-	public String getPosScanMode(int n){
-		String scanMode =posScanMode[n].getVal();		
+
+	public String getPosScanMode(int n) {
+		String scanMode = posScanMode[n].getVal();
 		return scanMode;
-	}	
-	public String getPosPnPV(int n){ 
+	}
+
+	public String getPosPnPV(int n) {
 		return posPnPV[n].getVal();
-	}	
-	public String getPosRelAbs(int n){
+	}
+
+	public String getPosRelAbs(int n) {
 		return posRelAbs[n].getVal();
 	}
-	public double getPosPP(int n){
+
+	public double getPosPP(int n) {
 		return posPnPP[n].getDoubleVal();
-	}	
-	public double getPosMin(int n){
+	}
+
+	public double getPosMin(int n) {
 		return posMin[n].getDoubleVal();
 	}
-	public double getPosWidth(int n){
+
+	public double getPosWidth(int n) {
 		return posWidth[n].getVal();
-	}	
-	public double[] getPosPA(int pos, int n){
+	}
+
+	public double[] getPosPA(int pos, int n) {
 		return posPnPA[pos].getArrayValues(n);
 	}
-	public double getPosCV(int pos){
+
+	public double getPosCV(int pos) {
 		return posCV[pos].getDoubleVal();
 	}
-	public double[] getPosReadBackArray(int pos){
+
+	public double[] getPosReadBackArray(int pos) {
 		return posPnRA[pos].getArrayValues();
 	}
-	public double[] getPosReadBackArray(int pos, int m){
+
+	public double[] getPosReadBackArray(int pos, int m) {
 		return posPnRA[pos].getArrayValues(m);
 	}
 
-	public PositionerPnPV[] getPosPnPV(){
+	public PositionerPnPV[] getPosPnPV() {
 		return posPnPV;
 	}
 }

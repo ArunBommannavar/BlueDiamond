@@ -566,6 +566,17 @@ public class BlueDiamond {
 	public void autoConvert_actionPerformed(ActionEvent e) {
 		autoConvert = rdbtnAutoConvertRadioButton.isSelected();
 	}
+	
+	public void readTableScanValuesDialog() {
+		int returnValue = 0;
+		TableDataConfig tableDataConfig = new TableDataConfig(frmBluediamond, true);
+		tableDataConfig.setScan1PositionerParms(scan1PositionerParms);
+		tableDataConfig.setScan2PositionerParms(scan2PositionerParms);
+		
+		returnValue = tableDataConfig.getReturnVal();
+		
+		System.out.println(" Return value = "+returnValue);
+	}
 }
 
 class BlueDiamond_AutoConvert_ActionAdapter implements ActionListener {
@@ -641,14 +652,14 @@ class BlueDiamond_About_ActionAdapter implements ActionListener {
 }
 
 class BlueDiamond_mntmReadTableScanValues_ActionAdapter implements ActionListener {
-	BlueDiamond adptee;
+	BlueDiamond adaptee;
 	
 	BlueDiamond_mntmReadTableScanValues_ActionAdapter(BlueDiamond adaptee){
-		this.adptee = adptee;
+		this.adaptee = adaptee;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+		adaptee.readTableScanValuesDialog();
 		
 	}
 	

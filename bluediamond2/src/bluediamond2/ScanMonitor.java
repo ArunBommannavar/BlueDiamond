@@ -77,7 +77,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		this.scan2Prefix = s2;
 	}
 
-	
 	public void createScanPVS() {
 		scan1CPTObj = new CPT(scan1Prefix + ".CPT",context);
 		scan2CPTObj = new CPT(scan2Prefix + ".CPT",context);
@@ -338,7 +337,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void getScan2ValidPos() {
 		validPos2 = scan2PositionerParms.getValidPos();
-
 	}
 
 	private void doScan1EXSC() {
@@ -461,6 +459,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			active_1D_ScanPanel.updateUserAuto();
 			
 			String posName = active_1D_ScanPanel.getPositionerName(data1D.getSelectedPositioner());
+		
 			active_1D_ScanPanel.setXAxisTitle(posName);
 
 		} else {
@@ -487,10 +486,10 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		validPos1.forEach((n) -> {
 			active_2D_ScanPanel.setXPositionerVisible_2D(n, true);
 			String posName_X = active_1D_ScanPanel.getPosName(n);
+			System.out.println(" getPosName = "+posName_X);
 			active_2D_ScanPanel.setXPositionerName_2D(n,posName_X);
 		});
 	}
-
 
 	public void setMainPanel_2D_Y_PositionerNames() {
 		validPos2.forEach((n) -> {
@@ -498,7 +497,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			final String str = scan2PositionerParms.getPosPnPV(n);
 			active_2D_ScanPanel.setYPositionerName_2D(n, str);
 		});
-
 	}
 
 	public void setMainPanel_1D_DetectorNames() {
