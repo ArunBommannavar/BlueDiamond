@@ -60,7 +60,7 @@ public class AboutFrame extends JFrame {
 		contentPane.add(infoPanel, BorderLayout.NORTH);
 		infoPanel.setLayout(new BorderLayout(0, 0));
 		
-		lblNewLabel = new JLabel("<html>Bluediamond<br>Author: Arun Bommannavar<br>(Build Date: October 04,2018)</htlm>");
+		lblNewLabel = new JLabel("<html>Bluediamond<br>Author: Arun Bommannavar<br>(Build Date: January 10,2019)</htlm>");
 		lblNewLabel.setBackground(new Color(253, 245, 230));
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
