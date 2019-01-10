@@ -507,6 +507,8 @@ public class BlueDiamond {
 
 			scan2PositionerParms.createPosPVs();
 
+			
+			
 			scanMonitor.createScanPVS();
 
 			scanMonitor.validate1DPositioners();
@@ -516,14 +518,18 @@ public class BlueDiamond {
 			scanMonitor.getScan1ValidPos();
 			scanMonitor.getScan1ValidDet();
 			scanMonitor.getScan2ValidPos();
+			
+			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPVList());
+			active_2D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPVList());
+			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPVList());
+			
+			scan1PositionerParms.findPositionerDescription();
+			scan2PositionerParms.findPositionerDescription();			
+			
 			scanMonitor.setMainPanel_1D_PositionerNames();
 			scanMonitor.setMainPanel_2D_X_PositionerNames();
 			scanMonitor.setMainPanel_2D_Y_PositionerNames();
 			scanMonitor.setMainPanel_1D_DetectorNames();
-
-			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
-			active_2D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPV());
-			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPV());
 
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
@@ -550,17 +556,14 @@ public class BlueDiamond {
 
 	public void fileexit_actionPerformed(ActionEvent e) {
 		closeApplication();
-
 	}
 
 	public void confignew_actionPerformed(ActionEvent e) {
 		showNewConfigPanel();
-
 	}
 
 	public void configopen_actionPerformed(ActionEvent e) {
 		showOpenConfigPanel();
-
 	}
 	
 	public void autoConvert_actionPerformed(ActionEvent e) {
@@ -569,13 +572,18 @@ public class BlueDiamond {
 	
 	public void readTableScanValuesDialog() {
 		int returnValue = 0;
-		TableDataConfig tableDataConfig = new TableDataConfig(frmBluediamond, true);
+		TableDataConfig tableDataConfig = new TableDataConfig(frmBluediamond, false);
 		tableDataConfig.setScan1PositionerParms(scan1PositionerParms);
 		tableDataConfig.setScan2PositionerParms(scan2PositionerParms);
+		tableDataConfig.get1DValidPosList();
+		tableDataConfig.get2DValidPosList();
 		
+		tableDataConfig.populatePositioners();
+		tableDataConfig.revalidate();
+		tableDataConfig.setModal(true);
 		returnValue = tableDataConfig.getReturnVal();
 		
-		System.out.println(" Return value = "+returnValue);
+		
 	}
 }
 

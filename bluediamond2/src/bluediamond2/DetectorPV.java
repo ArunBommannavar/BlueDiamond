@@ -19,6 +19,7 @@ public class DetectorPV implements MonitorListener{
 
 	String pvName;
 	String val = null;
+	String detectorDescription=" ";
 
 	public DetectorPV(String str, int i,Context context) {
 		this.context = context;
@@ -30,7 +31,6 @@ public class DetectorPV implements MonitorListener{
 			channel = context.createChannel(pvName);
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 			System.out.println("createChannel PV Name = "+pvName+"  createChannel IllegalArgumentException | IllegalStateException | CAException");
-
 
 			e.printStackTrace();
 		}
@@ -61,18 +61,19 @@ public class DetectorPV implements MonitorListener{
 		}
 	}
 
-
 	public String getVal() {
 		return val;
 	}
 
-
+	public void findDetectorDescription() {
+		PVDescription1 pVDescription1; 
+	}
+	
 	public void monitorChanged(MonitorEvent event) {
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
 			val = ((DBR_String) convert).getStringValue()[0];
 		} else
-			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
-		
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);				
 	}
 }

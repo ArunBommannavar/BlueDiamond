@@ -442,6 +442,9 @@ public class Active_2D_ScanPanel extends JPanel {
 
 	public void setYPositionerName_2D(int pos, String str) {
 		JCheckBox jb = posYMap.get(pos);
+		jb.setText(str);
+		
+		/*
 		String firstPart;
 		String secondPart;
 		String rtyp = str;
@@ -487,12 +490,8 @@ public class Active_2D_ScanPanel extends JPanel {
 		jb.setText(pvDescriptionResult);
 		pvDescription.disconnectChannel();
 		
-/*
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb, context);
-		pvDescription.makeEpicsDataObject();
-		jb.setText(pvDescription.getDescription());
-		pvDescription.disconnectChannel();
 		*/
+
 	}
 
 	public void setXPositionerName_2D(int pos, String str) {
@@ -550,7 +549,6 @@ public class Active_2D_ScanPanel extends JPanel {
 				int_2D_value.setText(String.valueOf(zz));
 			}
 			setBtnMoveButton2DEnable(true);
-
 		}
 	}
 
@@ -642,5 +640,4 @@ public class Active_2D_ScanPanel extends JPanel {
 
 		}
 	}
-
 }

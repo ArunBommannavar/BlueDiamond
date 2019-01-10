@@ -24,6 +24,8 @@ public class Scan1PositionerParms {
 	private PositionerRelAbs[] posRelAbs = new PositionerRelAbs[numberOfPositioners];
 	private PositionerScanMode[] posScanMode = new PositionerScanMode[numberOfPositioners];
 	private PositionerPnRA[] posPnRA = new PositionerPnRA[numberOfPositioners];
+	
+	private String[] positionerDescription = new String[4];
 
 	List<Integer> validPos = new ArrayList<Integer>();
 	boolean initPos = false;
@@ -146,7 +148,6 @@ public class Scan1PositionerParms {
 				posNV[i].disconnectChannel();
 				posMin[i].disconnectChannel();
 				posWidth[i].disconnectChannel();
-				;
 				posRelAbs[i].disconnectChannel();
 				posPnPV[i].disconnectChannel();
 				posPnPP[i].disconnectChannel();
@@ -187,6 +188,17 @@ public class Scan1PositionerParms {
 		return initPos;
 	}
 
+	public void findPositionerDescription() {
+		validPos.forEach((n) -> {
+			posPnPV[n].findMotorChannelPVdescription();
+			positionerDescription[n] = posPnPV[n].getMotorDescription();
+		});
+	}
+	
+	public String getPositionerDescription(int n) {
+		return positionerDescription[n];
+	}
+	
 	public String getPosScanMode(int n) {
 		String scanMode = posScanMode[n].getVal();
 		return scanMode;
@@ -228,7 +240,8 @@ public class Scan1PositionerParms {
 		return posPnRA[pos].getArrayValues(m);
 	}
 
-	public PositionerPnPV[] getPosPnPV() {
+	public PositionerPnPV[] getPosPnPVList() {
 		return posPnPV;
 	}
+	
 }

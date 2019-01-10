@@ -367,10 +367,12 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void validate1DPositioners() {
 		scan1PositionerParms.validatePositioners();
+		scan1PositionerParms.findPositionerDescription();
 	}
 
 	public void validate2DPositioners() {
 		scan2PositionerParms.validatePositioners();
+		scan2PositionerParms.findPositionerDescription();
 	}
 
 	public void validateDets() {
@@ -476,7 +478,10 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		validPos1.forEach((n) -> {
 			active_1D_ScanPanel.setXPositionerVisible_1D(n, true);
-			final String str = scan1PositionerParms.getPosPnPV(n);
+//			final String str = scan1PositionerParms.getPosPnPV(n);
+			final String str = scan1PositionerParms.getPositionerDescription(n);
+//			System.out.println(" In ScanMonitor "+str);
+
 			active_1D_ScanPanel.setXPositionerName_1D(n, str);
 		});
 	}
@@ -485,8 +490,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		validPos1.forEach((n) -> {
 			active_2D_ScanPanel.setXPositionerVisible_2D(n, true);
-			String posName_X = active_1D_ScanPanel.getPosName(n);
-			System.out.println(" getPosName = "+posName_X);
+			String posName_X = active_1D_ScanPanel.getPositionerName(n);
 			active_2D_ScanPanel.setXPositionerName_2D(n,posName_X);
 		});
 	}
@@ -504,6 +508,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			active_1D_ScanPanel.setDetVisible(n, true);
 			active_1D_ScanPanel.setDetEnable(n, true);
 			final String str = scan1DetectorParms.getDetPV(n);
+//			System.out.println(" In ScanMonitor setMainPanel_1D_DetectorNames "+n+"  "+str);
 			active_1D_ScanPanel.setDetectorName(n, str);
 		});
 	}
@@ -511,12 +516,10 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	public void init1DPlot() {
 		data1D.initDataArray();
 		data1D.initChartData();
-
 	}
 	
 	public void initPosDet1D() {
 		
-//		System.out.println(" Entering initPosDet1D ");
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
@@ -535,7 +538,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		setMainPanel_1D_DetectorNames();
 
 		// Linear/Table/Fly mode
-//		System.out.println(" Liner/table/Fly");
+
 
 		validPos1.forEach((n) -> {
 			final String str = scan1PositionerParms.getPosScanMode(n);
@@ -547,7 +550,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Relative/Absolute scan
-//		System.out.println(" Rel/Abs");
+
 
 		validPos1.forEach((n) -> {
 			final String str = scan1PositionerParms.getPosRelAbs(n);
@@ -555,7 +558,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Positioner Min Value
-//		System.out.println(" Positioner Min");
+
 
 		validPos1.forEach((n) -> {
 			final double d = scan1PositionerParms.getPosMin(n);
@@ -563,7 +566,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Positioner Scan Width
-//		System.out.println(" Positioner Width");
+
 
 		validPos1.forEach((n) -> {
 			final double d = scan1PositionerParms.getPosWidth(n);
@@ -571,13 +574,12 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		});
 
 		// Positioner current position (Before Scan)
-//		System.out.println(" Positioner Current positoner before scan");
+
 
 		validPos1.forEach((n) -> {
 			final double d = scan1PositionerParms.getPosPP(n);
 			data1D.setPosPP(n, d);
 		});
-//		System.out.println(" Positioner setXAxisRange");
 
 		validPos1.forEach((n) -> {
 			data1D.setXAxisRange(n);

@@ -9,16 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jgoodies.forms.layout.FormSpecs;
+//import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -79,7 +77,7 @@ public class TableDataConfig extends JDialog {
 			{
 				tableXPanel = new JPanel();
 				tabbedPane.addTab("x-axis positioners", null, tableXPanel, null);
-				tableXPanel.setLayout(new GridLayout(1, 0, 0, 0));
+				tableXPanel.setLayout(new GridLayout(4, 0, 0, 0));
 			}
 			{
 				tableYPanel = new JPanel();
@@ -144,16 +142,32 @@ public class TableDataConfig extends JDialog {
 		
 		for (int i = 0; i < 4; i++) {
 			if(valid1DPos.contains(i) ) {
-				TableScanFilePickerPanel tableScanFilePickerPanel = new TableScanFilePickerPanel();
+				TableScanFilePickerPanel1 tableScanFilePickerPanel = new TableScanFilePickerPanel1();
 				tableXPanel.add(tableScanFilePickerPanel);
-			//	motorName = 
+				motorName = scan1PositionerParms.getPositionerDescription(i);
+				tableScanFilePickerPanel.setPositionerName(motorName);
 				
 			}else {
 				JPanel jPanelEmpty = new JPanel();
 				tableXPanel.add(jPanelEmpty);
 			}
 			
+			if(valid2DPos.contains(i) ) {
+				TableScanFilePickerPanel1 tableScanFilePickerPanel = new TableScanFilePickerPanel1();
+				tableYPanel.add(tableScanFilePickerPanel);
+				motorName = scan2PositionerParms.getPositionerDescription(i);
+				tableScanFilePickerPanel.setPositionerName(motorName);
+				
+			}else {
+				JPanel jPanelEmpty = new JPanel();
+				tableYPanel.add(jPanelEmpty);
+			}
+
+			
 		}
+		
+		
+		
 	}
 }
 

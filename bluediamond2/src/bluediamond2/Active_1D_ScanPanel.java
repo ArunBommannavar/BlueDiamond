@@ -1309,11 +1309,14 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public double getMinX() {
-		return xaxis.getMin();
+		
+		double d = getPrecisionedData( xaxis.getMin());
+		return d;
 	}
 
 	public double getMaxX() {
-		return xaxis.getMax();
+		double d = getPrecisionedData(xaxis.getMax());
+		return d;
 	}
 
 	public double getMinY() {
@@ -1333,15 +1336,12 @@ public class Active_1D_ScanPanel extends JPanel {
 	public double getCenter(double d1, double d2) {
 
 		double d = (d1 + d2) / 2.0;
-		// d = getPrecisionedData(d);
-
 		return d;
 	}
 
 	public double getWidth(double d1, double d2) {
 
 		double d = d2 - d1;
-		// d = getPrecisionedData(d);
 		return d;
 	}
 
@@ -1461,14 +1461,12 @@ public class Active_1D_ScanPanel extends JPanel {
 		}
 	}
 
-	public String getPosName(int pos) {
-		JCheckBox jb1D = posXMap.get(pos);
-		String posName = jb1D.getText();
-		return posName;
-	}
 
 	public void setXPositionerName_1D(int pos, String str) {
 		JCheckBox jb = posXMap.get(pos);
+		jb.setText(str);
+		
+		/*
 		String firstPart;
 		String secondPart;
 		String rtyp = str;
@@ -1503,8 +1501,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			e.printStackTrace();
 		}
 		
-		
-//		System.out.println(" first part = "+firstPart+"  second Part = "+secondPart+"  RTYP = "+rtyp);
+	
 		String pvDescriptionResult = str;
 		
 		if (!rtyp.equals("table"))
@@ -1522,10 +1519,18 @@ public class Active_1D_ScanPanel extends JPanel {
 				
 		pvDescription.disconnectChannel();
 		}
+		
 		jb.setText(pvDescriptionResult);
+		*/
 
 	}
-
+	/*
+	public String getPosName(int pos) {
+		JCheckBox jb1D = posXMap.get(pos);
+		String posName = jb1D.getText();
+		return posName;
+	}
+*/
 	public String getPositionerName(int pos) {
 		String ret = "";
 		JCheckBox jb = posXMap.get(pos);
@@ -1617,7 +1622,6 @@ public class Active_1D_ScanPanel extends JPanel {
 			e.printStackTrace();
 		}
 		
-
 		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
 		pvDescription.makeEpicsDataObject();
 		detName = pvDescription.getDescription();
@@ -1629,7 +1633,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		String ret = "";
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		JCheckBox jb = detPanel.getDetPanelCheckBox();
-		// ret = jb.getName();
 		ret = jb.getText();
 		return ret;
 	}

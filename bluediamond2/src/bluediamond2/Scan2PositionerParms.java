@@ -21,6 +21,7 @@ public class Scan2PositionerParms {
 	private PositionerRelAbs[] posRelAbs = new PositionerRelAbs[numberOfPositioners];
 	private PositionerScanMode[] posScanMode = new PositionerScanMode[numberOfPositioners];	
 	private PositionerPnRA[] posPnRA = new PositionerPnRA[numberOfPositioners];
+	private String[] positionerDescription = new String[4];
 
 	private String scanPv;
 
@@ -174,6 +175,18 @@ public class Scan2PositionerParms {
 		return initPos;
 	}
 	
+	public void findPositionerDescription() {		
+		validPos.forEach((n) -> {
+			posPnPV[n].findMotorChannelPVdescription();
+			positionerDescription[n] = posPnPV[n].getMotorDescription();
+		});
+	}
+	
+	public String getPositionerDescription(int n) {
+		return positionerDescription[n];
+	}
+
+	
 	public String getPosScanMode(int n){
 		String scanMode =posScanMode[n].getVal();		
 		return scanMode;
@@ -204,7 +217,7 @@ public class Scan2PositionerParms {
 	public double[] getPosReadBackArray(int n, int m){
 		return posPnRA[n].getArrayValues(m);
 	}
-	public PositionerPnPV[] getPosPnPV(){
+	public PositionerPnPV[] getPosPnPVList(){
 		return posPnPV;
 	}
 }
