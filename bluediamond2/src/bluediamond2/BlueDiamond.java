@@ -189,7 +189,6 @@ public class BlueDiamond {
 				derivative = !derivative;
 				data1D.setDerivative(derivative);
 				mntmDerivative.setText(((derivative) ? "Raw" : "Derivative"));
-
 			}
 		});
 
@@ -211,6 +210,7 @@ public class BlueDiamond {
 				mntmShowVMarkers.setText(((showVMarkers) ? "Show V Marker" : "Hide V Marker"));
 			}
 		});
+		
 		mnMarkerMenu.add(mntmShowVMarkers);
 
 		JMenuItem mntmShowHMarkers = new JMenuItem("Hide H Markers");
@@ -223,7 +223,6 @@ public class BlueDiamond {
 				}
 				showHMarkers = !showHMarkers;
 				mntmShowHMarkers.setText(((showHMarkers) ? "Show H Marker" : "Hide H Marker"));
-
 			}
 		});
 		mnMarkerMenu.add(mntmShowHMarkers);
@@ -241,7 +240,6 @@ public class BlueDiamond {
 				yAxisLog = !yAxisLog;
 				data1D.setLogLinear(yAxisLog);
 				mntmYaxislog.setText(((yAxisLog) ? "Linear" : "Logarithmic"));
-
 			}
 		});
 
@@ -258,8 +256,7 @@ public class BlueDiamond {
 
 		JMenuItem mntmReadTableScanValues = new JMenuItem("Read Values");
 		mnTable.add(mntmReadTableScanValues);
-		mntmReadTableScanValues.addActionListener(new BlueDiamond_mntmReadTableScanValues_ActionAdapter(this));
-		
+		mntmReadTableScanValues.addActionListener(new BlueDiamond_mntmReadTableScanValues_ActionAdapter(this));		
 
 		JMenu mnHelp = new JMenu("About");
 		mnHelp.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -314,7 +311,6 @@ public class BlueDiamond {
 		} catch (Throwable th) {
 			th.printStackTrace();
 		}
-
 	}
 
 	public void mdaFileOpen_actionPerformed(ActionEvent e) {
@@ -373,11 +369,7 @@ public class BlueDiamond {
 	public void about_actionPerformed(ActionEvent e) {
 
 		AboutFrame frameAbout = new AboutFrame();
-		// int width = 350;
-		// int height = 300;
-		// frame.setSize(width, height);
 		frameAbout.setVisible(true);
-
 	}
 
 	public void showNewConfigPanel() {
@@ -415,7 +407,6 @@ public class BlueDiamond {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-
 			}
 			break;
 
@@ -505,9 +496,7 @@ public class BlueDiamond {
 			scan1PositionerParms.createPosPVs();
 			scan1DetectorParms.createDetPVs();
 
-			scan2PositionerParms.createPosPVs();
-
-			
+			scan2PositionerParms.createPosPVs();			
 			
 			scanMonitor.createScanPVS();
 
@@ -572,7 +561,7 @@ public class BlueDiamond {
 	
 	public void readTableScanValuesDialog() {
 		int returnValue = 0;
-		TableDataConfig tableDataConfig = new TableDataConfig(frmBluediamond, false);
+		TableDataConfig tableDataConfig = new TableDataConfig(frmBluediamond, true);
 		tableDataConfig.setScan1PositionerParms(scan1PositionerParms);
 		tableDataConfig.setScan2PositionerParms(scan2PositionerParms);
 		tableDataConfig.get1DValidPosList();
@@ -580,8 +569,12 @@ public class BlueDiamond {
 		
 		tableDataConfig.populatePositioners();
 		tableDataConfig.revalidate();
-		tableDataConfig.setModal(true);
+		tableDataConfig.setVisible(true);
+		tableDataConfig.setModal(true);		
+		
 		returnValue = tableDataConfig.getReturnVal();
+//		tableDataConfig.setVisible(false);
+//		System.out.println(" Return Value = "+returnValue);
 		
 		
 	}
@@ -630,7 +623,7 @@ class BlueDiamond_confignew_ActionAdapter implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent actionEvent) {
-		// adaptee.confignew_actionPerformed(actionEvent);
+		
 		adaptee.showNewConfigPanel();
 	}
 }
@@ -670,7 +663,6 @@ class BlueDiamond_mntmReadTableScanValues_ActionAdapter implements ActionListene
 		adaptee.readTableScanValuesDialog();
 		
 	}
-	
 	
 }
 

@@ -103,10 +103,10 @@ public class TableDataConfig extends JDialog {
 			getRootPane().setDefaultButton(cancelButton);
 			
 			setLocationRelativeTo(jFrame);
-			setVisible(true);
+
 		}
 	}
-
+	
 	public void okButton_actionPerformed(ActionEvent e) {
 		returnValue = APPROVE_OPTION;
 		setVisible(false);
@@ -162,11 +162,8 @@ public class TableDataConfig extends JDialog {
 				JPanel jPanelEmpty = new JPanel();
 				tableYPanel.add(jPanelEmpty);
 			}
-
 			
-		}
-		
-		
+		}	
 		
 	}
 }
