@@ -14,6 +14,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 //import com.jgoodies.forms.layout.FormSpecs;
@@ -32,6 +33,12 @@ public class TableDataConfig extends JDialog {
 	
 	List<Integer> valid1DPos;
 	List<Integer> valid2DPos;
+	
+	HashMap <Integer, TableScanFilePickerPanel1> valid1DPosPanel = new HashMap <Integer, TableScanFilePickerPanel1>();
+	HashMap <Integer, TableScanFilePickerPanel1> valid2DPosPanel = new HashMap <Integer, TableScanFilePickerPanel1>();
+	
+	HashMap <Integer, String> valid1DPosFileName = new HashMap<Integer, String>();
+	HashMap <Integer, String> valid2DPosFileName = new HashMap<Integer, String>();
 	
 	JPanel tableXPanel;
 	JPanel tableYPanel;
@@ -66,6 +73,7 @@ public class TableDataConfig extends JDialog {
 	 */
 	public TableDataConfig(JFrame jFrame, boolean modal) {
 		super(jFrame, modal);
+		initAllHashMap();
 		setBounds(100, 100, 457, 245);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,14 +108,30 @@ public class TableDataConfig extends JDialog {
 			buttonPane.add(cancelButton);
 			cancelButton.addActionListener(new TableDataConfig_cancelbutton_ActionAdapter(this));
 
-			getRootPane().setDefaultButton(cancelButton);
-			
+			getRootPane().setDefaultButton(cancelButton);			
 			setLocationRelativeTo(jFrame);
 
 		}
 	}
 	
 	public void okButton_actionPerformed(ActionEvent e) {
+		
+		valid1DPosPanel.forEach((k,tableScanFilePickerPanel1)->{
+			String positionerTableFileName = tableScanFilePickerPanel1.getPickedFileName();
+			System.out.println(" 1D Positioner "+k+"   "+positionerTableFileName);			
+			valid1DPosFileName.put(k, positionerTableFileName);
+			})
+		;
+
+		valid2DPosPanel.forEach((k,tableScanFilePickerPanel1)->{
+			String positionerTableFileName = tableScanFilePickerPanel1.getPickedFileName();
+			System.out.println(" 2D Positioner "+k+"   "+positionerTableFileName);
+			valid2DPosFileName.put(k, positionerTableFileName);
+
+			})
+		;
+	
+		
 		returnValue = APPROVE_OPTION;
 		setVisible(false);
 	}
@@ -146,6 +170,7 @@ public class TableDataConfig extends JDialog {
 				tableXPanel.add(tableScanFilePickerPanel);
 				motorName = scan1PositionerParms.getPositionerDescription(i);
 				tableScanFilePickerPanel.setPositionerName(motorName);
+				set1DPosFile(i,tableScanFilePickerPanel);
 				
 			}else {
 				JPanel jPanelEmpty = new JPanel();
@@ -157,15 +182,30 @@ public class TableDataConfig extends JDialog {
 				tableYPanel.add(tableScanFilePickerPanel);
 				motorName = scan2PositionerParms.getPositionerDescription(i);
 				tableScanFilePickerPanel.setPositionerName(motorName);
+				set2DPosFile(i,tableScanFilePickerPanel);
 				
 			}else {
 				JPanel jPanelEmpty = new JPanel();
 				tableYPanel.add(jPanelEmpty);
-			}
-			
-		}	
-		
+			}			
+		}			
 	}
+	
+	public void initAllHashMap() {
+		
+		valid1DPosPanel.clear();
+		valid2DPosPanel.clear();
+		valid1DPosFileName.clear();
+		valid2DPosFileName.clear();
+	}
+	
+	public void set1DPosFile(int n, TableScanFilePickerPanel1 str) {
+		valid1DPosPanel.put(n,str);
+	}
+	
+	public void set2DPosFile(int n, TableScanFilePickerPanel1 str) {
+		valid2DPosPanel.put(n,str);
+	}	
 }
 
 class TableDataConfig_okbutton_ActionAdapter implements ActionListener {

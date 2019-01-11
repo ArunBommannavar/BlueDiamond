@@ -44,7 +44,6 @@ public class TableScanFilePickerPanel1 extends JPanel {
 		Path currentRelativePath = Paths.get("");
 		programPath = new File(currentRelativePath.toAbsolutePath().toString());
 
-
 	}
 
 	public void setPositionerName(String str) {
@@ -57,6 +56,10 @@ public class TableScanFilePickerPanel1 extends JPanel {
 	
 	public void setPickedFileName(String str) {
 		tableScanFileTextField.setText(str);
+	}
+	
+	public String getPickedFileName() {		
+		return tableScanFileTextField.getText().trim();
 	}
 	
 	public void pickFileButton_ActionPerformed() {

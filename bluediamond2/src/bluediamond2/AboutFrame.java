@@ -81,8 +81,8 @@ public class AboutFrame extends JFrame {
 	public void closeAboutFrame(){
 		this.dispose();
 	}
-
 }
+
 class AboutFrame_exit_ActionAdapter implements ActionListener{
 	private AboutFrame adaptee;
 	

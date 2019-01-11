@@ -128,7 +128,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan1EXSCObj.addPropertyChangeListener("SCAN1EXSC", this);
 		scan2EXSCObj.addPropertyChangeListener("SCAN2EXSC", this);
 		scan2BUSYObj.addPropertyChangeListener("SCAN2BUSY", this);
-
 		
 		scan1CPTObj.setMonitor();		
 		scan2CPTObj.setMonitor();		
