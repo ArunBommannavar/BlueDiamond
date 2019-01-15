@@ -1607,6 +1607,7 @@ public class Active_1D_ScanPanel extends JPanel {
 			DBR dbr = channel.get(DBRType.STRING, 1);
 			context.pendIO(1.0);
 			rtyp = ((STRING) dbr).getStringValue()[0];
+//			System.out.println(" Detector RTYP  ="+rtyp);
 			channel.destroy();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

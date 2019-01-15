@@ -257,10 +257,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		
 		scanStatusMessageObj.removePropertyChangeListener(this);
 		scanStatusMessageObj.disconnectChannel();
-		
-		
-		
-	}
+		}
 
 	public void setActive_1D_ScanPanel(Active_1D_ScanPanel active_1D_ScanPanel) {
 		this.active_1D_ScanPanel = active_1D_ScanPanel;

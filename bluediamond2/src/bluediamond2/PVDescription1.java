@@ -44,6 +44,26 @@ public class PVDescription1 {
 		}
 	}
 	
+	public void makeAiEpicsObject() {
+
+		pvName = firstPart + ".DESC";
+		try {
+			channel = context.createChannel(pvName);
+			context.pendIO(1.0);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void makeA0EpicsObject() {
 		
 		secondPart = ".DESC";

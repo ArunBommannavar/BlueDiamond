@@ -129,8 +129,7 @@ public class TableDataConfig extends JDialog {
 			valid2DPosFileName.put(k, positionerTableFileName);
 
 			})
-		;
-	
+		;	
 		
 		returnValue = APPROVE_OPTION;
 		setVisible(false);

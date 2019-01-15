@@ -49,7 +49,7 @@ public class PVDescription {
 				e.printStackTrace();
 			}
 
-		} else if (recordType.equals("ao")) {
+		} else if (recordType.equals("ao")||recordType.equals("ai")) {
 			pvName = firstPart + ".DESC";
 
 			try {
