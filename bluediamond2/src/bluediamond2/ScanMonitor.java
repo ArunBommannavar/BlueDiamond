@@ -373,6 +373,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void validateDets() {
 		scan1DetectorParms.validateDetectors();
+		
 	}
 	
 	private void setHasScan1Parms(boolean b) {
@@ -494,7 +495,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	public void setMainPanel_2D_Y_PositionerNames() {
 		validPos2.forEach((n) -> {
 			active_2D_ScanPanel.setYPositionerVisible_2D(n, true);
-			final String str = scan2PositionerParms.getPosPnPV(n);
+//			final String str = scan2PositionerParms.getPosPnPV(n);
+			final String str = scan2PositionerParms.getPositionerDescription(n);
 			active_2D_ScanPanel.setYPositionerName_2D(n, str);
 		});
 	}
@@ -503,7 +505,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		validDet.forEach((n) -> {
 			active_1D_ScanPanel.setDetVisible(n, true);
 			active_1D_ScanPanel.setDetEnable(n, true);
-			final String str = scan1DetectorParms.getDetPV(n);
+//			final String str = scan1DetectorParms.getDetPV(n);
+			final String str = scan1DetectorParms.getDetectorDescription(n);
 //			System.out.println(" In ScanMonitor setMainPanel_1D_DetectorNames "+n+"  "+str);
 			active_1D_ScanPanel.setDetectorName(n, str);
 		});

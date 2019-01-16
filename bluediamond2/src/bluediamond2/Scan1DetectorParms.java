@@ -16,6 +16,8 @@ public class Scan1DetectorParms {
 	DetectorCV[] detCV = new DetectorCV[numberOfDetectors];
 	DetectorDnnRA[] detDnnRA = new DetectorDnnRA[numberOfDetectors];
 
+	private String[] detectorDescription = new String[numberOfDetectors];
+
 	private String scanPv;
  
 	List<Integer> validDet = new ArrayList<Integer>();
@@ -130,6 +132,17 @@ public class Scan1DetectorParms {
 		initDet = true;
 	}
 
+	public void findDetectorDescription() {
+		validDet.forEach((n) -> {
+			detPV[n].findDetectorPVdescription();
+			detectorDescription[n] = detPV[n].getDetectorDescription();
+		});
+	}
+
+	public String getDetectorDescription(int n) {
+		return detectorDescription[n];
+	}
+	
 	public List<Integer> getValidDet(){
 		return validDet;
 	}

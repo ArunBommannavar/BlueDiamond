@@ -279,7 +279,6 @@ public class BlueDiamond {
 		
 	private void initializeJCA() {
 		JCALibrary jca = JCALibrary.getInstance();
-		// Create a context with default configuration values.
 		try {
 			context = jca.createContext(JCALibrary.CHANNEL_ACCESS_JAVA);
 		} catch (CAException e) {
@@ -354,15 +353,12 @@ public class BlueDiamond {
 					}
 				} else if(dataRank==2) {
 					inData.close();
-					saved_2D_ScanPanel.setFile(inFile);
-
-					
+					saved_2D_ScanPanel.setFile(inFile);					
 				}
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
-			}
-			
+			}			
 		}
 	}
 
@@ -514,6 +510,7 @@ public class BlueDiamond {
 			
 			scan1PositionerParms.findPositionerDescription();
 			scan2PositionerParms.findPositionerDescription();			
+			scan1DetectorParms.findDetectorDescription();
 			
 			scanMonitor.setMainPanel_1D_PositionerNames();
 			scanMonitor.setMainPanel_2D_X_PositionerNames();

@@ -65,40 +65,21 @@ public class PositionerPnPV implements MonitorListener {
 	
 	public void findMotorChannelPVdescription() {
 
-		PVDescription1 pVDescription1; 
-		String secondPart;
 		String motorChannelName = motorChannel.getName();
+
+		PvRTYP pvRTYP = new PvRTYP(motorChannelName ,context);
+		recordType = pvRTYP.getRtyp();
+		String secondPart;
 		motorDescription = motorChannelName;
 
 		int lastIndexOfDot = motorChannelName.lastIndexOf(".");
 		String firstPart = motorChannelName.substring(0, lastIndexOfDot);
 		secondPart = motorChannelName.substring(lastIndexOfDot + 1);
-
-		Channel rtypeChannel;
-		String rtypePV = firstPart+".RTYP";
-
-		try {
-			rtypeChannel = context.createChannel(rtypePV);
-			context.pendIO(1.0);
-			DBR dbr = rtypeChannel.get(DBRType.STRING, 1);
-			context.pendIO(1.0);
-			recordType = ((STRING) dbr).getStringValue()[0];
-			rtypeChannel.destroy();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			System.out.println(
-					" TimeOutException PositionerPnPV " + pvName + "  find PV Description of " + motorChannelName);
-			e.printStackTrace();
-		}
+		
+		PVDescription pVDescription = new PVDescription(context);
+		motorDescription = pVDescription.getDescription(firstPart, secondPart, recordType);
+		
+/*
 		if (recordType.equals("motor")) {
 			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
 			pVDescription1.makeMotorEpicsObject();
@@ -129,7 +110,7 @@ public class PositionerPnPV implements MonitorListener {
 			motorDescription = pVDescription1.getDescription();
 			pVDescription1.disconnectChannel();
 		}
-
+*/
 
 	}
 

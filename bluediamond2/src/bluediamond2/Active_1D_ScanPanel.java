@@ -1587,6 +1587,9 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setDetectorName(int det, String str) {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		JCheckBox jb = detPanel.getDetPanelCheckBox();
+		
+		jb.setText(str);
+		/*
 		String firstPart;
 		String secondPart;
 		String rtyp = str;
@@ -1623,11 +1626,13 @@ public class Active_1D_ScanPanel extends JPanel {
 			e.printStackTrace();
 		}
 		
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
-		pvDescription.makeEpicsDataObject();
-		detName = pvDescription.getDescription();
+		PVDescription pvDescription = new PVDescription( context);
+
+		detName = pvDescription.getDescription(firstPart, secondPart, rtyp);
+		
 		jb.setText(detName);
-		pvDescription.disconnectChannel();
+		*/
+		
 	}
 
 	public String getDetectorName(int det) {

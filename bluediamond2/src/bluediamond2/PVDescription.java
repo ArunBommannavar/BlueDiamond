@@ -18,14 +18,10 @@ public class PVDescription {
 	String secondPart;
 	String pvName;
 	String recordType;
-	JCheckBox jCheckBox;
+	boolean recordTypeFound = false;
 
-	public PVDescription(String str1, String str2, String rc, JCheckBox jc, Context context) {
+	public PVDescription(Context context) {
 		this.context = context;
-		firstPart = str1;
-		secondPart = str2;
-		recordType = rc;
-		jCheckBox = jc;
 	}
 
 	public void makeEpicsDataObject() {
@@ -35,6 +31,7 @@ public class PVDescription {
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);
+				recordTypeFound = true;
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -49,12 +46,36 @@ public class PVDescription {
 				e.printStackTrace();
 			}
 
-		} else if (recordType.equals("ao")||recordType.equals("ai")) {
+		} else if (recordType.equals("ao")) {
 			pvName = firstPart + ".DESC";
 
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);
+				recordTypeFound = true;
+
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else if (recordType.equals("ai")) {
+			pvName = firstPart + ".DESC";
+
+			try {
+				channel = context.createChannel(pvName);
+				context.pendIO(1.0);
+				recordTypeFound = true;
+
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -76,6 +97,8 @@ public class PVDescription {
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);
+				recordTypeFound = true;
+
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -97,6 +120,8 @@ public class PVDescription {
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);
+				recordTypeFound = true;
+
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -110,7 +135,6 @@ public class PVDescription {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 
 		else if (recordType.equals("mca")) {
@@ -120,6 +144,8 @@ public class PVDescription {
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);
+				recordTypeFound = true;
+
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -151,25 +177,37 @@ public class PVDescription {
 		}
 	}
 
-	public String getDescription() {
-		String ret = " ";
-		try {
-			DBR dbr = channel.get();
-			context.pendIO(1.0);
-			dbr = channel.get(DBRType.STRING, 1);
-			context.pendIO(1.0);
-			ret = ((STRING) dbr).getStringValue()[0];
+	public String getDescription(String str1, String str2, String rc) {
 
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		firstPart = str1;
+		secondPart = str2;
+		recordType = rc;
+
+		String ret = str1+str2;
+
+		makeEpicsDataObject();
+		
+		if (recordTypeFound) {
+			try {
+				DBR dbr = channel.get();
+				context.pendIO(1.0);
+				dbr = channel.get(DBRType.STRING, 1);
+				context.pendIO(1.0);
+				ret = ((STRING) dbr).getStringValue()[0];
+
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		disconnectChannel();
 
 		return ret;
 	}

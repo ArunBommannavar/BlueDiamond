@@ -68,86 +68,24 @@ public class DetectorPV implements MonitorListener{
 	public String getVal() {
 		return val;
 	}
-/*
-	public void findDetectorDescription() {
-		PVDescription1 pVDescription1; 
+	
+	public String getDetectorDescription() {		
+		return detectorDescription;
 	}
-*/
-	
-	
+
 	public void findDetectorPVdescription() {
 
-		PVDescription1 pVDescription1; 
+		String recordType = "unKnown";
+		PvRTYP pvRTYP = new PvRTYP(detectorDescription, context);
+		recordType = pvRTYP.getRtyp();
 		String secondPart;
-//		String motorChannelName = motorChannel.getName();
-		detectorDescription = pvName;
 
 		int lastIndexOfDot = detectorDescription.lastIndexOf(".");
 		String firstPart = detectorDescription.substring(0, lastIndexOfDot);
 		secondPart = detectorDescription.substring(lastIndexOfDot + 1);
 
-		Channel rtypeChannel;
-		String rtypePV = firstPart+".RTYP";
-
-		try {
-			rtypeChannel = context.createChannel(rtypePV);
-			context.pendIO(1.0);
-			DBR dbr = rtypeChannel.get(DBRType.STRING, 1);
-			context.pendIO(1.0);
-			recordType = ((STRING) dbr).getStringValue()[0];
-			rtypeChannel.destroy();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			System.out.println(
-					" TimeOutException PositionerPnPV " + pvName + "  find PV Description of " + detectorDescription);
-			e.printStackTrace();
-		}
-		if (recordType.equals("motor")) {
-			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
-			pVDescription1.makeMotorEpicsObject();
-			detectorDescription = pVDescription1.getDescription();
-			pVDescription1.disconnectChannel();
-			
-		} else if (recordType.equals("ao")) {
-			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
-			pVDescription1.makeA0EpicsObject();
-			detectorDescription = pVDescription1.getDescription();
-			pVDescription1.disconnectChannel();
-			
-		} else if (recordType.equals("scaler")) {
-			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
-			pVDescription1.makeScalerEpicsObject();
-			detectorDescription = pVDescription1.getDescription();
-			pVDescription1.disconnectChannel();
-
-		} else if (recordType.equals("transform")) {
-			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
-			pVDescription1.makeTransformEpicsDataObject();
-			detectorDescription = pVDescription1.getDescription();
-			pVDescription1.disconnectChannel();
-
-		} else if (recordType.equals("mca")) {
-			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
-			pVDescription1.makeMcaEpicsDataObject();
-			detectorDescription = pVDescription1.getDescription();
-			pVDescription1.disconnectChannel();
-		}else if (recordType.equals("ai")) {
-			pVDescription1 = new PVDescription1(firstPart,secondPart,context);
-			pVDescription1.makeAiEpicsObject();
-			detectorDescription = pVDescription1.getDescription();
-			pVDescription1.disconnectChannel();
-			
-		}
-
+		PVDescription pVDescription = new PVDescription(context);
+		detectorDescription = pVDescription.getDescription(firstPart, secondPart, recordType);	
 
 	}
 
@@ -158,6 +96,7 @@ public class DetectorPV implements MonitorListener{
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
 			val = ((DBR_String) convert).getStringValue()[0];
+			detectorDescription = val;
 		} else
 			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);				
 	}
