@@ -161,7 +161,7 @@ public class PVDescription {
 			}
 		} else {
 			String temp = firstPart+secondPart;
-			System.out.println(" No Description found for PV = "+temp+"    RTYP = "+recordType);
+			System.out.println(" Diagnostics: No Description found for PV = "+temp+"    RTYP = "+recordType);
 		}
 	}
 
