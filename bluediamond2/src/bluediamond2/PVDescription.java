@@ -159,7 +159,9 @@ public class PVDescription {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+		} else {
+			String temp = firstPart+secondPart;
+			System.out.println(" No Description found for PV = "+temp+"    RTYP = "+recordType);
 		}
 	}
 
