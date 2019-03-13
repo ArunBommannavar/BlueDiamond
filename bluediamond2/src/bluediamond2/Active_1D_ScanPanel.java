@@ -127,7 +127,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	double pickedPoint;
 	double minMarker;
 	double maxMarker;
-	int precision = 4;
+	int precision = 7;
 
 	JLabel lblLeftMarkerValue;
 	JLabel lblRightMarkerValue;
