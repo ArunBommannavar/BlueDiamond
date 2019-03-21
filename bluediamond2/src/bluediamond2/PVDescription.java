@@ -91,9 +91,15 @@ public class PVDescription {
 			}
 
 		} else if (recordType.equals("scaler")) {
-			String str = secondPart.replace("S", "NM");
-			pvName = firstPart + "." + str;
+			
+			
+			if(secondPart.endsWith("T")) {				
+				pvName = firstPart + "." + "NM1";
 
+			} else {	
+				String str = secondPart.replace("S", "NM");
+				pvName = firstPart + "." + str;
+			}			
 			try {
 				channel = context.createChannel(pvName);
 				context.pendIO(1.0);

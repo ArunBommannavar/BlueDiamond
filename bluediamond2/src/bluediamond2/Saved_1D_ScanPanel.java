@@ -33,7 +33,6 @@ import com.klg.jclass.chart.JCAxis;
 import com.klg.jclass.chart.JCChart;
 import com.klg.jclass.chart.JCMarker;
 
-
 import javax.swing.JTabbedPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
@@ -66,10 +65,10 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	private int scanDataViewNum = 1;
 	private Old_1D_Panel old_1D_Panel;
-	
+
 	java.util.List<String> oldList = new ArrayList<String>();
-	private Map<String, OldFileList> oldFileListMap = new HashMap<String,OldFileList >();
-		
+	private Map<String, OldFileList> oldFileListMap = new HashMap<String, OldFileList>();
+
 	private JTextField xRangeMinTextBox;
 	private JTextField xRangeMaxTextBox;
 	private JTextField yRangeMinTextBox;
@@ -79,7 +78,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	JTabbedPane tabbedPane_left;
 	private JTable table;
-	
+
 	JCAxis xaxis;
 	JCAxis yaxis;
 
@@ -89,7 +88,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 	double pickedPoint;
 	double minMarker;
 	double maxMarker;
-	
+
 	JCMarker vMarker1;
 	JCMarker vMarker2;
 	JCMarker vMarkerCenter;
@@ -98,16 +97,16 @@ public class Saved_1D_ScanPanel extends JPanel {
 	double vMarkerCenterPos;
 	double scanCenter;
 	int precision = 4;
-	
+
 	JLabel lblLeftMarkerValue;
 	JLabel lblCenterMarkerValue;
 	JLabel lblWidthMarkerValue;
 	JLabel lblRightMarkerValue;
-	
+
 	boolean xScaleAuto = true;
 	JCheckBox userCheckBox;
 	JCheckBox autoCheckBox;
-	
+
 	double displayXMin;
 	double displayXMax;
 
@@ -171,7 +170,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		JPanel panel_7 = new JPanel();
 		leftPanel.add(panel_7, BorderLayout.CENTER);
 		panel_7.setLayout(new BorderLayout(0, 0));
-		
+
 		lblLeftMarkerValue = new JLabel("New label");
 		lblLeftMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_7.add(lblLeftMarkerValue, BorderLayout.CENTER);
@@ -197,7 +196,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		JPanel panel_9 = new JPanel();
 		rightPanel.add(panel_9, BorderLayout.CENTER);
 		panel_9.setLayout(new BorderLayout(0, 0));
-		
+
 		lblRightMarkerValue = new JLabel("New label");
 		lblRightMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_9.add(lblRightMarkerValue, BorderLayout.CENTER);
@@ -225,7 +224,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		JPanel panel_11 = new JPanel();
 		centerPanel.add(panel_11, BorderLayout.CENTER);
 		panel_11.setLayout(new BorderLayout(0, 0));
-		
+
 		lblCenterMarkerValue = new JLabel("New label");
 		lblCenterMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_11.add(lblCenterMarkerValue, BorderLayout.CENTER);
@@ -252,7 +251,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		JPanel panel_13 = new JPanel();
 		widthPanel.add(panel_13, BorderLayout.CENTER);
 		panel_13.setLayout(new BorderLayout(0, 0));
-		
+
 		lblWidthMarkerValue = new JLabel("New label");
 		lblWidthMarkerValue.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_13.add(lblWidthMarkerValue, BorderLayout.CENTER);
@@ -356,9 +355,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 		markerChartPanel.add(chartPanel);
 		chartPanel.setLayout(new BorderLayout(0, 0));
 
-//		chart = new JCChart();
-		chart  = new JCChart(JCChart.PLOT);
-//		chart = new ZoomXChart();
+		// chart = new JCChart();
+		chart = new JCChart(JCChart.PLOT);
+		// chart = new ZoomXChart();
 		chart.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				chart_mousePressed(e);
@@ -376,8 +375,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 		});
 
 		chartPanel.add(chart, BorderLayout.CENTER);
-		
-		
+
 		vMarker1 = new JCMarker();
 		vMarker1.setAssociatedWithYAxis(false);
 
@@ -481,7 +479,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 	public void setXScaleAuto(boolean b) {
 		xScaleAuto = b;
-		
+
 		int selectedPositioner;
 		double tempXMin;
 		double tempXMax;
@@ -489,65 +487,66 @@ public class Saved_1D_ScanPanel extends JPanel {
 		OldData1D tempOldData1D;
 		String tempFileNameString;
 		OldFileList tempOldFileList;
-		
+
 		double xMin = Double.MAX_VALUE;
 		double xMax = Double.MIN_VALUE;
 
-		
 		/*
 		 * Loop through all dataViews. They are available through OldFileListMap
 		 * 
 		 */
-		
-		for (Map.Entry<String, OldFileList> entry :oldFileListMap.entrySet()){
+
+		for (Map.Entry<String, OldFileList> entry : oldFileListMap.entrySet()) {
 			tempFileNameString = entry.getKey();
 			tempOldFileList = entry.getValue();
 			tempDataView = tempOldFileList.getChartDataView();
-			
-			if(tempDataView.isVisible()) {
+
+			if (tempDataView.isVisible()) {
 				tempOldData1D = tempOldFileList.getOldData1D();
 				selectedPositioner = tempOldData1D.getSelectedPositioner();
 				tempXMin = tempOldData1D.getSelectedPositionerXMin();
-				if (tempXMin <xMin)xMin = tempXMin;
-				
+				if (tempXMin < xMin)
+					xMin = tempXMin;
+
 				tempXMax = tempOldData1D.getSelectedPositionerXMax();
-				if (tempXMax >xMax)xMax = tempXMax;
-				
+				if (tempXMax > xMax)
+					xMax = tempXMax;
+
 				tempDataView.getXAxis().setMin(xMin);
 				tempDataView.getXAxis().setMax(xMax);
-				
-			}				
-		}		
+
+			}
+		}
 
 		showVMarkers();
-		chart.update();	
+		chart.update();
 	}
-	
+
 	public void setDisplayXMin(double d) {
-		displayXMin = d;		
+		displayXMin = d;
 	}
-	
+
 	public void setDisplayXMax(double d) {
-		displayXMax = d;		
+		displayXMax = d;
 	}
-	
+
 	public double getDisplayXMin() {
-		
+
 		return displayXMin;
 	}
-	
+
 	public double getDisplayXMax() {
 		return displayXMax;
 	}
-	
+
 	public boolean getXScaleAuto() {
 		return xScaleAuto;
 	}
-	
+
 	public boolean isXScaleAuto() {
-		return ((xScaleAuto)?true:false);
+		return ((xScaleAuto) ? true : false);
 	}
-	
+
 	public void setFile(File inFile) {
 		String inFileName = inFile.getName();
 		ReadSavedMdaData rmd = new ReadSavedMdaData();
@@ -560,10 +559,10 @@ public class Saved_1D_ScanPanel extends JPanel {
 		oldFileList.addOldData1D(oldData1D);
 
 		oldData1D.setDataViewNumber(scanDataViewNum);
-		
+
 		chart.getDataView(scanDataViewNum).setDataSource(oldData1D);
 		oldFileList.addChartDataView(chart.getDataView(scanDataViewNum));
-		
+
 		old_1D_Panel = new Old_1D_Panel();
 		old_1D_Panel.setSaved_1D_ScanPanel(this);
 		old_1D_Panel.setChart(chart);
@@ -635,49 +634,42 @@ public class Saved_1D_ScanPanel extends JPanel {
 		autoCheckBox.setEnabled(true);
 		userCheckBox.setEnabled(true);
 		setXScaleAuto(true);
-		
+
 		scanDataViewNum++;
 	}
 
 	public boolean isListed(String str) {
 		return oldList.contains(str);
 	}
-	
-	
-    public void dropAllTabs() {
-    
-    	tabbedPane_left.getTabCount();
-    	tabbedPane_left.removeAll();
-    }
+
+	public void dropAllTabs() {
+
+		tabbedPane_left.getTabCount();
+		tabbedPane_left.removeAll();
+	}
 
 	public void addVisibleTabs() {
-		
-//		int selectedPositioner;
-//		double tempXMin;
-//		double tempXMax;
-//		ChartDataView tempDataView;
-//		OldData1D tempOldData1D;
+
 		String tempFileNameString;
 		OldFileList tempOldFileList;
 		boolean tabVisible;
 		Old_1D_Panel temp_Old_1D_Panel;
 
-		
-		for (Map.Entry<String, OldFileList> entry :oldFileListMap.entrySet()){
+		for (Map.Entry<String, OldFileList> entry : oldFileListMap.entrySet()) {
 			tempFileNameString = entry.getKey();
 			tempOldFileList = entry.getValue();
-			tabVisible= tempOldFileList.getTabVisible();
-			
-			if(tabVisible) {
+			tabVisible = tempOldFileList.getTabVisible();
+
+			if (tabVisible) {
 				tempFileNameString = tempOldFileList.getFileName();
 				temp_Old_1D_Panel = tempOldFileList.getOld_1D_Panel();
 				tabbedPane_left.add(tempFileNameString, temp_Old_1D_Panel);
-				
-			}				
-		}		
+
+			}
+		}
 
 	}
-    
+
 	public void populateFileTable(String str) {
 		HpFileTableModel mp = (HpFileTableModel) table.getModel();
 		JRadioButton rb1 = new JRadioButton();
@@ -685,9 +677,10 @@ public class Saved_1D_ScanPanel extends JPanel {
 		table.getColumn("Select").setCellEditor(new RadioButtonEditor(new JCheckBox()));
 
 		mp.addRow(new Object[] { str, rb1 });
-		
+
 		rb1.setHorizontalAlignment(SwingConstants.CENTER);
 		rb1.setSelected(true);
+
 
 	}
 
@@ -768,29 +761,28 @@ public class Saved_1D_ScanPanel extends JPanel {
 							if (mColIndex == 1) {
 								Object obj = mp.getValueAt(firstRow, mColIndex);
 								Object fileNameObject = mp.getValueAt(firstRow, 0);
-								String fileName= fileNameObject.toString();
+								String fileName = fileNameObject.toString();
 								JRadioButton rb = (JRadioButton) obj;
 								OldFileList oldFileList1 = oldFileListMap.get(fileName);
 								ChartDataView chartDataView1 = oldFileList1.getChartDataView();
-          
-								if(rb.isSelected()) {
+
+								if (rb.isSelected()) {
 									oldFileList1.setTabVisible(true);
 									chartDataView1.setVisible(true);
 									chart.update();
 
-								}else {
+								} else {
 									oldFileList1.setTabVisible(false);
 									chartDataView1.setVisible(false);
 									chart.update();
 								}
-								
+
 								dropAllTabs();
 								addVisibleTabs();
 								setXScaleAuto(true);
 								// Object dObj = chart.getDataView(dataViewNumber).getDataSource();
-								if (table.getName() == "Saved File") {								
-									
-									
+								if (table.getName() == "Saved File") {
+
 								}
 							}
 						}
@@ -818,8 +810,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 					column);
 			((JLabel) renderer).setOpaque(true);
 			((JLabel) renderer).setHorizontalAlignment(SwingConstants.CENTER);
-			
-//			((JLabel) renderer).setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+
+			// ((JLabel) renderer).setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 			Color foreground, background;
 			if (hidden) {
 				foreground = new Color(0xDC, 0xDC, 0xDC);
@@ -830,7 +822,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 			}
 			renderer.setForeground(foreground);
 			renderer.setBackground(background);
-			
+
 			setAlignmentX(DefaultTableCellRenderer.CENTER);
 			return renderer;
 		}
@@ -840,11 +832,9 @@ public class Saved_1D_ScanPanel extends JPanel {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
 			/*
-			if (value == null) {
-				return null;
-			}
-			*/
-			
+			 * if (value == null) { return null; }
+			 */
+
 			return (Component) value;
 		}
 	}
@@ -878,8 +868,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 			super.fireEditingStopped();
 		}
 	}
-	
-	
+
 	public static void runSafe(Runnable task) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			task.run();
@@ -904,7 +893,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
 
-
 		runSafe(new Runnable() {
 			public void run() {
 
@@ -927,17 +915,17 @@ public class Saved_1D_ScanPanel extends JPanel {
 				setCenterMarkerValue(vMarkerCenterPos);
 				setWidthMarkerValue(getWidth(d3, d4));
 
-//				updateScanCenterDiff();
-
-		}
+			}
 		});
 	}
+
 	public void showVMarkers() {
 		setMarkers();
 		addVMarkers();
 		updateVMarkers();
 
 	}
+
 	public void addVMarkers() {
 		chart.getDataView(0).addMarker(vMarker1);
 		chart.getDataView(0).addMarker(vMarker2);
@@ -957,7 +945,7 @@ public class Saved_1D_ScanPanel extends JPanel {
 			}
 		});
 	}
-	
+
 	public void setLeftMarkerValue(double d) {
 		d = getPrecisionedData(d);
 		String str = Double.toString(d);
@@ -981,17 +969,19 @@ public class Saved_1D_ScanPanel extends JPanel {
 		String str = Double.toString(d);
 		lblWidthMarkerValue.setText(str);
 	}
+
 	public double getWidth(double d1, double d2) {
 
 		double d = d2 - d1;
 		return d;
 	}
+
 	public double getPrecisionedData(double d1) {
 		double d = Math.floor(d1 * Math.pow(10, precision) + 0.5);
 		d = d / Math.pow(10, precision);
 		return d;
 	}
-	
+
 	public double getMinX() {
 		return xaxis.getMin();
 	}
@@ -1046,21 +1036,19 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		}
 		chart.update();
-//		data1D.updateChartDisplay();
-
 	}
 
 	public void chart_mouseReleased(MouseEvent e) {
-		if (vMarkerSelected ) {
+		if (vMarkerSelected) {
 			chart.setBatched(true);
 			com.klg.jclass.chart.JCLineStyle ll = pickedMarker.getLineStyle();
 			ll.setColor(Color.BLACK);
 			pickedMarker = null;
 			chart.setBatched(false);
 			chart.update();
-//			data1D.updateChartDisplay();
 		}
 	}
+
 	public void chart_mouseDragged(MouseEvent e) {
 		Point point;
 
@@ -1081,9 +1069,8 @@ public class Saved_1D_ScanPanel extends JPanel {
 			moveVmarker(pickedMarker, pickedPoint);
 			chart.setBatched(false);
 
-		} 
+		}
 		chart.update();
-//		data1D.updateChartDisplay();
 	}
 
 	public void moveVmarker(JCMarker mrkr, double d) {
@@ -1098,109 +1085,102 @@ public class Saved_1D_ScanPanel extends JPanel {
 		vMarkerCenter.setValue(dCenter);
 
 		updateVMarkers();
-//		updateScanCenterDiff();
-
 	}
+
 	public double getCenter(double d1, double d2) {
 
 		double d = (d1 + d2) / 2.0;
 		// d = getPrecisionedData(d);
 
 		return d;
-	}	
+	}
 }
 
 class TabManager {
-    JTabbedPane tabbedPane;
-    String[] titles;
-    JComponent[] components;
-/* 
-    public TabManager(JTabbedPane tabbedPane, String[] titles,
-                      JComponent[] components) {
-        this.tabbedPane = tabbedPane;
-        this.titles = titles;
-        this.components = components;
-        setTabs(titles);
-    }
- */
-    public TabManager(JTabbedPane tabbedPane) {
-    	 this.tabbedPane = tabbedPane;
-    }
-    
-    public void dropAllTabs() {
-    	
-    }
-    public void setTabs(String[] titles) {
-        removeTabs(titles);
-        addTabs(titles);
-    }
- 
-    private void addTabs(String[] titles) {
-        String[] tabTitles = getTabTitles();
-        for(int i = 0; i < titles.length; i++) {
-            String title = titles[i];
-            if(!contains(tabTitles, title)) {
-                insert(title);
-            }
-        }
-    }
- 
-    private void insert(String title) {
-        String[] tabTitles = getTabTitles();
-        int index = getIndex(tabTitles, title);
-        JComponent component = components[getIndex(title)];
-        if(index == -1) {
-            tabbedPane.addTab(title, component);
-        } else {
-            tabbedPane.insertTab(title, null, component, null, index);
-        }
-    }
- 
-    private int getIndex(String[] array, String insert) {
-        int insertIndex = getIndex(insert);
-        for(int i = 0; i < array.length; i++) {
-            int index = getIndex(array[i]);
-            if(insertIndex < index) {;
-                return i;
-            }
-        }
-        return -1;
-    }
- 
-    private int getIndex(String str) {
-        for(int i = 0; i < titles.length; i++) {
-            if(titles[i].equals(str)) {
-                return i;
-            }
-        }
-        return -1;
-    }
- 
-    private void removeTabs(String[] titles) {
-        String[] tabTitles = getTabTitles();
-        for(int i = tabTitles.length-1; i >= 0; i--) {
-            String title = tabTitles[i];
-            if(!contains(titles, title)) {
-                tabbedPane.removeTabAt(i);
-            }
-        }
-    }
- 
-    private boolean contains(String[] array, String element) {
-        for(int i = 0; i < array.length; i++) {
-            if(array[i].equals(element)) {
-                return true;
-            }
-        }
-        return false;
-    }                
- 
-    private String[] getTabTitles() {
-        int tabCount = tabbedPane.getTabCount();
-        String[] titles = new String[tabCount];
-        for(int i = 0; i < tabCount; i++) {
-            titles[i] = tabbedPane.getTitleAt(i);
-        }
-        return titles;
-    }
+	JTabbedPane tabbedPane;
+	String[] titles;
+	JComponent[] components;
+
+	public TabManager(JTabbedPane tabbedPane) {
+		this.tabbedPane = tabbedPane;
+	}
+
+	public void dropAllTabs() {
+
+	}
+
+	public void setTabs(String[] titles) {
+		removeTabs(titles);
+		addTabs(titles);
+	}
+
+	private void addTabs(String[] titles) {
+		String[] tabTitles = getTabTitles();
+		for (int i = 0; i < titles.length; i++) {
+			String title = titles[i];
+			if (!contains(tabTitles, title)) {
+				insert(title);
+			}
+		}
+	}
+
+	private void insert(String title) {
+		String[] tabTitles = getTabTitles();
+		int index = getIndex(tabTitles, title);
+		JComponent component = components[getIndex(title)];
+		if (index == -1) {
+			tabbedPane.addTab(title, component);
+		} else {
+			tabbedPane.insertTab(title, null, component, null, index);
+		}
+	}
+
+	private int getIndex(String[] array, String insert) {
+		int insertIndex = getIndex(insert);
+		for (int i = 0; i < array.length; i++) {
+			int index = getIndex(array[i]);
+			if (insertIndex < index) {
+				;
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private int getIndex(String str) {
+		for (int i = 0; i < titles.length; i++) {
+			if (titles[i].equals(str)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private void removeTabs(String[] titles) {
+		String[] tabTitles = getTabTitles();
+		for (int i = tabTitles.length - 1; i >= 0; i--) {
+			String title = tabTitles[i];
+			if (!contains(titles, title)) {
+				tabbedPane.removeTabAt(i);
+			}
+		}
+	}
+
+	private boolean contains(String[] array, String element) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(element)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private String[] getTabTitles() {
+		int tabCount = tabbedPane.getTabCount();
+		String[] titles = new String[tabCount];
+		for (int i = 0; i < tabCount; i++) {
+			titles[i] = tabbedPane.getTitleAt(i);
+		}
+		return titles;
+	}
 }
