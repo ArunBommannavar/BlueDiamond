@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-
 import gov.aps.jca.CAException;
 import gov.aps.jca.Channel;
 import gov.aps.jca.Context;
@@ -67,7 +66,7 @@ import javax.swing.border.LineBorder;
 import gov.aps.jca.dbr.STRING;
 
 public class Active_1D_ScanPanel extends JPanel {
-	
+
 	Context context;
 	private JTextField xRangeMinTextField;
 	private JTextField xRangeMaxTextField;
@@ -98,7 +97,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	JCAxis xaxis;
 	JCAxis yaxis;
 	ChartDataView dataView;
-	
+
 	JCMarker vMarker1;
 	JCMarker vMarker2;
 	JCMarker vMarkerCenter;
@@ -113,7 +112,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	JCMarker hMarkerCenter;
 	JCLineStyle centerVMarkerStyle;
 	JCLineStyle centerHMarkerStyle;
-	
+
 	double hMarker1Pos;
 	double hMarker2Pos;
 	double hMarkerCenterPos;
@@ -144,32 +143,31 @@ public class Active_1D_ScanPanel extends JPanel {
 
 	JCLineStyle vMarkerCenterStyle;
 	JCLineStyle hMarkerCenterStyle;
-	
+
 	String checkText;
 	boolean checkTextValid;
-	
-	
+
 	String dx1Text;
 	String dx2Text;
 	String dy1Text;
 	String dy2Text;
-	
+
 	boolean dx1Boolean;
 	boolean dx2Boolean;
 	boolean dy1Boolean;
-	boolean dy2Boolean;	
-	
+	boolean dy2Boolean;
+
 	double dx1;
 	double dx2;
 	double dy1;
 	double dy2;
 
-	String fileHeader= "";
-	
+	String fileHeader = "";
+
 	JButton btnLeftMarkerButton;
 	JButton btnRightMarkerButton;
 	JButton btnCenterMarkerButton;
-	
+
 	private PositionerPnPV[] scan1PosPnPV = new PositionerPnPV[4];
 
 	JPanel detectorPanel_1D_1_30;
@@ -604,20 +602,18 @@ public class Active_1D_ScanPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				dx1Text = xRangeMinTextField.getText();
 				dx1Boolean = validateTextFieldEntry(dx1Text);
-				if(!dx1Boolean) {
+				if (!dx1Boolean) {
 					showAlert(" Invalid entry");
 					xRangeMinTextField.setText(String.valueOf(getMinX()));
 				} else {
 					// if user then update the plot
-					if(!getAutoScale()) {
+					if (!getAutoScale()) {
 						data1D.setxAxisUserMin(Double.parseDouble(dx1Text));
 						data1D.setXAxisScale();
 						setMarkers();
 					}
 				}
-				
-				
-				
+
 			}
 		});
 		x_rangePanel_1D.add(xRangeMinTextField, "cell 1 0,growx");
@@ -631,12 +627,12 @@ public class Active_1D_ScanPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				dx2Text = xRangeMaxTextField.getText();
 				dx2Boolean = validateTextFieldEntry(dx2Text);
-				if(!dx2Boolean) {
+				if (!dx2Boolean) {
 					showAlert(" Invalid entry");
 					xRangeMaxTextField.setText(String.valueOf(getMaxX()));
 				} else {
 					// if user then update the plot
-					if(!getAutoScale()) {
+					if (!getAutoScale()) {
 						data1D.setxAxisUserMax(Double.parseDouble(dx2Text));
 						data1D.setXAxisScale();
 						setMarkers();
@@ -662,11 +658,11 @@ public class Active_1D_ScanPanel extends JPanel {
 				dy1Text = yRangeMinTextField.getText();
 				dy1Boolean = validateTextFieldEntry(dy1Text);
 
-				if(!dy1Boolean) {
+				if (!dy1Boolean) {
 					showAlert(" Invalid Entry ");
 					yRangeMinTextField.setText(String.valueOf(getMinY()));
-				}else {
-					if(!getAutoScale()) {
+				} else {
+					if (!getAutoScale()) {
 						data1D.setyAxisUserMin(Double.parseDouble(dy1Text));
 						data1D.setYAxisScale();
 						setMarkers();
@@ -685,11 +681,11 @@ public class Active_1D_ScanPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				dy2Text = yRangeMaxTextField.getText();
 				dy2Boolean = validateTextFieldEntry(dy2Text);
-				if(!dy2Boolean) {
+				if (!dy2Boolean) {
 					showAlert(" Invalid Entry ");
 					yRangeMaxTextField.setText(String.valueOf(getMaxY()));
-				}else {
-					if(!getAutoScale()) {
+				} else {
+					if (!getAutoScale()) {
 						data1D.setyAxisUserMax(Double.parseDouble(dy2Text));
 						data1D.setYAxisScale();
 						setMarkers();
@@ -708,30 +704,30 @@ public class Active_1D_ScanPanel extends JPanel {
 		panel_8.add(userCheckBox);
 		userCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setAutoScale(false);				
-				dx1Text = xRangeMinTextField.getText();				
+				setAutoScale(false);
+				dx1Text = xRangeMinTextField.getText();
 				dx2Text = xRangeMaxTextField.getText();
 				dy1Text = yRangeMinTextField.getText();
-				dy2Text = yRangeMaxTextField.getText();				
-				
+				dy2Text = yRangeMaxTextField.getText();
+
 				dx1 = Double.parseDouble(dx1Text);
 				dx2 = Double.parseDouble(dx2Text);
 				dy1 = Double.parseDouble(dy1Text);
 				dy2 = Double.parseDouble(dy2Text);
-				
+
 				if ((dx2 <= dx1) || (dy2 <= dy1)) {
 					showAlert(" xMin should be less than xMax AND yMin must be less than yMax");
-					setAutoScale(true);		
+					setAutoScale(true);
 				} else {
 					data1D.setxAxisUserMin(dx1);
 					data1D.setxAxisUserMax(dx2);
-					
+
 					data1D.setyAxisUserMin(dy1);
 					data1D.setyAxisUserMax(dy2);
-					
+
 					data1D.setXAxisScale();
 					data1D.setYAxisScale();
-					
+
 					setMarkers();
 				}
 			}
@@ -758,11 +754,11 @@ public class Active_1D_ScanPanel extends JPanel {
 		Font trb18 = new Font("TimesRoman", Font.BOLD, 18);
 		chart.getHeader().setFont(trb18);
 		chart.getHeader().setForeground(Color.BLUE);
-		
+
 		JCAxis xAxis = chart.getDataView(0).getXAxis();
 		Font trb14 = new Font("TimesRoman", Font.BOLD, 14);
 		xAxis.setFont(trb14);
-		
+
 		detectorPanel_1D.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane detectorTabbedPane_1D = new JTabbedPane(JTabbedPane.TOP);
@@ -797,11 +793,11 @@ public class Active_1D_ScanPanel extends JPanel {
 				chart_mouseDragged(e);
 			}
 		});
-		
+
 		chart.setAllowUserChanges(true);
-		chart.setTrigger(0, new EventTrigger(InputEvent.META_MASK,EventTrigger.CUSTOMIZE));
+		chart.setTrigger(0, new EventTrigger(InputEvent.META_MASK, EventTrigger.CUSTOMIZE));
 		dataView = chart.getDataView(0);
-		
+
 		addDetectorPanels_1D();
 		vMarker1 = new JCMarker();
 		vMarker1.setAssociatedWithYAxis(false);
@@ -811,9 +807,9 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		vMarkerCenter = new JCMarker();
 		vMarkerCenter.setAssociatedWithYAxis(false);
-		   centerVMarkerStyle = vMarkerCenter.getLineStyle();
-	        centerVMarkerStyle.setPattern(JCLineStyle.SHORT_DASH);
-	        centerVMarkerStyle.setColor(java.awt.Color.BLUE);
+		centerVMarkerStyle = vMarkerCenter.getLineStyle();
+		centerVMarkerStyle.setPattern(JCLineStyle.SHORT_DASH);
+		centerVMarkerStyle.setColor(java.awt.Color.BLUE);
 
 		hMarker1 = new JCMarker();
 		hMarker1.setAssociatedWithYAxis(true);
@@ -823,10 +819,9 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		hMarkerCenter = new JCMarker();
 		hMarkerCenter.setAssociatedWithYAxis(true);
-		   centerHMarkerStyle = hMarkerCenter.getLineStyle();
-	        centerHMarkerStyle.setPattern(JCLineStyle.SHORT_DASH);
-	        centerHMarkerStyle.setColor(java.awt.Color.BLUE);
-
+		centerHMarkerStyle = hMarkerCenter.getLineStyle();
+		centerHMarkerStyle.setPattern(JCLineStyle.SHORT_DASH);
+		centerHMarkerStyle.setColor(java.awt.Color.BLUE);
 
 		this.updateUI();
 
@@ -835,7 +830,7 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setContext(Context context) {
 		this.context = context;
 	}
-	
+
 	public static void runSafe(Runnable task) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			task.run();
@@ -875,8 +870,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		runSafe(new Runnable() {
 			public void run() {
 
-
-
 				double d1 = yaxis.getMin();
 				double d2 = yaxis.getMax();
 				double d3 = d1 + (0.25 * (d2 - d1));
@@ -896,11 +889,11 @@ public class Active_1D_ScanPanel extends JPanel {
 				setHorzCenterValue(hMarkerCenterPos);
 				setHorzWidthValue(getWidth(d3, d4));
 
-//				data1D.updateChartDisplay();
+				// data1D.updateChartDisplay();
 			}
 		});
 	}
-	
+
 	public void setMarkers() {
 
 		xaxis = chart.getDataView(0).getXAxis();
@@ -1014,8 +1007,9 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public void setChartHeader(String str) {
-		((JLabel)chart.getHeader()).setText(str);
+		((JLabel) chart.getHeader()).setText(str);
 	}
+
 	public void set1DDataSource(Data1D d1) {
 		data1D = d1;
 	}
@@ -1028,7 +1022,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		double dd;
 
 		Point point = e.getPoint();
-//		System.out.println(" Blue X Point = "+point.getX());
+		// System.out.println(" Blue X Point = "+point.getX());
 		com.klg.jclass.chart.JCLineStyle ll;
 
 		if (vMarkersShowing) {
@@ -1309,8 +1303,8 @@ public class Active_1D_ScanPanel extends JPanel {
 	}
 
 	public double getMinX() {
-		
-		double d = getPrecisionedData( xaxis.getMin());
+
+		double d = getPrecisionedData(xaxis.getMin());
 		return d;
 	}
 
@@ -1386,19 +1380,20 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setScanStatus(String str) {
 		scanStatusLabel.setText(str);
 	}
-	
+
 	public void setAutoScale(boolean b) {
 		autoScale = b;
-		
+
 		data1D.setAutoScale(b);
 		if (b) {
 			updateUserAuto();
-		}		
+		}
 	}
 
 	public boolean getAutoScale() {
 		return autoScale;
 	}
+
 	public void updateUserAuto() {
 		data1D.updateChartDisplay();
 
@@ -1406,7 +1401,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		setUserXMaxText(this.getMaxX());
 		setUserYminText(this.getMinY());
 		setUserYMaxText(this.getMaxY());
-
 	}
 
 	public void setUserXminText(double d) {
@@ -1461,76 +1455,11 @@ public class Active_1D_ScanPanel extends JPanel {
 		}
 	}
 
-
 	public void setXPositionerName_1D(int pos, String str) {
 		JCheckBox jb = posXMap.get(pos);
 		jb.setText(str);
-		
-		/*
-		String firstPart;
-		String secondPart;
-		String rtyp = str;
-		int lastIndexOfDot;
-		String pvName;
-		Channel channel;
-		String defaultName = str;
-
-		lastIndexOfDot = str.lastIndexOf(".");
-		firstPart = str.substring(0, lastIndexOfDot);
-		secondPart = str.substring(lastIndexOfDot + 1);
-		pvName = firstPart + ".RTYP";
-		
-		try {
-			channel = context.createChannel(pvName);
-			context.pendIO(1.0);
-			DBR dbr = channel.get(DBRType.STRING, 1);
-			context.pendIO(1.0);
-			rtyp = ((STRING) dbr).getStringValue()[0];
-			channel.destroy();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	
-		String pvDescriptionResult = str;
-		
-		if (!rtyp.equals("table"))
-		{
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
-		
-		
-		pvDescription.makeEpicsDataObject();
-
-		pvDescriptionResult = pvDescription.getDescription();
-		
-		if (pvDescriptionResult.length()<1) {
-			pvDescriptionResult = defaultName;
-		}
-				
-		pvDescription.disconnectChannel();
-		}
-		
-		jb.setText(pvDescriptionResult);
-		*/
-
 	}
-	/*
-	public String getPosName(int pos) {
-		JCheckBox jb1D = posXMap.get(pos);
-		String posName = jb1D.getText();
-		return posName;
-	}
-*/
+
 	public String getPositionerName(int pos) {
 		String ret = "";
 		JCheckBox jb = posXMap.get(pos);
@@ -1538,6 +1467,8 @@ public class Active_1D_ScanPanel extends JPanel {
 		return ret;
 	}
 
+	
+	
 	public void setDetVisible(int det, boolean b) {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		detPanel.setVisible(b);
@@ -1587,52 +1518,8 @@ public class Active_1D_ScanPanel extends JPanel {
 	public void setDetectorName(int det, String str) {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		JCheckBox jb = detPanel.getDetPanelCheckBox();
-		
+
 		jb.setText(str);
-		/*
-		String firstPart;
-		String secondPart;
-		String rtyp = str;
-		int lastIndexOfDot;
-		String pvName;
-		Channel channel = null;
-
-		String detName;
-
-		lastIndexOfDot = str.lastIndexOf(".");
-		firstPart = str.substring(0, lastIndexOfDot);
-		secondPart = str.substring(lastIndexOfDot + 1);
-		pvName = firstPart + ".RTYP";
-		
-		try {
-			channel = context.createChannel(pvName);
-			context.pendIO(1.0);
-			DBR dbr = channel.get(DBRType.STRING, 1);
-			context.pendIO(1.0);
-			rtyp = ((STRING) dbr).getStringValue()[0];
-//			System.out.println(" Detector RTYP  ="+rtyp);
-			channel.destroy();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		PVDescription pvDescription = new PVDescription( context);
-
-		detName = pvDescription.getDescription(firstPart, secondPart, rtyp);
-		
-		jb.setText(detName);
-		*/
-		
 	}
 
 	public String getDetectorName(int det) {
@@ -1647,7 +1534,10 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		for (int i = 0; i < 60; i++) {
 			setDetVisible(i, false);
-		}
+		}		
+
+//		 detMap_1D.clear();
+		
 	}
 
 	public void detectorStatus1D(String str, boolean b) {
@@ -1661,7 +1551,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		int thickness = data1D.getSeriesThickness(nm);
 		int shape = data1D.getSeriesSymbol(nm);
 		int symbolSize = data1D.getSeriesSymbolSize(nm);
-		// Color lineColor = data1D.getSeriesLineColor(nm);
 		sp.setThickness(thickness);
 		sp.setShape(shape);
 		sp.setSymbolSize(symbolSize);
@@ -1691,6 +1580,7 @@ public class Active_1D_ScanPanel extends JPanel {
 		btnRightMarkerButton.setEnabled(b);
 		btnCenterMarkerButton.setEnabled(b);
 	}
+
 	public void setScan1PosPv(PositionerPnPV[] pp) {
 		for (int i = 0; i < 4; i++) {
 			scan1PosPnPV[i] = pp[i];

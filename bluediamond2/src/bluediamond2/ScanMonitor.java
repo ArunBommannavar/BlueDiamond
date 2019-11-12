@@ -3,6 +3,7 @@ package bluediamond2;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gov.aps.jca.CAException;
@@ -64,9 +65,13 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	Data1D data1D;
 	Data2D data2D;
 	
-	List<Integer> validPos1 = new ArrayList<Integer>();
-	List<Integer> validPos2 = new ArrayList<Integer>();
-	List<Integer> validDet = new ArrayList<Integer>();
+	List<Integer> validPos1 =Collections.synchronizedList( new ArrayList<Integer>());
+	List<Integer> validPos2 =Collections.synchronizedList( new ArrayList<Integer>());
+	List<Integer> validDet =Collections.synchronizedList( new ArrayList<Integer>());
+	
+//	List<Integer> validPos1 = new ArrayList<Integer>();
+//	List<Integer> validPos2 = new ArrayList<Integer>();
+//	List<Integer> validDet = new ArrayList<Integer>();
 	
 	Active_1D_ScanPanel active_1D_ScanPanel;
 	Active_2D_ScanPanel active_2D_ScanPanel;
@@ -210,8 +215,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		scan1DATAObj.addPropertyChangeListener("DATA", this);
-		
+		scan1DATAObj.addPropertyChangeListener("DATA", this);		
 		scan1DATAObj.setMonitor();
 		try {
 			context.flushIO();
@@ -328,7 +332,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void getScan1ValidPos() {
 		validPos1 = scan1PositionerParms.getValidPos();
-
 	}
 
 	public void getScan2ValidPos() {
@@ -341,6 +344,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 //		initPosDet1D();
 		
 		if(!hasScan1Parms) {
+//			System.out.println(" In doScan1EXSC hasScan1Parms = "+hasScan1Parms+"  Inside the if the statement");
+
 			initPosDet1D();
 		}else {
 			data1D.clearYValues();
@@ -363,12 +368,20 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void validate1DPositioners() {
 		scan1PositionerParms.validatePositioners();
+//		scan1PositionerParms.findPositionerDescription();
+	}
+	
+	public void findPositionerDescription1D() {
 		scan1PositionerParms.findPositionerDescription();
 	}
-
+	
+	public void findPositionerDescription2D() {
+		scan2PositionerParms.findPositionerDescription();
+	}
+	
 	public void validate2DPositioners() {
 		scan2PositionerParms.validatePositioners();
-		scan2PositionerParms.findPositionerDescription();
+//		scan2PositionerParms.findPositionerDescription();
 	}
 
 	public void validateDets() {
@@ -475,10 +488,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		validPos1.forEach((n) -> {
 			active_1D_ScanPanel.setXPositionerVisible_1D(n, true);
-//			final String str = scan1PositionerParms.getPosPnPV(n);
 			final String str = scan1PositionerParms.getPositionerDescription(n);
-//			System.out.println(" In ScanMonitor "+str);
-
 			active_1D_ScanPanel.setXPositionerName_1D(n, str);
 		});
 	}
@@ -495,7 +505,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	public void setMainPanel_2D_Y_PositionerNames() {
 		validPos2.forEach((n) -> {
 			active_2D_ScanPanel.setYPositionerVisible_2D(n, true);
-//			final String str = scan2PositionerParms.getPosPnPV(n);
 			final String str = scan2PositionerParms.getPositionerDescription(n);
 			active_2D_ScanPanel.setYPositionerName_2D(n, str);
 		});
@@ -505,9 +514,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		validDet.forEach((n) -> {
 			active_1D_ScanPanel.setDetVisible(n, true);
 			active_1D_ScanPanel.setDetEnable(n, true);
-//			final String str = scan1DetectorParms.getDetPV(n);
 			final String str = scan1DetectorParms.getDetectorDescription(n);
-//			System.out.println(" In ScanMonitor setMainPanel_1D_DetectorNames "+n+"  "+str);
 			active_1D_ScanPanel.setDetectorName(n, str);
 		});
 	}
@@ -792,7 +799,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 				 * positioner's start and width value Tell the plot about the X-scale
 				 * positioners range.
 				 */
-//				System.out.println(" In run doScan1EXSC ");
+	//			System.out.println(" In run doScan1EXSC ");
 
 				doScan1EXSC();
 				// }else{

@@ -122,6 +122,8 @@ public class PVDescription {
 		} else if (recordType.equals("transform")) {
 			String str = ".CMT" + secondPart;
 			pvName = firstPart + str;
+			
+			
 
 			try {
 				channel = context.createChannel(pvName);

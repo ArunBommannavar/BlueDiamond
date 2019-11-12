@@ -25,7 +25,7 @@ public class PositionerPnPV implements MonitorListener {
 
 	Channel motorChannel = null;
 	String recordType = "unKnown";
-
+	
 	public PositionerPnPV(String str, int i, Context context) {
 		this.context = context;
 		pvName = str + ".P" + String.valueOf(i) + "PV";
@@ -49,7 +49,7 @@ public class PositionerPnPV implements MonitorListener {
 			}
 			motorChannel = context.createChannel(pvPvVal);
 			context.pendIO(3.0);
-//			System.out.println(" Motor Channel get Name = " + motorChannel.getName());
+//			System.out.println(" In PositionerPnPV/createMotorChannel Motor Channel get Name = " + motorChannel.getName());
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 			System.out.println(" PV Name = " + pvName + "  createMotorChannel CAException or IllegalStateException");
 			e.printStackTrace();
@@ -189,6 +189,7 @@ public class PositionerPnPV implements MonitorListener {
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
 			pvPvVal = ((DBR_String) convert).getStringValue()[0];
+//			System.out.println(" In PositionerPnPV/monitorChanged pvPvVal= "+pvPvVal+"  length = "+pvPvVal.length());
 			if (pvPvVal.length() > 0) {
 				Thread thread = new Thread(new Runnable() {
 					public void run() {

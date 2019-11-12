@@ -1,6 +1,7 @@
 package bluediamond2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gov.aps.jca.CAException;
@@ -25,7 +26,9 @@ public class Scan2PositionerParms {
 
 	private String scanPv;
 
-	List<Integer> validPos = new ArrayList<Integer>();
+//	List<Integer> validPos = new ArrayList<Integer>();
+	List<Integer> validPos = Collections.synchronizedList(new ArrayList<Integer>()); 
+
 	boolean initPos = false;
 	
 	public Scan2PositionerParms(String str,Context context) {

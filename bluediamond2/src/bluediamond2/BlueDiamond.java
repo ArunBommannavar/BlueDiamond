@@ -22,6 +22,10 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -89,6 +93,11 @@ public class BlueDiamond {
 	
 	JRadioButton rdbtnAutoConvertRadioButton;
 	boolean autoConvert = false;
+	
+	private Socket clientSocket= null;
+    private PrintWriter out = null;
+    private BufferedReader in = null;
+
 
 	
 	/**
@@ -277,6 +286,60 @@ public class BlueDiamond {
 
 	}
 		
+    public void startConnection(String ip, int port) {
+        try {
+			clientSocket = new Socket(ip, port);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			out = new PrintWriter(clientSocket.getOutputStream(), true);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+        try {
+			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+ 
+    public String sendMessage(String msg) {
+        out.println(msg);
+        System.out.println(" Sending Message from Client "+msg);
+        String resp = null;
+		try {
+			resp = in.readLine();
+			System.out.println(" Response from Server = "+resp.trim());
+			System.out.println(" next line");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return resp;
+    }
+	
+    public void stopConnection() {
+        try {
+        	if (in!=null)
+        		in.close();
+        	if(out!=null)
+        		out.close();
+        	if(clientSocket != null)
+        		clientSocket.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 	private void initializeJCA() {
 		JCALibrary jca = JCALibrary.getInstance();
 		try {
@@ -485,6 +548,8 @@ public class BlueDiamond {
 			active_2D_ScanPanel = mainPanel.getActive_2D_ScanPanel();
 			active_2D_ScanPanel.setContext(context);
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
+			active_2D_ScanPanel.resetPositioners_2D();
+
 
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 			saved_2D_ScanPanel = mainPanel.getSaved_2D_ScanPanel();
@@ -516,7 +581,10 @@ public class BlueDiamond {
 			scanMonitor.setMainPanel_2D_X_PositionerNames();
 			scanMonitor.setMainPanel_2D_Y_PositionerNames();
 			scanMonitor.setMainPanel_1D_DetectorNames();
-
+/*
+			startConnection("164.54.105.197",27000);
+			sendMessage("Get Message    ");
+*/			
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
 
