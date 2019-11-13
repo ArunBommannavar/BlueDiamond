@@ -368,9 +368,16 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void validate1DPositioners() {
 		scan1PositionerParms.validatePositioners();
-//		scan1PositionerParms.findPositionerDescription();
 	}
 	
+	public void validate2DPositioners() {
+		scan2PositionerParms.validatePositioners();
+	}
+
+	public void validateDets() {
+		scan1DetectorParms.validateDetectors();		
+	}
+
 	public void findPositionerDescription1D() {
 		scan1PositionerParms.findPositionerDescription();
 	}
@@ -379,15 +386,11 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2PositionerParms.findPositionerDescription();
 	}
 	
-	public void validate2DPositioners() {
-		scan2PositionerParms.validatePositioners();
-//		scan2PositionerParms.findPositionerDescription();
-	}
 
-	public void validateDets() {
-		scan1DetectorParms.validateDetectors();
-		
+	public void findDetectorDescription() {
+		scan1DetectorParms.findDetectorDescription();
 	}
+	
 	
 	private void setHasScan1Parms(boolean b) {
 		hasScan1Parms = b;
@@ -529,6 +532,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan1NumberOfPoints = data1D.getScan1NumberOfPoints();
 		scan1NumberOfPoints = scan1NPTSObj.getVal();
 		data1D.setNumberOfPoints(scan1NumberOfPoints);
+		
 		active_1D_ScanPanel.resetDetectors();
 		active_1D_ScanPanel.resetPositioners_1D();
 
@@ -540,6 +544,10 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		getScan1ValidPos();
 		getScan1ValidDet();
 
+		scan1PositionerParms.findPositionerDescription();
+//		scan2PositionerParms.findPositionerDescription();			
+		scan1DetectorParms.findDetectorDescription();
+		
 		setMainPanel_1D_PositionerNames();
 		setMainPanel_1D_DetectorNames();
 
@@ -609,6 +617,8 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		scan2NumberOfPoints = scan2NPTSObj.getVal();
 		scan2PositionerParms.validatePositioners();
 		getScan2ValidPos();
+
+		scan2PositionerParms.findPositionerDescription();			
 
 		setMainPanel_2D_X_PositionerNames();
 		setMainPanel_2D_Y_PositionerNames();

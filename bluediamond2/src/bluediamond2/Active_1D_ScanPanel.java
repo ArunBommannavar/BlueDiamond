@@ -1535,9 +1535,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		for (int i = 0; i < 60; i++) {
 			setDetVisible(i, false);
 		}		
-
-//		 detMap_1D.clear();
-		
 	}
 
 	public void detectorStatus1D(String str, boolean b) {

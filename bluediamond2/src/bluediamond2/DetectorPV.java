@@ -22,6 +22,7 @@ public class DetectorPV implements MonitorListener{
 	String pvName;
 	String val = null;
 	String detectorDescription=" ";
+	String rawdetectorDescription=" ";
 	String recordType = "unKnown";
 
 
@@ -76,13 +77,13 @@ public class DetectorPV implements MonitorListener{
 	public void findDetectorPVdescription() {
 
 		String recordType = "unKnown";
-		PvRTYP pvRTYP = new PvRTYP(detectorDescription, context);
+		PvRTYP pvRTYP = new PvRTYP(rawdetectorDescription, context);
 		recordType = pvRTYP.getRtyp();
 		String secondPart;
 
-		int lastIndexOfDot = detectorDescription.lastIndexOf(".");
-		String firstPart = detectorDescription.substring(0, lastIndexOfDot);
-		secondPart = detectorDescription.substring(lastIndexOfDot + 1);
+		int lastIndexOfDot = rawdetectorDescription.lastIndexOf(".");
+		String firstPart = rawdetectorDescription.substring(0, lastIndexOfDot);
+		secondPart = rawdetectorDescription.substring(lastIndexOfDot + 1);
 
 		PVDescription pVDescription = new PVDescription(context);
 		detectorDescription = pVDescription.getDescription(firstPart, secondPart, recordType);	
@@ -96,7 +97,7 @@ public class DetectorPV implements MonitorListener{
 		if (event.getStatus() == CAStatus.NORMAL) {
 			DBR convert = event.getDBR();
 			val = ((DBR_String) convert).getStringValue()[0];
-			detectorDescription = val;
+			rawdetectorDescription = val;
 		} else
 			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);				
 	}
