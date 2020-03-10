@@ -48,8 +48,7 @@ public class PvRTYP {
 			System.out.println(
 					" TimeOutException PositionerPnPV " + pvName + "  PvRTYP class ");
 			e.printStackTrace();
-		}
-		
+		}	
 
 		return recordType;
 		
