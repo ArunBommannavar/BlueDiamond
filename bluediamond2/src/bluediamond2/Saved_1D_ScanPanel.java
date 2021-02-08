@@ -124,8 +124,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		JPanel markerChartPanel = new JPanel();
 		springLayout.putConstraint(SpringLayout.NORTH, markerChartPanel, 10, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, markerChartPanel, 10, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, 360, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, markerChartPanel, -10, SpringLayout.EAST, this);
 		add(markerChartPanel);
 		SpringLayout sl_markerChartPanel = new SpringLayout();
@@ -386,12 +384,12 @@ public class Saved_1D_ScanPanel extends JPanel {
 		vMarkerCenter.setAssociatedWithYAxis(false);
 
 		JPanel detectorPositionerTopPanel = new JPanel();
-		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 5, SpringLayout.SOUTH,
-				markerChartPanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -10, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, 0, SpringLayout.EAST,
-				markerChartPanel);
+		springLayout.putConstraint(SpringLayout.NORTH, detectorPositionerTopPanel, 365, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, detectorPositionerTopPanel, 10, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -10, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, -10, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.WEST, markerChartPanel, 0, SpringLayout.WEST, detectorPositionerTopPanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, -5, SpringLayout.NORTH, detectorPositionerTopPanel);
 		add(detectorPositionerTopPanel);
 		SpringLayout sl_detectorPositionerTopPanel = new SpringLayout();
 		detectorPositionerTopPanel.setLayout(sl_detectorPositionerTopPanel);

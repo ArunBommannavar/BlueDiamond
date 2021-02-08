@@ -193,8 +193,10 @@ public class PVDescription {
 		secondPart = str2;
 		recordType = rc;
 
-		String ret = str1+str2;
-
+		String ret0 = str1+str2;
+		String ret= ret0;
+//		System.out.println(" PV Description routine :"+str1+"  "+str2+ "   "+ret+  " Record Type = "+rc);
+		
 		makeEpicsDataObject();
 		
 		if (recordTypeFound) {
@@ -218,7 +220,10 @@ public class PVDescription {
 		}
 		
 		disconnectChannel();
-
+		
+//		System.out.println(" Return value = "+ret+" of length = "+ret.length());
+		if (ret.length() < 1) ret = ret0;
+		
 		return ret;
 	}
 

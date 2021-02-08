@@ -79,11 +79,13 @@ public class DetectorPV implements MonitorListener{
 		String recordType = "unKnown";
 		PvRTYP pvRTYP = new PvRTYP(rawdetectorDescription, context);
 		recordType = pvRTYP.getRtyp();
-		String secondPart;
-
+		String secondPart = " ";
+		String firstPart = rawdetectorDescription;
 		int lastIndexOfDot = rawdetectorDescription.lastIndexOf(".");
-		String firstPart = rawdetectorDescription.substring(0, lastIndexOfDot);
-		secondPart = rawdetectorDescription.substring(lastIndexOfDot + 1);
+		if (lastIndexOfDot > 0) {
+			firstPart = rawdetectorDescription.substring(0, lastIndexOfDot);
+			secondPart = rawdetectorDescription.substring(lastIndexOfDot + 1);
+		}
 
 		PVDescription pVDescription = new PVDescription(context);
 		detectorDescription = pVDescription.getDescription(firstPart, secondPart, recordType);	
