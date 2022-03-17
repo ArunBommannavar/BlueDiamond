@@ -85,7 +85,6 @@ public class Scan1DetectorParms {
 			j = i + 1;
 			detNV[i].setLabels();			
 		}		
-
 //		System.out.println("After ChannelLabels Time = "+System.currentTimeMillis());
 
 		for (int i = 0; i < numberOfDetectors; i++) {
