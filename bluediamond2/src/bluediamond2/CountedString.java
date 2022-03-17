@@ -23,7 +23,6 @@ public class CountedString {
 	      rem = 0;
 	    }
 	    cor = size + rem;
-
 	    return cor;
 	  }
 
