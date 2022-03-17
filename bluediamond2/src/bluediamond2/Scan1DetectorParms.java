@@ -129,6 +129,7 @@ public class Scan1DetectorParms {
 				validDet.add(i);
 			}
 		}
+//		System.out.println(" Number of Detectors in Validate = "+validDet.size());
 		initDet = true;
 	}
 

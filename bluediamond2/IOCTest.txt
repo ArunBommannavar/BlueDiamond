@@ -1,2 +1,2 @@
-16TEST1:scan1
-16TEST1:scan2
+16test:scan1
+16test:scan2

@@ -327,7 +327,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 	public void getScan1ValidDet() {
 		validDet = scan1DetectorParms.getValidDet();
-
 	}
 
 	public void getScan1ValidPos() {
@@ -412,6 +411,9 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		data1D.updateChartDisplay(scan1CPT, scan1NumberOfPoints);
 		active_1D_ScanPanel.setHMarkers();
+		String posName = active_1D_ScanPanel.getPositionerName(data1D.getSelectedPositioner());
+		
+		active_1D_ScanPanel.setXAxisTitle(posName);
 
 	}
 

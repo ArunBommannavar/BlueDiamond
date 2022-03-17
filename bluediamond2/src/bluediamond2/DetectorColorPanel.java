@@ -34,7 +34,6 @@ public class DetectorColorPanel extends JPanel {
 
 	}
 
-
 	public JCheckBox getDetPanelCheckBox() {
 		return detCheckbox;
 	}
@@ -43,27 +42,27 @@ public class DetectorColorPanel extends JPanel {
 		return colorButton;
 	}
 
-	public void addJDetCheckBoxName(String str){
+	public void addJDetCheckBoxName(String str) {
 		detCheckbox.setName(str);
 	}
-	
-	public void addDetColorButtonName(String str){
+
+	public void addDetColorButtonName(String str) {
 		colorButton.setName(str);
 	}
-	
+
 	public void setValid(boolean b) {
 		detCheckbox.setEnabled(b);
 		detCheckbox.setVisible(b);
 		colorButton.setEnabled(b);
-		colorButton.setVisible(b);		
+		colorButton.setVisible(b);
 	}
-	
-	public void setEnabled(boolean b){
+
+	public void setEnabled(boolean b) {
 		detCheckbox.setEnabled(b);
 		colorButton.setEnabled(b);
 	}
-	
-	public void setVisible(boolean b){
+
+	public void setVisible(boolean b) {
 		detCheckbox.setVisible(b);
 		colorButton.setVisible(b);
 

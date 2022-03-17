@@ -1467,8 +1467,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		return ret;
 	}
 
-	
-	
 	public void setDetVisible(int det, boolean b) {
 		DetectorColorPanel detPanel = detMap_1D.get(det);
 		detPanel.setVisible(b);
@@ -1534,7 +1532,7 @@ public class Active_1D_ScanPanel extends JPanel {
 
 		for (int i = 0; i < 60; i++) {
 			setDetVisible(i, false);
-		}		
+		}
 	}
 
 	public void detectorStatus1D(String str, boolean b) {
@@ -1544,6 +1542,8 @@ public class Active_1D_ScanPanel extends JPanel {
 
 	public void detectorColorStatus1D(String str) {
 		int nm = Integer.parseInt(str);
+//		System.out.println(" Detector color string = " + str);
+//		System.out.println(" Total number of series = " + data1D.getNumSeries());
 		StylePicker2 sp = new StylePicker2();
 		int thickness = data1D.getSeriesThickness(nm);
 		int shape = data1D.getSeriesSymbol(nm);
@@ -1738,6 +1738,7 @@ class Active_1D_ScanPanel_detPanelButton_actionAdapter implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		Object eObject = e.getSource();
 		JButton jButton = (JButton) eObject;
+//		System.out.println(" Debug get Button Name= " + jButton.getName());
 		adaptee.detectorColorStatus1D(jButton.getName());
 	}
 }

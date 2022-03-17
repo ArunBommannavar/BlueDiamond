@@ -267,7 +267,6 @@ public class Data1D extends JCDefaultDataSource {
 
 	public void setXAxisScale() {
 		
-//		System.out.println(" Autoscale = "+autoScale+"  selected positioner = "+selectedPositioner);
 		chart.setBatched(true);
 		xaxis = chart.getDataView(0).getXAxis();
 		yaxis = chart.getDataView(0).getYAxis();
@@ -354,11 +353,11 @@ public class Data1D extends JCDefaultDataSource {
 	public void setPositionerDataArray(int pos, double[] d) {
 		xVals[pos] = d;
 		for (int i=0; i<d.length;i++) {
-//			System.out.println(" Data1D positioner vales pos ="+pos+"  value = "+d[i]);
 		}
 	}
 
 	public void setDetectorDataArray(int det, double[] d) {
+//		System.out.println(" Data1D Set Detector Data Array = "+det+"  Array Size  = "+d.length);
 		yVals[det] = d;
 	}
 
@@ -392,6 +391,7 @@ public class Data1D extends JCDefaultDataSource {
 				yaxis.setMinIsDefault(true);
 				yaxis.setMaxIsDefault(true);
 				chart.setBatched(false);
+//				System.out.println(" Set Detector for display = "+n+"  total series = "+chart.getDataView(0).getNumSeries());
 				fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
 			}
 		});
@@ -425,8 +425,6 @@ public class Data1D extends JCDefaultDataSource {
 		int rawLastPlotPoint = n;
 		int derTotalPlotPints = m - 1;
 		int derLastPlotPoint = n - 1;
-//	System.out.println(" In Data1D updateChartDisplay(int n, int m) displayModeSwitched = "+ displayModeSwitched );
-//	System.out.println(" X-Axis Min = "+xaxis.getMin()+"  X-Axis Max = "+xaxis.getMax());
 		chart.setBatched(true);
 
 		if (derivative) {
@@ -521,6 +519,7 @@ public class Data1D extends JCDefaultDataSource {
 	}
 
 	public Color getSeriesLineColor(int n) {
+		
 		Color c = chart.getDataView(0).getSeries(n).getStyle().getLineColor();
 		return c;
 	}
