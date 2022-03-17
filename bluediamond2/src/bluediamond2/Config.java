@@ -206,8 +206,7 @@ public class Config extends JDialog {
 	      returnValue = CANCEL_OPTION;
 	      setVisible(false);
 
-	}	
-	
+	}		
 }
 
 class Config_okbutton_ActionAdapter implements ActionListener {
