@@ -6,3 +6,4 @@ public interface XRangeI {
 	   public double[] getPosXMinArray();
 	   public double[] getPosXMaxArray();
 }
+

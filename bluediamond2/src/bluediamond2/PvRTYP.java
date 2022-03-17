@@ -25,7 +25,6 @@ public class PvRTYP {
 		int lastIndexOfDot = pvName.lastIndexOf(".");
 		if (lastIndexOfDot > 0) {		
 			firstPart = pvName.substring(0, lastIndexOfDot);
-//		String secondPart = pvName.substring(lastIndexOfDot + 1);
 		}
 
 		String rtypePV = firstPart+".RTYP";

@@ -52,6 +52,7 @@ public class DetectorPV implements MonitorListener{
 			e.printStackTrace();
 		}
 	}
+	
 	public void disconnectChannel() {
 		
 		try {

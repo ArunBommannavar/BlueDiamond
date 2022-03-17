@@ -96,7 +96,6 @@ public class MdaData {
 	      str[i] = pos[i].getPosDesc();
 	    }
 
-
 	    return str;
 	  }
 

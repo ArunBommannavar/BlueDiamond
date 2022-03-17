@@ -26,6 +26,7 @@ public class Scan2PositionerParms {
 
 	private String scanPv;
 
+	
 //	List<Integer> validPos = new ArrayList<Integer>();
 	List<Integer> validPos = Collections.synchronizedList(new ArrayList<Integer>()); 
 

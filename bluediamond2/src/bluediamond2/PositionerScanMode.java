@@ -14,6 +14,7 @@ import gov.aps.jca.dbr.LABELS;
 import gov.aps.jca.event.MonitorEvent;
 import gov.aps.jca.event.MonitorListener;
 
+
 public class PositionerScanMode implements MonitorListener {
 	Context context;
 	Channel channel = null;

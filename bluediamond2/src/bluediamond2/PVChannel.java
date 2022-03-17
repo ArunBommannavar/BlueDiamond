@@ -87,3 +87,4 @@ public abstract class PVChannel implements MonitorListener {
 	abstract public void monitorChanged(MonitorEvent event);
 
 }
+

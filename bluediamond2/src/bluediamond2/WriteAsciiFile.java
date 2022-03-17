@@ -22,5 +22,4 @@ public class WriteAsciiFile {
 	public void setFileName(String str) {
 		fileName = str;
 	}
-	
 }

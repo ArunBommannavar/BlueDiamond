@@ -65,6 +65,5 @@ public class DetectorColorPanel extends JPanel {
 	public void setVisible(boolean b) {
 		detCheckbox.setVisible(b);
 		colorButton.setVisible(b);
-
 	}
 }

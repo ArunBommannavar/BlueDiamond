@@ -230,6 +230,5 @@ class TableDataConfig_cancelbutton_ActionAdapter implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
         adaptee.cancelButton_actionPerformed(e);
-
 	}
 }

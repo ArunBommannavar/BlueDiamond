@@ -258,7 +258,6 @@ public class OldData2D extends JCDefault3dGridDataSource {
 				 * 
 				 * if (zValues[i][j] < botCutoff) { zValues[i][j] = botCutoff; } }
 				 */
-
 			}
 		}
 		chart3d.setBatched(false);

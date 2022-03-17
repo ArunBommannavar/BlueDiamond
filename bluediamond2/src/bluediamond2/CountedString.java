@@ -35,7 +35,6 @@ public class CountedString {
 	    int rem;
 //	    int cor;
 	    byte[] tmpByte;
-
 //	    byte[] extBytes;
 //	    int extSize;
 //	    int diffSize;

@@ -388,8 +388,10 @@ public class Saved_1D_ScanPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.WEST, detectorPositionerTopPanel, 10, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, detectorPositionerTopPanel, -10, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, detectorPositionerTopPanel, -10, SpringLayout.EAST, this);
-		springLayout.putConstraint(SpringLayout.WEST, markerChartPanel, 0, SpringLayout.WEST, detectorPositionerTopPanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, -5, SpringLayout.NORTH, detectorPositionerTopPanel);
+		springLayout.putConstraint(SpringLayout.WEST, markerChartPanel, 0, SpringLayout.WEST,
+				detectorPositionerTopPanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, markerChartPanel, -5, SpringLayout.NORTH,
+				detectorPositionerTopPanel);
 		add(detectorPositionerTopPanel);
 		SpringLayout sl_detectorPositionerTopPanel = new SpringLayout();
 		detectorPositionerTopPanel.setLayout(sl_detectorPositionerTopPanel);
@@ -678,7 +680,6 @@ public class Saved_1D_ScanPanel extends JPanel {
 
 		rb1.setHorizontalAlignment(SwingConstants.CENTER);
 		rb1.setSelected(true);
-
 
 	}
 

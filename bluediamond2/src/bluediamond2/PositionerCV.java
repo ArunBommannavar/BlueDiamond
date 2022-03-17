@@ -20,7 +20,6 @@ public class PositionerCV implements MonitorListener {
 	String pvName;
 	double val;
 
-
 	public PositionerCV(String str, int i,Context context) {
 		this.context = context;
 		pvName = str + ".R" + String.valueOf(i) + "CV";

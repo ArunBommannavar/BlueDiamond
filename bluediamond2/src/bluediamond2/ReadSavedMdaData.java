@@ -297,7 +297,6 @@ public class ReadSavedMdaData {
 	                            file.getName());	     
 	    
 	    }
-
 	    
 	    is.close();
 	    return bytes;

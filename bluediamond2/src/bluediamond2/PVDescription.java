@@ -219,8 +219,7 @@ public class PVDescription {
 			}
 		}
 		
-		disconnectChannel();
-		
+		disconnectChannel();		
 //		System.out.println(" Return value = "+ret+" of length = "+ret.length());
 		if (ret.length() < 1) ret = ret0;
 		

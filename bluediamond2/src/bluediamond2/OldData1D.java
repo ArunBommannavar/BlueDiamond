@@ -493,5 +493,4 @@ public class OldData1D extends JCDefaultDataSource implements DetectorDisplayI, 
         m = oldChart.getDataView(dataViewNumber).getSeries(n).getStyle().getLineWidth();
         return m;
 	}
-
 }

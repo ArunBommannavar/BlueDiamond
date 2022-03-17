@@ -10,5 +10,4 @@ public class Fit_1D_Panel extends JPanel {
 	public Fit_1D_Panel() {
 
 	}
-
 }

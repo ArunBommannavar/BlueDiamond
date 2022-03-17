@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.image.BufferedImage;
 import java.io.File;
-//import java.net.URL;
 
 public class LogoPanel extends JPanel {
 

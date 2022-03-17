@@ -79,6 +79,7 @@ public class PositionerPnPV implements MonitorListener {
 		PVDescription pVDescription = new PVDescription(context);
 		motorDescription = pVDescription.getDescription(firstPart, secondPart, recordType);
 		
+		
 /*
 		if (recordType.equals("motor")) {
 			pVDescription1 = new PVDescription1(firstPart,secondPart,context);

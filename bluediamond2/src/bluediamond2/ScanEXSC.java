@@ -37,6 +37,7 @@ public class ScanEXSC implements MonitorListener {
 		try {
 			channel = context.createChannel(pvName);
  //           context.pendIO(3.0);
+			
  
 		} catch (IllegalArgumentException | IllegalStateException | CAException e) {
 			

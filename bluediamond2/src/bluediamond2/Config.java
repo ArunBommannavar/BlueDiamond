@@ -26,7 +26,6 @@ import java.awt.event.FocusEvent;
 
 public class Config extends JDialog {
 
-
 	private static final long serialVersionUID = -4210489905455657035L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField_1D;

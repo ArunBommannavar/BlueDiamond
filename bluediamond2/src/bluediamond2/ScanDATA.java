@@ -89,5 +89,4 @@ public class ScanDATA implements MonitorListener {
 		} else
 			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
 	}
-
 }

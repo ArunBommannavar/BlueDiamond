@@ -64,7 +64,6 @@ public class CPT implements MonitorListener {
 		}
 	}
 
-
 	synchronized public int getValue() {
 		return val;
 	}

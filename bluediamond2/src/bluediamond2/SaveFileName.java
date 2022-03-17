@@ -46,7 +46,6 @@ public class SaveFileName implements MonitorListener {
 	public void setMonitor() {
 		try {
 			monitor = channel.addMonitor(Monitor.VALUE, this);
-//			context.flushIO();
 
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block

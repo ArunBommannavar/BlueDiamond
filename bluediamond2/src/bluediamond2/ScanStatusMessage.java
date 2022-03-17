@@ -30,7 +30,6 @@ public class ScanStatusMessage implements MonitorListener {
 		this.context = context;
 		pvName = str;
 	}
-
 	public void createChannel() {
 		try {
 			channel = context.createChannel(pvName);

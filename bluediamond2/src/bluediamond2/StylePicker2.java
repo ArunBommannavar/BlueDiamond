@@ -441,3 +441,4 @@ class StylePicker2_jButton3_actionAdapter implements ActionListener {
 		adaptee.jButton3_actionPerformed(e);
 	}
 }
+

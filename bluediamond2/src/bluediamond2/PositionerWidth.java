@@ -72,7 +72,6 @@ public class PositionerWidth implements MonitorListener {
 			DBR convert = event.getDBR();
 			val = ((DBR_Double) convert).getDoubleValue()[0];
 		} else
-			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);
-		
+			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
 	}
 }

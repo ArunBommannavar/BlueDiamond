@@ -95,5 +95,4 @@ public class ScanBUSY implements MonitorListener {
 		} else
 			System.err.println("Monitor error: " + event.getStatus() + "  PV = " + pvName);
 	}
-
 }

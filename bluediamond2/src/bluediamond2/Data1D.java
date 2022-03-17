@@ -451,7 +451,6 @@ public class Data1D extends JCDefaultDataSource {
 			}
 		} else {
 			if (displayModeSwitched) {
-//				System.out.println(" Inside Data1D displayModeSwitched=true ");
 				xvalues = new double[1][rawTotalPlotPints];
 				yvalues = new double[numberOfDetectors][rawTotalPlotPints];
 				for (int i = 0; i < numberOfDetectors; i++) {

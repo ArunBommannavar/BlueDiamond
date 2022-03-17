@@ -305,6 +305,7 @@ public class ReadSavedMdaFile {
 	}
 	
 	public void populate1DimScanData() {
+		
 	/*	
 		if (!saved_1D_ScanPanel.isListed(inFile.getName())) {
 			saved_1D_ScanPanel.addNewFile(inFile, dataViewNum);

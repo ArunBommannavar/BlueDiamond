@@ -88,5 +88,4 @@ class TableScanFilePickerPanel1_pickFileButton_ActionAdapter implements ActionLi
 		adaptee.pickFileButton_ActionPerformed();
 		
 	}
-	
 }

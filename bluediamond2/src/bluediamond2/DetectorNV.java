@@ -26,7 +26,7 @@ public class DetectorNV implements MonitorListener {
 	String pvName;
 	String pvStatus;
 
-	
+
     boolean valid = false;
 	String temp;
 	boolean ready = false;

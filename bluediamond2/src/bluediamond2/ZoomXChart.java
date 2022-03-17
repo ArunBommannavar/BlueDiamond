@@ -18,8 +18,7 @@ protected Point        DragStart = null;
 protected Rectangle    rect = null;
 protected Rectangle    oldRect = null;
 
-public ZoomXChart()
-{
+public ZoomXChart() 	{
     myChartArea = new MyChartArea(this);
 
 	// Tell the dataView about the new chart area

@@ -25,6 +25,7 @@ public class TableScanDialog extends JDialog {
 		}
 	}
 
+	
 	/**
 	 * Create the dialog.
 	 */

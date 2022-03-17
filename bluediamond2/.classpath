@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/JClassDesktopViews/lib/lib/jcchart.jar"/>
-	<classpathentry kind="lib" path="C:/JClassDesktopViews/lib/lib/jcchart3dj2d.jar"/>
-	<classpathentry kind="lib" path="C:/JClassDesktopViews/lib/lib/jcpagelayout.jar"/>
-	<classpathentry kind="lib" path="C:/JClassDesktopViews/lib/lib/jctable.jar"/>
-	<classpathentry kind="lib" path="C:/JClassDesktopViews/lib/lib/vecmath.jar"/>
-	<classpathentry kind="lib" path="C:/DevelopmentJars/MigLayout/miglayout-core-5.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="C:/DevelopmentJars/MigLayout/miglayout-swing-5.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="C:/git/jca/target/jca-2.4.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="C:/Users/arun/git/jca/target/jca-2.4.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="D:/JClassDesktopViews/lib/lib/jcchart.jar"/>
+	<classpathentry kind="lib" path="D:/JClassDesktopViews/lib/lib/jcchart3dj2d.jar"/>
+	<classpathentry kind="lib" path="D:/JClassDesktopViews/lib/lib/jcpagelayout.jar"/>
+	<classpathentry kind="lib" path="D:/JClassDesktopViews/lib/lib/jctable.jar"/>
+	<classpathentry kind="lib" path="D:/JClassDesktopViews/lib/lib/vecmath.jar"/>
+	<classpathentry kind="lib" path="C:/Users/arun/git/miglayout/core/target/miglayout-core-5.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/arun/git/miglayout/swing/target/miglayout-swing-5.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

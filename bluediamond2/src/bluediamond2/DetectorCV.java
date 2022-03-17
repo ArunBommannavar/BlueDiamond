@@ -80,5 +80,4 @@ public class DetectorCV implements MonitorListener {
 			System.err.println("Monitor error: " + event.getStatus()+"  PV = "+pvName);		
 	}
 
-
 }

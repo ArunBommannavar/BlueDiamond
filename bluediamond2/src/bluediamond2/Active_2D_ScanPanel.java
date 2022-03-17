@@ -168,6 +168,7 @@ public class Active_2D_ScanPanel extends JPanel {
 				scan2PosPnPV[selectedPositioner_Y].movePositioner(y_Pos_2D_value.getText());
 			}
 		});
+
 		panel_1.add(btnMoveButton2D);
 
 		sl_leftPanel_2D.putConstraint(SpringLayout.EAST, positioner_2D_Panel, 0, SpringLayout.EAST,
@@ -389,7 +390,6 @@ public class Active_2D_ScanPanel extends JPanel {
 		chart3dJava2d.getLegend().setVisible(true);
 		chart3dJava2d.getActionTable().addAllDefaultActions();
 
-
 	}
 
 	public JCChart3dJava2d get3DChart() {
@@ -443,54 +443,34 @@ public class Active_2D_ScanPanel extends JPanel {
 	public void setYPositionerName_2D(int pos, String str) {
 		JCheckBox jb = posYMap.get(pos);
 		jb.setText(str);
-		
+
 		/*
-		String firstPart;
-		String secondPart;
-		String rtyp = str;
-		int lastIndexOfDot;
-		String pvName;
-		Channel channel;
-		String defaultName = str;
-
-		lastIndexOfDot = str.lastIndexOf(".");
-		firstPart = str.substring(0, lastIndexOfDot);
-		secondPart = str.substring(lastIndexOfDot + 1);
-		pvName = firstPart + ".RTYP";
-
-		try {
-			channel = context.createChannel(pvName);
-			context.pendIO(1.0);
-			DBR dbr = channel.get(DBRType.STRING, 1);
-			context.pendIO(1.0);
-			rtyp = ((STRING) dbr).getStringValue()[0];
-			channel.destroy();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp, jb,context);
-		pvDescription.makeEpicsDataObject();
-
-		String pvDescriptionResult = pvDescription.getDescription();
-		
-		if (pvDescriptionResult.length()<1) {
-			pvDescriptionResult = defaultName;
-		}
-		jb.setText(pvDescriptionResult);
-		pvDescription.disconnectChannel();
-		
-		*/
+		 * String firstPart; String secondPart; String rtyp = str; int lastIndexOfDot;
+		 * String pvName; Channel channel; String defaultName = str;
+		 * 
+		 * lastIndexOfDot = str.lastIndexOf("."); firstPart = str.substring(0,
+		 * lastIndexOfDot); secondPart = str.substring(lastIndexOfDot + 1); pvName =
+		 * firstPart + ".RTYP";
+		 * 
+		 * try { channel = context.createChannel(pvName); context.pendIO(1.0); DBR dbr =
+		 * channel.get(DBRType.STRING, 1); context.pendIO(1.0); rtyp = ((STRING)
+		 * dbr).getStringValue()[0]; channel.destroy(); } catch
+		 * (IllegalArgumentException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } catch (IllegalStateException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } catch (CAException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); } catch
+		 * (TimeoutException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * 
+		 * PVDescription pvDescription = new PVDescription(firstPart, secondPart, rtyp,
+		 * jb,context); pvDescription.makeEpicsDataObject();
+		 * 
+		 * String pvDescriptionResult = pvDescription.getDescription();
+		 * 
+		 * if (pvDescriptionResult.length()<1) { pvDescriptionResult = defaultName; }
+		 * jb.setText(pvDescriptionResult); pvDescription.disconnectChannel();
+		 * 
+		 */
 
 	}
 
@@ -602,21 +582,21 @@ public class Active_2D_ScanPanel extends JPanel {
 	public int getSelectedX_Positioner() {
 		return selectedPositioner_X;
 	}
-	
+
 	public int getSelectedY_Positioner() {
 		return selectedPositioner_Y;
 	}
-		
+
 	public String getPositionerXTitle(int n) {
 		JCheckBox jb = posX2DMap.get(n);
 		return jb.getText();
 	}
-	
+
 	public String getPositionerYTitle(int n) {
 		JCheckBox jb = posYMap.get(n);
 		return jb.getText();
 	}
-	
+
 	public void setXAxisTitle(String str) {
 		JCChart3dArea jcArea = chart3dJava2d.getChart3dArea();
 		com.klg.jclass.chart3d.JCAxis jx = jcArea.getXAxis();

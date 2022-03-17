@@ -15,6 +15,5 @@ public interface DetectorDisplayI {
 	   public int getSeriesSymbol(int n);
 	   public int getSeriesSymbolSize(int n);
 	   public int getSeriesThickness(int n);
-	   public List<Integer> getSelectedChartDetectors();
-	   
+	   public List<Integer> getSelectedChartDetectors();	   
 }

@@ -106,7 +106,6 @@ public class Data2D extends JCDefault3dGridDataSource {
 		initYArray();
 		initZArray();
 		
-
 	}
 
 	public void initXArray() {

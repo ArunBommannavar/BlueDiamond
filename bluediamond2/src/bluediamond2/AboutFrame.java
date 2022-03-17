@@ -78,6 +78,7 @@ public class AboutFrame extends JFrame {
 		btnNewButton.addActionListener(new AboutFrame_exit_ActionAdapter(this));
 	}
 	
+	
 	public void closeAboutFrame(){
 		this.dispose();
 	}

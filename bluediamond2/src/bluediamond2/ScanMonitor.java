@@ -403,7 +403,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 
 		setScan1VALStatus(false);
 		scan1CPT = scan1CPTObj.getValue();
-//		System.out.println(" In doScan1Val scan1CPT = "+scan1CPT+"   scan1NumberOfPoints = "+scan1NumberOfPoints );
 
 		validDet.forEach((n) -> {
 			data1D.setDetectorValue(n, scan1CPT, scan1DetectorParms.getDetCV(n));

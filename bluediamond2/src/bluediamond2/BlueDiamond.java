@@ -48,8 +48,6 @@ import java.awt.Font;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRadioButton;
 
-
-
 public class BlueDiamond {
 
 	private static final String LOOKANDFEEL = null;
@@ -57,7 +55,7 @@ public class BlueDiamond {
 
 	LogoPanel logoPanel = new LogoPanel();
 
-	private JFrame frmBluediamond;	
+	private JFrame frmBluediamond;
 	private Context context = null;
 
 	Config config = null;
@@ -79,7 +77,7 @@ public class BlueDiamond {
 	Data1D data1D;
 	Data2D data2D;
 	OldData2D oldData2D;
-	
+
 	MainPanel mainPanel;
 	Active_1D_ScanPanel active_1D_ScanPanel;
 	Active_2D_ScanPanel active_2D_ScanPanel;
@@ -90,29 +88,26 @@ public class BlueDiamond {
 	protected JCChart oldChart;
 	protected JCChart3dJava2d chart3d = null;
 	protected JCChart3dJava2d oldChart3d = null;
-	
+
 	JRadioButton rdbtnAutoConvertRadioButton;
 	boolean autoConvert = false;
-	
-	private Socket clientSocket= null;
-    private PrintWriter out = null;
-    private BufferedReader in = null;
 
+	private Socket clientSocket = null;
+	private PrintWriter out = null;
+	private BufferedReader in = null;
 
-	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-	
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-									
-					
+
 					try {
 						for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-							
+
 							if ("Windows".equals(info.getName())) {
 								UIManager.setLookAndFeel(info.getClassName());
 								break;
@@ -121,8 +116,7 @@ public class BlueDiamond {
 					} catch (Exception e) {
 						// If Nimbus is not available, you can set the GUI to another look and feel.
 					}
-					
-					
+
 					BlueDiamond window = new BlueDiamond();
 					window.frmBluediamond.setVisible(true);
 				} catch (Exception e) {
@@ -157,7 +151,7 @@ public class BlueDiamond {
 		// frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frmBluediamond.getContentPane().add(logoPanel, java.awt.BorderLayout.CENTER);
 		// frame.getContentPane().getComponent(0).setName("BlueDiamond");
-		
+
 		initializeJCA();
 
 		JMenuBar menuBar = new JMenuBar();
@@ -219,7 +213,7 @@ public class BlueDiamond {
 				mntmShowVMarkers.setText(((showVMarkers) ? "Show V Marker" : "Hide V Marker"));
 			}
 		});
-		
+
 		mnMarkerMenu.add(mntmShowVMarkers);
 
 		JMenuItem mntmShowHMarkers = new JMenuItem("Hide H Markers");
@@ -235,7 +229,7 @@ public class BlueDiamond {
 			}
 		});
 		mnMarkerMenu.add(mntmShowHMarkers);
-		
+
 		JMenuItem mntmNewMenuItem = new JMenuItem("Reset");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -265,18 +259,18 @@ public class BlueDiamond {
 
 		JMenuItem mntmReadTableScanValues = new JMenuItem("Read Values");
 		mnTable.add(mntmReadTableScanValues);
-		mntmReadTableScanValues.addActionListener(new BlueDiamond_mntmReadTableScanValues_ActionAdapter(this));		
+		mntmReadTableScanValues.addActionListener(new BlueDiamond_mntmReadTableScanValues_ActionAdapter(this));
 
 		JMenu mnHelp = new JMenu("About");
 		mnHelp.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		
+
 		JMenu mnAscii = new JMenu("ASCII");
 		menuBar.add(mnAscii);
-		
+
 		rdbtnAutoConvertRadioButton = new JRadioButton("Auto Convert");
 		mnAscii.add(rdbtnAutoConvertRadioButton);
 		rdbtnAutoConvertRadioButton.addActionListener(new BlueDiamond_AutoConvert_ActionAdapter(this));
-		
+
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(mnHelp);
 
@@ -285,9 +279,9 @@ public class BlueDiamond {
 		mntmAbout.addActionListener(new BlueDiamond_About_ActionAdapter(this));
 
 	}
-		
-    public void startConnection(String ip, int port) {
-        try {
+
+	public void startConnection(String ip, int port) {
+		try {
 			clientSocket = new Socket(ip, port);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -296,50 +290,50 @@ public class BlueDiamond {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        try {
+		try {
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
-        try {
+		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
- 
-    public String sendMessage(String msg) {
-        out.println(msg);
-        System.out.println(" Sending Message from Client "+msg);
-        String resp = null;
+	}
+
+	public String sendMessage(String msg) {
+		out.println(msg);
+		System.out.println(" Sending Message from Client " + msg);
+		String resp = null;
 		try {
 			resp = in.readLine();
-			System.out.println(" Response from Server = "+resp.trim());
+			System.out.println(" Response from Server = " + resp.trim());
 			System.out.println(" next line");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return resp;
-    }
-	
-    public void stopConnection() {
-        try {
-        	if (in!=null)
-        		in.close();
-        	if(out!=null)
-        		out.close();
-        	if(clientSocket != null)
-        		clientSocket.close();
+		return resp;
+	}
+
+	public void stopConnection() {
+		try {
+			if (in != null)
+				in.close();
+			if (out != null)
+				out.close();
+			if (clientSocket != null)
+				clientSocket.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
-    
+	}
+
 	private void initializeJCA() {
 		JCALibrary jca = JCALibrary.getInstance();
 		try {
@@ -349,7 +343,7 @@ public class BlueDiamond {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closeApplication() {
 		if (scanMonitor != null)
 			scanMonitor.disconnectChannel();
@@ -361,8 +355,7 @@ public class BlueDiamond {
 			scan2PositionerParms.disconnectChannel();
 		System.exit(0);
 	}
-	
-	
+
 	private void closeJCAChannels() {
 		try {
 
@@ -405,23 +398,23 @@ public class BlueDiamond {
 				float version = inData.readFloat();
 				int scanNumber = inData.readInt();
 				int dataRank = inData.readInt();
-				
+
 				inData.close();
-				if (dataRank==1) {
-					
+				if (dataRank == 1) {
+
 					String inFileName = inFile.getName();
-					if(!saved_1D_ScanPanel.isListed(inFileName)) {
+					if (!saved_1D_ScanPanel.isListed(inFileName)) {
 						inData.close();
-							saved_1D_ScanPanel.setFile(inFile);
+						saved_1D_ScanPanel.setFile(inFile);
 					}
-				} else if(dataRank==2) {
+				} else if (dataRank == 2) {
 					inData.close();
-					saved_2D_ScanPanel.setFile(inFile);					
+					saved_2D_ScanPanel.setFile(inFile);
 				}
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
-			}			
+			}
 		}
 	}
 
@@ -510,9 +503,9 @@ public class BlueDiamond {
 			scan1Str = parms[0].trim();
 			scan2Str = parms[1].trim();
 
-			scan1PositionerParms = new Scan1PositionerParms(scan1Str,context);
-			scan1DetectorParms = new Scan1DetectorParms(scan1Str,context);
-			scan2PositionerParms = new Scan2PositionerParms(scan2Str,context);
+			scan1PositionerParms = new Scan1PositionerParms(scan1Str, context);
+			scan1DetectorParms = new Scan1DetectorParms(scan1Str, context);
+			scan2PositionerParms = new Scan2PositionerParms(scan2Str, context);
 
 			mainPanel = new MainPanel();
 
@@ -524,7 +517,7 @@ public class BlueDiamond {
 			data1D = new Data1D(chart);
 			data2D = new Data2D(chart3d);
 			oldData2D = new OldData2D(oldChart3d);
-			
+
 			chart3d.getDataView(0).setElevationDataSource(data2D);
 			oldChart3d.getDataView(0).setElevationDataSource(oldData2D);
 
@@ -550,15 +543,14 @@ public class BlueDiamond {
 			scanMonitor.setActive_2D_ScanPanel(active_2D_ScanPanel);
 			active_2D_ScanPanel.resetPositioners_2D();
 
-
 			saved_1D_ScanPanel = mainPanel.getSaved_1D_ScanPanel();
 			saved_2D_ScanPanel = mainPanel.getSaved_2D_ScanPanel();
 
 			scan1PositionerParms.createPosPVs();
 			scan1DetectorParms.createDetPVs();
 
-			scan2PositionerParms.createPosPVs();			
-			
+			scan2PositionerParms.createPosPVs();
+
 			scanMonitor.createScanPVS();
 
 			scanMonitor.validate1DPositioners();
@@ -568,31 +560,29 @@ public class BlueDiamond {
 			scanMonitor.getScan1ValidPos();
 			scanMonitor.getScan1ValidDet();
 			scanMonitor.getScan2ValidPos();
-			
+
 			active_1D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPVList());
 			active_2D_ScanPanel.setScan1PosPv(scan1PositionerParms.getPosPnPVList());
 			active_2D_ScanPanel.setScan2PosPv(scan2PositionerParms.getPosPnPVList());
-			
+
 			scan1PositionerParms.findPositionerDescription();
-			scan2PositionerParms.findPositionerDescription();			
+			scan2PositionerParms.findPositionerDescription();
 			scan1DetectorParms.findDetectorDescription();
-			
+
 			scanMonitor.setMainPanel_1D_PositionerNames();
 			scanMonitor.setMainPanel_2D_X_PositionerNames();
 			scanMonitor.setMainPanel_2D_Y_PositionerNames();
 			scanMonitor.setMainPanel_1D_DetectorNames();
-/*
-			startConnection("164.54.105.197",27000);
-			sendMessage("Get Message    ");
-*/			
+			/*
+			 * startConnection("164.54.105.197",27000); sendMessage("Get Message    ");
+			 */
 			scanMonitor.createDSTATE();
 			scanMonitor.createDATA();
 
 			Thread scanMonitorThread = new Thread(scanMonitor);
 			scanMonitorThread.start();
 			initDisplay();
-			
-			
+
 			active_1D_ScanPanel.showVMarkers();
 			active_1D_ScanPanel.showHMarkers();
 			active_1D_ScanPanel.setMarkers();
@@ -619,11 +609,11 @@ public class BlueDiamond {
 	public void configopen_actionPerformed(ActionEvent e) {
 		showOpenConfigPanel();
 	}
-	
+
 	public void autoConvert_actionPerformed(ActionEvent e) {
 		autoConvert = rdbtnAutoConvertRadioButton.isSelected();
 	}
-	
+
 	public void readTableScanValuesDialog() {
 		int returnValue = 0;
 		TableDataConfig tableDataConfig = new TableDataConfig(frmBluediamond, true);
@@ -631,31 +621,32 @@ public class BlueDiamond {
 		tableDataConfig.setScan2PositionerParms(scan2PositionerParms);
 		tableDataConfig.get1DValidPosList();
 		tableDataConfig.get2DValidPosList();
-		
+
 		tableDataConfig.populatePositioners();
 		tableDataConfig.revalidate();
 		tableDataConfig.setVisible(true);
-		tableDataConfig.setModal(true);		
-		
+		tableDataConfig.setModal(true);
+
 		returnValue = tableDataConfig.getReturnVal();
 //		tableDataConfig.setVisible(false);
 //		System.out.println(" Return Value = "+returnValue);
-		
-		
+
 	}
 }
 
 class BlueDiamond_AutoConvert_ActionAdapter implements ActionListener {
 	BlueDiamond adaptee;
-	
-	BlueDiamond_AutoConvert_ActionAdapter (BlueDiamond adaptee){
+
+	BlueDiamond_AutoConvert_ActionAdapter(BlueDiamond adaptee) {
 		this.adaptee = adaptee;
 	}
+
 	public void actionPerformed(ActionEvent actionEvent) {
-		
+
 	}
 
 }
+
 class BlueDiamond_Mdafileopen_ActionAdapter implements ActionListener {
 	BlueDiamond adaptee;
 
@@ -688,7 +679,7 @@ class BlueDiamond_confignew_ActionAdapter implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent actionEvent) {
-		
+
 		adaptee.showNewConfigPanel();
 	}
 }
@@ -719,16 +710,16 @@ class BlueDiamond_About_ActionAdapter implements ActionListener {
 
 class BlueDiamond_mntmReadTableScanValues_ActionAdapter implements ActionListener {
 	BlueDiamond adaptee;
-	
-	BlueDiamond_mntmReadTableScanValues_ActionAdapter(BlueDiamond adaptee){
+
+	BlueDiamond_mntmReadTableScanValues_ActionAdapter(BlueDiamond adaptee) {
 		this.adaptee = adaptee;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		adaptee.readTableScanValuesDialog();
-		
+
 	}
-	
+
 }
 
 class TXTfilter extends javax.swing.filechooser.FileFilter {

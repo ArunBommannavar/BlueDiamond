@@ -131,5 +131,4 @@ public class PositionerNV implements MonitorListener {
 		} else
 			System.err.println("Monitor error: " + event.getStatus());
 	}
-
 }

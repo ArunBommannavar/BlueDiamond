@@ -1022,7 +1022,6 @@ public class Active_1D_ScanPanel extends JPanel {
 		double dd;
 
 		Point point = e.getPoint();
-		// System.out.println(" Blue X Point = "+point.getX());
 		com.klg.jclass.chart.JCLineStyle ll;
 
 		if (vMarkersShowing) {

@@ -139,8 +139,6 @@ public class MdaDetector {
 	        str = new String(tmpBytes);
 	        str = str.trim();
 	        setDetUnit(str);
-
-	        // setDetUnit(CountedString.getCountedString(inData));
 	      }
 
 	    }

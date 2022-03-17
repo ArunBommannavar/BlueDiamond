@@ -15,7 +15,6 @@ public class MdaTrigger {
 
     public void setTrigNum(int n) {
         trigNum = n;
-
     }
 
     public void setTrigName(String str) {

@@ -122,7 +122,6 @@ public class MdaPositioner {
 	      size = inData.readInt();
 	      if (size > 0) {
 	        asize = inData.readInt();
-//	        asize = CountedString.getCorrectedByteSize(asize);
 	        extSize = CountedString.getCorrectedByteSize(asize);
 	        diffSize = extSize-asize;
 	        tmpBytes = new byte[asize];

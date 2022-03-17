@@ -27,8 +27,7 @@ public class OldFileList {
 	public boolean getTabVisible() {
 		return tabVisible;
 	}
-	
-	
+		
 	public void addOldData1D(OldData1D oldData1D) {
 		this.oldData1D = oldData1D;		
 	}

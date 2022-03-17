@@ -95,8 +95,6 @@ public class PositionerPnPA implements MonitorListener{
 		return values;
 	}
 
-
-
 	@Override
 	public void monitorChanged(MonitorEvent event) {
 		if (event.getStatus() == CAStatus.NORMAL) {

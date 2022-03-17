@@ -649,5 +649,4 @@ public class Saved_2D_ScanPanel extends JPanel {
 		      jc.setVisible(false);
 		   }
 
-
-}
+	}

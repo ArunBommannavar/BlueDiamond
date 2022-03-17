@@ -246,6 +246,5 @@ public class Scan1PositionerParms {
 
 	public PositionerPnPV[] getPosPnPVList() {
 		return posPnPV;
-	}
-	
+	}	
 }
