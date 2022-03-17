@@ -628,8 +628,6 @@ public class BlueDiamond {
 		tableDataConfig.setModal(true);
 
 		returnValue = tableDataConfig.getReturnVal();
-//		tableDataConfig.setVisible(false);
-//		System.out.println(" Return Value = "+returnValue);
 
 	}
 }

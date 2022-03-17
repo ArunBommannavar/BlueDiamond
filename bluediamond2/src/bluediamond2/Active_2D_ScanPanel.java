@@ -96,6 +96,7 @@ public class Active_2D_ScanPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+
 	public Active_2D_ScanPanel() {
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(0, 255, 0), new Color(255, 200, 0)));
 		SpringLayout springLayout = new SpringLayout();

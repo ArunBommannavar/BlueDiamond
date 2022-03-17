@@ -11,7 +11,7 @@ import gov.aps.jca.Context;
 import gov.aps.jca.TimeoutException;
 
 public class ScanMonitor implements PropertyChangeListener, Runnable {
-// Code by 
+
 	Context context;
 
 	String scan1Prefix = "";

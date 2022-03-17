@@ -1737,7 +1737,6 @@ class Active_1D_ScanPanel_detPanelButton_actionAdapter implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		Object eObject = e.getSource();
 		JButton jButton = (JButton) eObject;
-//		System.out.println(" Debug get Button Name= " + jButton.getName());
 		adaptee.detectorColorStatus1D(jButton.getName());
 	}
 }
