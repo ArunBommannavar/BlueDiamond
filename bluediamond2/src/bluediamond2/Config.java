@@ -233,3 +233,4 @@ class Config_cancelbutton_ActionAdapter implements ActionListener {
         adaptee.cancelButton_actionPerformed(actionEvent);
     }
 }
+
