@@ -37,7 +37,10 @@ public class CountedString {
 //	    byte[] extBytes;
 //	    int extSize;
 //	    int diffSize;
-//
+//   
+	    
+	    
+	    
 	    
 
 	    try {
