@@ -129,6 +129,7 @@ public class Scan1DetectorParms {
 				validDet.add(i);
 			}
 		}
+		
 		initDet = true;
 	}
 
