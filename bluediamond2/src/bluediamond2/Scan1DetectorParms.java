@@ -118,7 +118,7 @@ public class Scan1DetectorParms {
 			}
 		}
 	}
-	
+
 	public void validateDetectors() {
 		boolean b = false;
 		validDet.clear();
