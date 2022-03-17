@@ -758,6 +758,7 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 			} else if (srcString.equals("0")) {
 				setScan2EXSCStatus(false);
 //				setHasScan2Parms(false);
+//				setHasScan2Parms(false);
 			}
 
 		} else if(propertyName.equals("SCAN2BUSY")) {
@@ -833,6 +834,5 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		}
 
 	}
-
 }
 
