@@ -151,6 +151,7 @@ public class Scan1DetectorParms {
 	public void setInitDet(boolean b){
 		initDet = b;
 	}
+	
 	public boolean getInitDet(){
 		return initDet;
 	}
