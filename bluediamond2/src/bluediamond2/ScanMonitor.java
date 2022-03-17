@@ -835,3 +835,4 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 	}
 
 }
+
