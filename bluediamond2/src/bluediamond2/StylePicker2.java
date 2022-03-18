@@ -283,7 +283,7 @@ public class StylePicker2 extends JComponent {
 
 	public void setSelectedColor(Color c) {
 		color = c;
-		System.out.println(" Set Color = " + color);
+//		System.out.println(" Set Color = " + color);
 	}
 
 	public void setThickness(int n) {

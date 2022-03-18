@@ -392,7 +392,7 @@ public class Data1D extends JCDefaultDataSource {
 				yaxis.setMinIsDefault(true);
 				yaxis.setMaxIsDefault(true);
 				chart.setBatched(false);
-//				System.out.println(" Set Detector for display = "+n+"  total series = "+chart.getDataView(0).getNumSeries());
+//				System.out.println(" Set Detector for display = "+n+"  total series = "+chart.getDataView(0).getNumSeries()+"   Color = "+chart.getDataView(0).getSeries(nm).);
 				fireChartDataEvent(ChartDataEvent.RESET, 0, 0);
 			}
 		});
