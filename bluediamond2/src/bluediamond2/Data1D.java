@@ -540,6 +540,7 @@ public class Data1D extends JCDefaultDataSource {
 		});
 	}
 
+	
 	public void setSeriesThickness(int n, int j) {
 
 		final int nm = n;
