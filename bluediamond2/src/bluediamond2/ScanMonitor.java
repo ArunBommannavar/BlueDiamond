@@ -719,7 +719,6 @@ public class ScanMonitor implements PropertyChangeListener, Runnable {
 		Object evtObj = evt.getNewValue();
 		String srcString = String.valueOf(evtObj);
 		
-//		System.out.println(" PropertyChange  "+propertyName+"  "+srcString+"  "+System.currentTimeMillis());
 		if (propertyName.equals("VAL")) {
 			setScan1VALStatus(true & scan1InProgress);
 
